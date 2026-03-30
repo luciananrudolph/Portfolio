@@ -544,6 +544,8 @@ function initHeaderColorDetect() {
   }
 
   function check() {
+    if (header.classList.contains("--menu-open")) return;
+
     var rect = header.getBoundingClientRect();
     var x = rect.left + rect.width / 2;
     var y = rect.top + rect.height / 2;
@@ -603,13 +605,45 @@ document.addEventListener("DOMContentLoaded", function () {
   /* Custom cursor */
   initCursor();
 
+  /* Mobile hamburger menu */
+  initBurger();
+
   /* Auto-detect header colour */
   initHeaderColorDetect();
 });
 
 
 /* =================================================
-   8. CUSTOM CURSOR
+   8. MOBILE HAMBURGER MENU
+   Toggle full-screen nav overlay on mobile.
+   ================================================= */
+
+function initBurger() {
+  var burger = document.querySelector(".top__burger");
+  var header = document.querySelector(".top");
+  if (!burger || !header) return;
+
+  burger.addEventListener("click", function () {
+    var isOpen = header.classList.toggle("--menu-open");
+    burger.setAttribute("aria-expanded", isOpen);
+    document.body.style.overflow = isOpen ? "hidden" : "";
+  });
+
+  /* Close menu when any nav link is tapped */
+  header.querySelectorAll("a, .lang").forEach(function (el) {
+    el.addEventListener("click", function () {
+      if (header.classList.contains("--menu-open")) {
+        header.classList.remove("--menu-open");
+        burger.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+      }
+    });
+  });
+}
+
+
+/* =================================================
+   9. CUSTOM CURSOR
    Filled blue circle → outline on clickable elements.
    ================================================= */
 

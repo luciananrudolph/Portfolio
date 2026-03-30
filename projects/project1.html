@@ -133,6 +133,7 @@
     }
     .xh__bigtext__body span {
       transition: color 0.15s ease;
+      text-shadow: 0 1px 6px rgba(244,241,230,0.8);
     }
     .xh__bigtext__cta {
       display: inline-block;
@@ -524,6 +525,16 @@
 
     <a class="name" href="../index.html" aria-label="Home">LUCIANA NOEMI RUDOLPH</a>
 
+    <div class="projects-dropdown">
+      <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false">Projects</button>
+      <ul class="projects-dropdown__menu">
+        <li><a class="projects-dropdown__link" href="project1.html">Djilakh Education Campus</a></li>
+        <li><a class="projects-dropdown__link" href="project2.html">IPAI Communication Center</a></li>
+        <li><a class="projects-dropdown__link" href="project3.html">The Supertecture Project</a></li>
+        <li><a class="projects-dropdown__link" href="project4.html">Inside Out</a></li>
+      </ul>
+    </div>
+
     <a class="top__link" href="../pages/about.html">About</a>
 
     <nav class="top__nav" aria-label="Language switcher">
@@ -541,6 +552,10 @@
         </ul>
       </div>
     </nav>
+
+    <button class="top__burger" type="button" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </header>
 
   <!-- ═══════════════════════════════════════════
@@ -765,6 +780,7 @@
     var bigtextBody = document.getElementById("xh-bigtext-body");
     var lblLeft   = document.getElementById("xh-lbl-left");
     var lblRight  = document.getElementById("xh-lbl-right");
+    var headerEl  = document.querySelector(".top");
 
     /* ── Big text for progressive reveal ── */
     var BIG_TEXT = "What if a school could grow with its community? A structure designed to evolve through time, material, and changing needs.";
@@ -851,6 +867,11 @@
       lblLeft.style.color  = bgT < 0.5 ? "#f4f1e6" : "#111";
       lblRight.style.color = bgT < 0.5 ? "#f4f1e6" : "#111";
 
+      if (headerEl) {
+        if (bgT < 0.5) headerEl.classList.add("--inverted");
+        else headerEl.classList.remove("--inverted");
+      }
+
       var headlineOpacity = 1 - eo(sub(progress, 0.50, 0.65));
       headline.style.opacity = headlineOpacity;
 
@@ -881,11 +902,11 @@
         setImg(imgA, x, y, w, h, 1, lerp(16, 10, t));
       } else {
         var t = eio(s5);
-        var w = lerp(px(70), px(100), t);
-        var h = lerp(py(85), py(100), t);
-        var x = lerp(px(15), 0, t);
-        var y = lerp(py(8), 0, t);
-        setImg(imgA, x, y, w, h, 1, lerp(10, 0, t));
+        var w = lerp(px(70), px(84), t);
+        var h = lerp(py(85), py(48), t);
+        var x = lerp(px(15), px(8), t);
+        var y = lerp(py(8), py(6), t);
+        setImg(imgA, x, y, w, h, 1, lerp(10, 16, t));
       }
 
       /* ─── SIDEBAR ─── */

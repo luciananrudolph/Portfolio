@@ -331,6 +331,55 @@ body {
   display: none;
 }
 
+
+/* ── Hamburger button (hidden on desktop, shown on mobile) ── */
+.top__burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.top__burger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-dark);
+  border-radius: 1px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.top.--inverted .top__burger span {
+  background: #fff;
+}
+
+/* Animate to X when menu is open */
+.top.--menu-open .top__burger span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.top.--menu-open .top__burger span:nth-child(2) {
+  opacity: 0;
+}
+.top.--menu-open .top__burger span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* ── Gallery link (homepage clickable images) ── */
+.gallery__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 /* Old .langs class — keep for backwards compat on project pages */
 .langs {
   position: absolute;
@@ -793,6 +842,142 @@ body {
   /* Reduce project-nav padding */
   .project-nav__link {
     padding: 24px;
+  }
+}
+
+
+/* =============================================================
+   MOBILE HEADER & NAVIGATION
+   Full-screen menu overlay triggered by hamburger button.
+   ============================================================= */
+
+@media (max-width: 768px) {
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 0;
+  }
+
+  .top__logo {
+    margin-right: 10px;
+  }
+
+  .top__logo img {
+    height: 24px;
+  }
+
+  .name {
+    flex: 1;
+    text-align: left;
+    font-size: 12px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .top__burger {
+    display: flex;
+    margin-left: 8px;
+  }
+
+  /* Hide nav items by default on mobile */
+  .projects-dropdown,
+  .top__link,
+  .top__nav {
+    display: none;
+    width: 100%;
+  }
+
+  /* ── Menu-open state: full-screen overlay ── */
+  .top.--menu-open {
+    position: fixed;
+    bottom: 0;
+    background: #fff !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    align-content: flex-start;
+  }
+
+  /* Override inverted colours when menu is open */
+  .top.--menu-open .name { color: var(--color-dark) !important; }
+  .top.--menu-open .top__logo img { filter: none !important; }
+  .top.--menu-open .top__burger span { background: var(--color-dark) !important; }
+  .top.--menu-open .top__link { color: var(--color-dark) !important; }
+
+  /* Show nav items when open */
+  .top.--menu-open .projects-dropdown {
+    display: block;
+    padding: 20px 0 8px;
+    border-top: 1px solid #eee;
+    margin-top: 14px;
+  }
+
+  .top.--menu-open .top__link {
+    display: block;
+    padding: 14px 0;
+    font-size: 16px;
+  }
+
+  .top.--menu-open .top__nav {
+    display: block;
+    padding: 16px 0 24px;
+    border-top: 1px solid #eee;
+    margin-top: 8px;
+  }
+
+  /* Projects: show as flat list (not hover dropdown) */
+  .top.--menu-open .projects-dropdown__trigger {
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    pointer-events: none;
+    padding: 0 0 8px;
+  }
+
+  .top.--menu-open .projects-dropdown__menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .top.--menu-open .projects-dropdown__link {
+    font-size: 16px;
+    padding: 12px 0;
+  }
+
+  /* Languages: show as horizontal row */
+  .top.--menu-open .lang-dropdown__trigger {
+    display: none;
+  }
+
+  .top.--menu-open .lang-dropdown__menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .top.--menu-open .lang {
+    padding: 10px 16px 10px 0;
+    font-size: 14px;
   }
 }
 

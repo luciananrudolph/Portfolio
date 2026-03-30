@@ -11,8 +11,8 @@
        Based on Codrops tutorial by Theo Plawinski
        ══════════════════════════════════════════ */
 
-    /* ── Fluid rem (1rem = 1px at 1440px) ── */
-    html { font-size: calc(100vw / 1440); }
+    /* ── Fluid rem (1rem = 1px at 1440px, floored for smaller desktops) ── */
+    html { font-size: clamp(0.8px, calc(100vw / 1440), 1.6px); }
     body {
       font-size: 16rem;
       overflow-x: hidden;
@@ -218,7 +218,7 @@
       top: 50%;
       left: 50%;
       transform: translate3d(-50%, -50%, 0);
-      width: 736rem;
+      width: min(736rem, 80vw);
     }
     .gallery__grid {
       display: grid;
@@ -279,18 +279,46 @@
 
     /* ── Mobile fallback ── */
     @media (max-width: 768px) {
-      html { font-size: calc(100vw / 375); }
-      .block--intro { padding: 32rem 20rem; }
+      html { font-size: 1px; }
+      body { font-size: 16px; }
+      .block--intro {
+        padding: 80px 20px 32px;
+        height: 100svh;
+      }
+      .block--intro__content { max-width: none; }
+      .block--intro__title { font-size: 28px; }
+      .block--intro__subtitle { font-size: 14px; }
+      .block--intro__scroll { font-size: 11px; bottom: 24px; }
       .block.block--main { height: auto; }
       .block__wrapper {
         position: relative;
         height: auto;
-        padding: 60rem 20rem 40rem;
+        padding: 40px 16px 32px;
       }
       .content {
         height: auto;
-        padding: 40rem 0;
+        padding: 24px 0 32px;
+        pointer-events: all;
       }
+      .content__title { font-size: 24px; }
+      .content__description {
+        font-size: 14px;
+        max-width: none;
+        margin-top: 12px;
+        opacity: 1 !important;
+      }
+      .content__buttons {
+        margin-top: 20px;
+        gap: 10px;
+        opacity: 1 !important;
+        pointer-events: all !important;
+      }
+      .content__button {
+        font-size: 13px;
+        padding: 12px 24px;
+        opacity: 1 !important;
+      }
+      .content__button--scroll { display: none; }
       .gallery {
         position: relative;
         top: auto; left: auto;
@@ -299,9 +327,21 @@
       }
       .gallery__grid {
         grid-template-columns: repeat(2, 1fr);
-        column-gap: 12rem;
-        row-gap: 16rem;
+        column-gap: 10px;
+        row-gap: 10px;
       }
+      .gallery__item {
+        border-radius: 6px;
+      }
+      .gallery__link {
+        -webkit-tap-highlight-color: rgba(0,0,0,0.05);
+      }
+    }
+
+    /* Small phones */
+    @media (max-width: 380px) {
+      .block--intro__title { font-size: 24px; }
+      .content__title { font-size: 20px; }
     }
 
     /* ── Reduced motion ── */
@@ -355,6 +395,10 @@
         </ul>
       </div>
     </nav>
+
+    <button class="top__burger" type="button" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </header>
 
   <!-- ══════════════════════════════════════════
@@ -395,40 +439,64 @@
       <div class="gallery">
         <ul class="gallery__grid">
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p1.jpg" alt="Senegal Secondary School" />
+            <a class="gallery__link" href="projects/project1.html">
+              <img class="gallery__image" src="assets/img/p1.jpg" alt="Djilakh Education Campus" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p2.jpg" alt="IPAI Communication Center" />
+            <a class="gallery__link" href="projects/project2.html">
+              <img class="gallery__image" src="assets/img/p2.jpg" alt="IPAI Communication Center" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p3.jpg" alt="Project 3" />
+            <a class="gallery__link" href="projects/project3.html">
+              <img class="gallery__image" src="assets/img/p3.jpg" alt="The Supertecture Project" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p4.jpg" alt="Project 4" />
+            <a class="gallery__link" href="projects/project4.html">
+              <img class="gallery__image" src="assets/img/p4.jpg" alt="Inside Out" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p1/entrance.jpg" alt="Senegal school entrance" />
+            <a class="gallery__link" href="projects/project1.html">
+              <img class="gallery__image" src="assets/img/p1/entrance.jpg" alt="Senegal school entrance" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p2/terrace.png" alt="IPAI terrace" />
+            <a class="gallery__link" href="projects/project2.html">
+              <img class="gallery__image" src="assets/img/p2/terrace.png" alt="IPAI terrace" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p1/courtyard.jpg" alt="Senegal school courtyard" />
+            <a class="gallery__link" href="projects/project1.html">
+              <img class="gallery__image" src="assets/img/p1/courtyard.jpg" alt="Senegal school courtyard" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p2/lookout.png" alt="IPAI lookout" />
+            <a class="gallery__link" href="projects/project2.html">
+              <img class="gallery__image" src="assets/img/p2/lookout.png" alt="IPAI lookout" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p1/interior.jpg" alt="Senegal classroom interior" />
+            <a class="gallery__link" href="projects/project1.html">
+              <img class="gallery__image" src="assets/img/p1/interior.jpg" alt="Senegal classroom interior" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p2/exterior.jpg" alt="IPAI campus exterior" />
+            <a class="gallery__link" href="projects/project2.html">
+              <img class="gallery__image" src="assets/img/p2/exterior.jpg" alt="IPAI campus exterior" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p1/classroom.jpg" alt="Senegal classroom" />
+            <a class="gallery__link" href="projects/project1.html">
+              <img class="gallery__image" src="assets/img/p1/classroom.jpg" alt="Senegal classroom" />
+            </a>
           </li>
           <li class="gallery__item">
-            <img class="gallery__image" src="assets/img/p2/model-aerial.jpg" alt="IPAI model aerial" />
+            <a class="gallery__link" href="projects/project2.html">
+              <img class="gallery__image" src="assets/img/p2/model-aerial.jpg" alt="IPAI model aerial" />
+            </a>
           </li>
         </ul>
       </div>
@@ -557,6 +625,20 @@
         });
       }
 
+      this.recalcTitleOffset();
+
+      /* Recalculate on resize so the title centering stays correct */
+      var self = this;
+      var resizeTimer;
+      window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          self.recalcTitleOffset();
+        }, 150);
+      });
+    };
+
+    StickyGridScroll.prototype.recalcTitleOffset = function () {
       if (this.content && this.title) {
         var dy = (this.content.offsetHeight - this.title.offsetHeight) / 2;
         this.titleOffsetY = (dy / this.content.offsetHeight) * 100;
