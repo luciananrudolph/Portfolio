@@ -1,0 +1,1017 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Supertecture Project — Luciana Noemi Rudolph</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      color: #111;
+      background: #f4f1e6;
+      overflow-x: hidden;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION: outer wrapper — tall to create
+       scrollable distance for the sticky stage.
+       5 states × ~120vh each = 600vh total.
+    ───────────────────────────────────────────── */
+    .xh {
+      position: relative;
+      height: 600vh;
+    }
+
+    /* ─────────────────────────────────────────────
+       STAGE: sticky viewport — pins to screen
+       while the user scrolls through the section.
+    ───────────────────────────────────────────── */
+    .xh__stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* ── Background layer ── */
+    .xh__bg {
+      position: absolute;
+      inset: 0;
+      background: #c4754b;
+      transition: none;
+      z-index: 0;
+    }
+
+    /* ── Persistent corner labels ── */
+    .xh__label {
+      position: absolute;
+      bottom: 36px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      z-index: 20;
+      letter-spacing: 0.01em;
+      transition: color 0.5s ease;
+    }
+    .xh__label--left  { left: 40px; }
+    .xh__label--right { right: 40px; }
+
+    /* ── Headline — centred, large ── */
+    .xh__headline {
+      position: absolute;
+      top: 10vh;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(2.2rem, 5.5vw, 4.8rem);
+      font-weight: 700;
+      line-height: 1.08;
+      text-align: center;
+      white-space: nowrap;
+      z-index: 10;
+      transition: color 0.5s ease;
+    }
+
+    /* ── Images — absolutely positioned, driven by JS ── */
+    .xh__img {
+      position: absolute;
+      border-radius: 20px;
+      overflow: hidden;
+      z-index: 5;
+      will-change: transform, opacity, width, height, top, left, border-radius;
+      transition: none;
+    }
+    .xh__img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Sidebar text (states 3, 4) ── */
+    .xh__sidebar {
+      position: absolute;
+      right: 6vw;
+      top: 50%;
+      transform: translateY(-50%);
+      max-width: 280px;
+      z-index: 15;
+      opacity: 0;
+    }
+    .xh__sidebar p {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      margin-bottom: 14px;
+      color: #111;
+    }
+    .xh__sidebar a {
+      font-size: 0.85rem;
+      color: #111;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ── State 5: big text block at bottom ── */
+    .xh__bigtext {
+      position: absolute;
+      bottom: 100px;
+      left: 40px;
+      right: 40px;
+      z-index: 15;
+      opacity: 0;
+    }
+    .xh__bigtext__body {
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
+      font-weight: 600;
+      line-height: 1.3;
+      max-width: 820px;
+    }
+    .xh__bigtext__body span {
+      transition: color 0.15s ease;
+    }
+    .xh__bigtext__cta {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 12px 28px;
+      background: #111;
+      color: #fff;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+    .xh__bigtext__cta:hover {
+      background: #333;
+    }
+
+    /* ── Sticky-Split Scroll Sections ── */
+    .split {
+      position: relative;
+      /* 5 sections × 100vh each */
+      height: 500vh;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .split__stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    /* Left: all titles */
+    .split__nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .split__item {
+      padding: 16px 0;
+      border-left: 2px solid transparent;
+      padding-left: 24px;
+      transition: border-color 0.4s ease, opacity 0.4s ease;
+      opacity: 0.25;
+      cursor: default;
+    }
+
+    .split__item.--active {
+      border-left-color: #111;
+      opacity: 1;
+    }
+
+    .split__number {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 6px;
+    }
+
+    .split__title {
+      font-size: clamp(1rem, 1.6vw, 1.3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: #111;
+      margin: 0;
+    }
+
+    .split__desc {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #555;
+      margin: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.4s ease;
+    }
+
+    .split__item.--active .split__desc {
+      max-height: 200px;
+      opacity: 1;
+      margin-top: 10px;
+    }
+
+    /* Right: stacked images, one visible at a time */
+    .split__images {
+      position: relative;
+      aspect-ratio: 4 / 3;
+    }
+
+    .split__img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      display: block;
+      background: #d9d9d9;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .split__img.--visible {
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .split {
+        height: auto;
+      }
+      .split__stage {
+        position: relative;
+        height: auto;
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 60px 0;
+      }
+      .split__images {
+        aspect-ratio: 4 / 3;
+      }
+    }
+
+    /* ── Showcase: full-screen image + sidebar text (like the scroll narrative) ── */
+    .showcase {
+      position: relative;
+      height: 300vh; /* 3 panels × 100vh */
+    }
+
+    .showcase__stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: #f4f1e6;
+    }
+
+    /* Stacked images */
+    .showcase__img {
+      position: absolute;
+      border-radius: 24px;
+      overflow: hidden;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .showcase__img.--visible {
+      opacity: 1;
+    }
+    .showcase__img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Placeholder when no img tag */
+    .showcase__img--placeholder {
+      background: #d0cdc5;
+    }
+
+    /* Sidebar text */
+    .showcase__text {
+      position: absolute;
+      right: 6vw;
+      top: 50%;
+      transform: translateY(-50%);
+      max-width: 280px;
+      z-index: 15;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .showcase__text.--visible {
+      opacity: 1;
+    }
+    .showcase__text p {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: #555;
+      margin-bottom: 14px;
+    }
+    .showcase__text a {
+      font-size: 0.85rem;
+      color: #111;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* Counter dots */
+    .showcase__dots {
+      position: absolute;
+      right: 2vw;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 20;
+    }
+    .showcase__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ccc;
+      transition: background 0.3s ease;
+    }
+    .showcase__dot.--active {
+      background: #2f4aa1;
+    }
+
+    @media (max-width: 768px) {
+      .showcase {
+        height: auto;
+      }
+      .showcase__stage {
+        position: relative;
+        height: auto;
+        min-height: 100vh;
+        padding: 80px 20px;
+      }
+      .showcase__img {
+        position: relative;
+        opacity: 1;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4/3;
+        margin-bottom: 24px;
+      }
+      .showcase__text {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        max-width: 100%;
+        opacity: 1;
+      }
+    }
+
+    /* ── Project info section (below scroll narrative) ── */
+    .project-info {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 40px 80px;
+    }
+    .project-info__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px 80px;
+    }
+    .project-info__meta {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .project-info__meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .project-info__meta-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #888;
+    }
+    .project-info__meta-value {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #222;
+    }
+    .project-info__description h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #111;
+    }
+    .project-info__description p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #444;
+      margin-bottom: 16px;
+    }
+
+    /* ── Gallery section ── */
+    .gallery {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 40px 100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .gallery__img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+    }
+    .gallery__img--full {
+      grid-column: 1 / -1;
+    }
+
+    /* ── Back nav ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 40px;
+      font-size: 0.85rem;
+      color: #555;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .back-link:hover { color: #111; }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      .xh { height: auto; }
+      .xh__stage {
+        position: relative;
+        height: auto;
+        min-height: 100vh;
+        padding: 60px 20px;
+      }
+      .xh__headline {
+        position: relative;
+        top: auto; left: auto;
+        transform: none;
+        white-space: normal;
+        margin-bottom: 32px;
+        font-size: 2rem;
+      }
+      .xh__img {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 4/5;
+        top: auto !important; left: auto !important;
+        transform: none !important;
+        opacity: 1 !important;
+        margin-bottom: 20px;
+      }
+      .xh__sidebar, .xh__bigtext {
+        position: relative;
+        opacity: 1 !important;
+        right: auto; bottom: auto; left: auto; top: auto;
+        transform: none !important;
+        max-width: 100%;
+        margin-top: 20px;
+      }
+      .xh__label { display: none; }
+      .xh__bg { background: #f4f1e6 !important; }
+      .project-info { padding: 60px 20px 40px; }
+      .project-info__grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .gallery {
+        grid-template-columns: 1fr;
+        padding: 0 20px 60px;
+      }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .xh { height: auto !important; }
+      .xh__stage { position: relative; }
+      .xh__img { opacity: 1 !important; transform: none !important; }
+      .xh__sidebar, .xh__bigtext { opacity: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================= -->
+  <!-- HEADER                                        -->
+  <!-- ============================================= -->
+  <header class="top --inverted">
+    <a class="top__logo" href="../index.html" aria-label="Home">
+      <img src="../assets/img/logo-blue.png" alt="LAR logo" />
+    </a>
+
+    <a class="name" href="../index.html" aria-label="Home">LUCIANA NOEMI RUDOLPH</a>
+
+    <a class="top__link" href="../pages/about.html">About</a>
+
+    <nav class="top__nav" aria-label="Language switcher">
+      <div class="lang-dropdown">
+        <button class="lang-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false">
+          <span class="lang-dropdown__active">EN</span>
+        </button>
+        <ul class="lang-dropdown__menu">
+          <li><button class="lang" type="button" data-lang="en" aria-pressed="true">English</button></li>
+          <li><button class="lang" type="button" data-lang="de" aria-pressed="false">Deutsch</button></li>
+          <li><button class="lang" type="button" data-lang="pt" aria-pressed="false">Português</button></li>
+          <li><button class="lang" type="button" data-lang="es" aria-pressed="false">Español</button></li>
+          <li><button class="lang" type="button" data-lang="it" aria-pressed="false">Italiano</button></li>
+          <li><button class="lang" type="button" data-lang="nl" aria-pressed="false">Nederlands</button></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       SCROLL NARRATIVE — 5-State
+       ═══════════════════════════════════════════ -->
+  <section class="xh" id="xh" aria-label="The Recycle Residence">
+    <div class="xh__stage" id="xh-stage">
+
+      <!-- Background (terracotta → cream) -->
+      <div class="xh__bg" id="xh-bg"></div>
+
+      <!-- Headline -->
+      <h1 class="xh__headline" id="xh-headline">The Supertecture Project</h1>
+
+      <!-- Image A: entrance exterior -->
+      <div class="xh__img" id="img-a">
+        <img src="../assets/img/p1/entrance.jpg" alt="Exterior view of the Senegal Secondary School entrance with children playing" />
+      </div>
+
+      <!-- Sidebar text -->
+      <div class="xh__sidebar" id="xh-sidebar">
+        <p id="xh-sidebar-text"></p>
+        <a href="#project-details" id="xh-sidebar-link">View project details</a>
+      </div>
+
+      <!-- Big text block (state 5) -->
+      <div class="xh__bigtext" id="xh-bigtext">
+        <div class="xh__bigtext__body" id="xh-bigtext-body"></div>
+        <a class="xh__bigtext__cta" href="#project-details">Explore the project</a>
+      </div>
+
+      <!-- Corner labels -->
+      <span class="xh__label xh__label--left" id="xh-lbl-left">The Recycle Residence</span>
+      <span class="xh__label xh__label--right" id="xh-lbl-right">Kaufbeuren, Germany</span>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SHOWCASE: 3 full-screen image panels
+       ═══════════════════════════════════════════ -->
+  <div class="showcase" id="showcase">
+    <div class="showcase__stage">
+
+      <!-- Image 1 -->
+      <div class="showcase__img showcase__img--placeholder --visible" id="sc-img-0"
+           style="left:10vw; top:12vh; width:55vw; height:70vh;"></div>
+      <!-- Image 2 -->
+      <div class="showcase__img showcase__img--placeholder" id="sc-img-1"
+           style="left:8vw; top:10vh; width:58vw; height:74vh;"></div>
+      <!-- Image 3 -->
+      <div class="showcase__img showcase__img--placeholder" id="sc-img-2"
+           style="left:12vw; top:14vh; width:52vw; height:66vh;"></div>
+
+      <!-- Text panels -->
+      <div class="showcase__text --visible" id="sc-text-0">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+        <a href="#project-details">View project details</a>
+      </div>
+      <div class="showcase__text" id="sc-text-1">
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+        <a href="#project-details">View project details</a>
+      </div>
+      <div class="showcase__text" id="sc-text-2">
+        <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+        <a href="#project-details">View project details</a>
+      </div>
+
+      <!-- Scroll dots -->
+      <div class="showcase__dots">
+        <div class="showcase__dot --active" id="sc-dot-0"></div>
+        <div class="showcase__dot" id="sc-dot-1"></div>
+        <div class="showcase__dot" id="sc-dot-2"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       STICKY-SPLIT SCROLL SECTIONS
+       ═══════════════════════════════════════════ -->
+  <div class="split" id="split">
+    <div class="split__stage">
+
+      <!-- Left: all titles -->
+      <nav class="split__nav">
+        <div class="split__item --active" data-split="0">
+          <div class="split__number">01</div>
+          <h2 class="split__title">Site &amp; Context</h2>
+          <p class="split__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+        <div class="split__item" data-split="1">
+          <div class="split__number">02</div>
+          <h2 class="split__title">Masterplan &amp; Layout</h2>
+          <p class="split__desc">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        </div>
+        <div class="split__item" data-split="2">
+          <div class="split__number">03</div>
+          <h2 class="split__title">Structure &amp; Materials</h2>
+          <p class="split__desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+        </div>
+        <div class="split__item" data-split="3">
+          <div class="split__number">04</div>
+          <h2 class="split__title">Interior &amp; Learning Spaces</h2>
+          <p class="split__desc">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos.</p>
+        </div>
+        <div class="split__item" data-split="4">
+          <div class="split__number">05</div>
+          <h2 class="split__title">Community &amp; Impact</h2>
+          <p class="split__desc">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.</p>
+        </div>
+      </nav>
+
+      <!-- Right: stacked images, one visible at a time -->
+      <div class="split__images">
+        <div class="split__img --visible" data-split-img="0"></div>
+        <div class="split__img" data-split-img="1"></div>
+        <div class="split__img" data-split-img="2"></div>
+        <div class="split__img" data-split-img="3"></div>
+        <div class="split__img" data-split-img="4"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PROJECT DETAILS
+       ═══════════════════════════════════════════ -->
+  <div id="project-details">
+    <section class="project-info">
+      <div class="project-info__grid">
+        <div class="project-info__meta">
+          <div class="project-info__meta-item">
+            <span class="project-info__meta-label">Project</span>
+            <span class="project-info__meta-value">Senegal Secondary School — Building Opportunity in Djilakh</span>
+          </div>
+          <div class="project-info__meta-item">
+            <span class="project-info__meta-label">Location</span>
+            <span class="project-info__meta-value">Djilakh, Thiès Region (Sindia Commune), Senegal</span>
+          </div>
+          <div class="project-info__meta-item">
+            <span class="project-info__meta-label">Competition</span>
+            <span class="project-info__meta-value">Archstorming × Let's Build My School (LBMS)</span>
+          </div>
+          <div class="project-info__meta-item">
+            <span class="project-info__meta-label">Program</span>
+            <span class="project-info__meta-value">4 classrooms, admin wing, multipurpose hall, storage, restrooms — approx. 160 students</span>
+          </div>
+          <div class="project-info__meta-item">
+            <span class="project-info__meta-label">Budget</span>
+            <span class="project-info__meta-value">€48,000 – €60,000</span>
+          </div>
+          <div class="project-info__meta-item">
+            <span class="project-info__meta-label">Construction</span>
+            <span class="project-info__meta-value">Compressed earth blocks, bamboo structure, corrugated metal roofing</span>
+          </div>
+        </div>
+
+        <div class="project-info__description">
+          <h3>Design Concept</h3>
+          <p>
+            The design responds to Djilakh's educational crisis — a village of 4,000 inhabitants where the absence of a secondary school leads to high dropout rates. The proposal creates a modular campus of interconnected circular pavilions arranged around two large courtyards, preserving six existing trees at the heart of the site.
+          </p>
+          <p>
+            A radial structural system of bamboo posts and ring beams supports deeply overhanging roofs, enabling passive cooling through cross-ventilation and shaded circulation. Stabilised compressed earth blocks form the building envelope, providing thermal mass against extreme heat while remaining constructable by local workers without heavy machinery.
+          </p>
+          <p>
+            Colorful translucent panels in cobalt blue, amber yellow, and lime green punctuate the earth-toned facades, filtering light into classrooms and marking thresholds between learning and gathering spaces. The courtyard amphitheatre doubles as a multipurpose cultural venue — the school as social hub.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery" aria-label="Project gallery">
+      <img class="gallery__img gallery__img--full" src="../assets/img/p1/courtyard.jpg" alt="Courtyard view with colorful openings and children playing" />
+      <img class="gallery__img" src="../assets/img/p1/interior.jpg" alt="Aerial view of the campus with circular pavilions and courtyards" />
+      <img class="gallery__img" src="../assets/img/p1/classroom.jpg" alt="Classroom interior with students at desks and teacher at the chalkboard" />
+    </section>
+  </div>
+
+  <!-- ============================================= -->
+  <!-- NAV: Previous / Next Project Links            -->
+  <!-- ============================================= -->
+  <nav class="project-nav" aria-label="Project navigation">
+    <a class="project-nav__link project-nav__link--prev" href="project4.html" aria-label="Previous project: Project 4">
+      <span class="project-nav__arrow" aria-hidden="true">←</span>
+      <img class="project-nav__thumb" src="../assets/img/p4.jpg" alt="" />
+      <span class="project-nav__text">
+        <span class="project-nav__label">Previous project</span>
+        <span class="project-nav__title">Project 4</span>
+      </span>
+    </a>
+    <a class="project-nav__link project-nav__link--next" href="project2.html" aria-label="Next project: IPAI Communication Center">
+      <span class="project-nav__text">
+        <span class="project-nav__label">Next project</span>
+        <span class="project-nav__title">IPAI Communication Center</span>
+      </span>
+      <img class="project-nav__thumb" src="../assets/img/p2.jpg" alt="" />
+      <span class="project-nav__arrow" aria-hidden="true">→</span>
+    </a>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       SCROLL ENGINE
+       ═══════════════════════════════════════════ -->
+  <script>
+  (function () {
+    "use strict";
+
+    if (window.innerWidth <= 768) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var section   = document.getElementById("xh");
+    var bg        = document.getElementById("xh-bg");
+    var headline  = document.getElementById("xh-headline");
+    var imgA      = document.getElementById("img-a");
+    var sidebar   = document.getElementById("xh-sidebar");
+    var sideText  = document.getElementById("xh-sidebar-text");
+    var sideLink  = document.getElementById("xh-sidebar-link");
+    var bigtext   = document.getElementById("xh-bigtext");
+    var bigtextBody = document.getElementById("xh-bigtext-body");
+    var lblLeft   = document.getElementById("xh-lbl-left");
+    var lblRight  = document.getElementById("xh-lbl-right");
+
+    /* ── Big text for progressive reveal ── */
+    var BIG_TEXT = "What if a house could be built from what is going to waste? The project develops a modular building system that transforms industrial timber offcuts into structural components.";
+    var words = BIG_TEXT.split(" ");
+    bigtextBody.innerHTML = words.map(function (w) {
+      return '<span style="color:#ccc">' + w + " </span>";
+    }).join("");
+    var wordSpans = bigtextBody.querySelectorAll("span");
+
+    /* ── Sidebar copy ── */
+    var SIDEBAR_COPY = {
+      3: { text: "Circular pavilions arranged around shared courtyards, preserving six existing trees and creating shaded gathering spaces for 160 students.", link: "View project details" },
+      4: { text: "Compressed earth blocks, bamboo structure, and colorful translucent panels — built by local workers, designed for passive cooling.", link: "View project details" },
+    };
+
+    /* ── Measurements ── */
+    var sTop = 0, sHeight = 0;
+    function measure() {
+      var r = section.getBoundingClientRect();
+      sTop = r.top + window.scrollY;
+      sHeight = r.height;
+    }
+    measure();
+    window.addEventListener("resize", measure);
+
+    function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    function sub(p, s, e) { return clamp((p - s) / (e - s), 0, 1); }
+    function eo(t) { return 1 - Math.pow(1 - t, 3); }
+    function eio(t) { return t < 0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+    var VW, VH;
+    function updateViewport() { VW = window.innerWidth; VH = window.innerHeight; }
+    updateViewport();
+    window.addEventListener("resize", updateViewport);
+
+    function px(vwPct) { return (vwPct / 100) * VW; }
+    function py(vhPct) { return (vhPct / 100) * VH; }
+
+    function setImg(el, x, y, w, h, opacity, radius) {
+      el.style.left         = x + "px";
+      el.style.top          = y + "px";
+      el.style.width        = w + "px";
+      el.style.height       = h + "px";
+      el.style.opacity      = opacity;
+      el.style.borderRadius = radius + "px";
+    }
+
+    /* ═══════════════════════════════════════════════════
+       STATE DEFINITIONS
+
+       State 1 (0.00–0.20): Terracotta bg, headline
+       State 2 (0.20–0.40): Cream bg, small entrance card
+       State 3 (0.40–0.60): Entrance grows left, courtyard appears right
+       State 4 (0.60–0.80): 3 floating images, sidebar changes
+       State 5 (0.80–1.00): Courtyard hero top, big text reveal
+    ═══════════════════════════════════════════════════ */
+
+    var rafId = null;
+
+    function tick() {
+      rafId = null;
+
+      var scrollable = sHeight - VH;
+      if (scrollable <= 0) return;
+      var progress = clamp((window.scrollY - sTop) / scrollable, 0, 1);
+
+      var s1 = sub(progress, 0.00, 0.20);
+      var s2 = sub(progress, 0.20, 0.40);
+      var s3 = sub(progress, 0.40, 0.60);
+      var s4 = sub(progress, 0.60, 0.80);
+      var s5 = sub(progress, 0.80, 1.00);
+
+      /* ─── BACKGROUND ─── */
+      // Terracotta → cream
+      var bgT = eo(s1);
+      var r = Math.round(lerp(196, 244, bgT));
+      var g = Math.round(lerp(117, 241, bgT));
+      var b = Math.round(lerp(75,  230, bgT));
+      bg.style.background = "rgb(" + r + "," + g + "," + b + ")";
+
+      /* ─── HEADLINE ─── */
+      headline.style.color = bgT < 0.5 ? "#f4f1e6" : "#111";
+      lblLeft.style.color  = bgT < 0.5 ? "#f4f1e6" : "#111";
+      lblRight.style.color = bgT < 0.5 ? "#f4f1e6" : "#111";
+
+      var headlineOpacity = 1 - eo(sub(progress, 0.50, 0.65));
+      headline.style.opacity = headlineOpacity;
+
+      var headlineY = lerp(0, -3, eo(s2));
+      headline.style.top = (10 + headlineY) + "vh";
+
+      /* ─── IMAGE A: entrance (centred, small → large → full) ─── */
+      if (progress < 0.20) {
+        setImg(imgA, px(50), py(50), 0, 0, 0, 20);
+      } else if (progress < 0.40) {
+        var t = eo(s2);
+        var w = lerp(0, px(28), t);
+        var h = lerp(0, py(55), t);
+        setImg(imgA, px(50) - w/2, py(50) - h/2, w, h, t, 20);
+      } else if (progress < 0.60) {
+        var t = eio(s3);
+        var w = lerp(px(28), px(50), t);
+        var h = lerp(py(55), py(75), t);
+        var x = lerp(px(50) - px(14), px(25), t);
+        var y = lerp(py(50) - py(27.5), py(12), t);
+        setImg(imgA, x, y, w, h, 1, lerp(20, 16, t));
+      } else if (progress < 0.80) {
+        var t = eio(s4);
+        var w = lerp(px(50), px(70), t);
+        var h = lerp(py(75), py(85), t);
+        var x = lerp(px(25), px(15), t);
+        var y = lerp(py(12), py(8), t);
+        setImg(imgA, x, y, w, h, 1, lerp(16, 10, t));
+      } else {
+        var t = eio(s5);
+        var w = lerp(px(70), px(100), t);
+        var h = lerp(py(85), py(100), t);
+        var x = lerp(px(15), 0, t);
+        var y = lerp(py(8), 0, t);
+        setImg(imgA, x, y, w, h, 1, lerp(10, 0, t));
+      }
+
+      /* ─── SIDEBAR ─── */
+      if (progress >= 0.40 && progress < 0.80) {
+        var fadeIn, sideState;
+        if (progress < 0.60) {
+          fadeIn = eo(sub(progress, 0.42, 0.52));
+          sideState = 3;
+        } else {
+          fadeIn = eo(sub(progress, 0.62, 0.72));
+          sideState = 4;
+        }
+        var copy = SIDEBAR_COPY[sideState];
+        sideText.textContent = copy.text;
+        sideLink.textContent = copy.link;
+        sidebar.style.opacity = fadeIn;
+
+        if (progress >= 0.56 && progress < 0.64) {
+          var crossT = sub(progress, 0.56, 0.64);
+          sidebar.style.opacity = crossT < 0.5 ? 1 - crossT * 2 : (crossT - 0.5) * 2;
+        }
+      } else {
+        sidebar.style.opacity = 0;
+      }
+
+      /* ─── BIG TEXT (State 5) ─── */
+      if (progress >= 0.78) {
+        var t = eo(sub(progress, 0.78, 0.88));
+        bigtext.style.opacity = t;
+        var revealProgress = sub(progress, 0.82, 1.00);
+        var wordsToReveal = Math.floor(revealProgress * wordSpans.length);
+        for (var i = 0; i < wordSpans.length; i++) {
+          wordSpans[i].style.color = i < wordsToReveal ? "#111" : "#ccc";
+        }
+      } else {
+        bigtext.style.opacity = 0;
+      }
+
+      lblRight.style.opacity = progress < 0.78 ? 1 : 1 - eo(sub(progress, 0.78, 0.85));
+
+      if (progress > 0.75) {
+        var t = eo(sub(progress, 0.75, 0.85));
+        lblLeft.style.bottom = lerp(36, VH * 0.5, t) + "px";
+      } else {
+        lblLeft.style.bottom = "36px";
+      }
+    }
+
+    function onScroll() {
+      if (!rafId) rafId = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    tick();
+
+  })();
+  </script>
+
+  <!-- Showcase: scroll-driven image/text swap -->
+  <script>
+  (function () {
+    var showcase = document.getElementById("showcase");
+    if (!showcase) return;
+
+    var count = 3;
+    var current = 0;
+
+    function update() {
+      var rect = showcase.getBoundingClientRect();
+      var scrollable = showcase.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      var progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+      var idx = Math.min(Math.floor(progress * count), count - 1);
+
+      if (idx !== current) {
+        document.getElementById("sc-img-" + current).classList.remove("--visible");
+        document.getElementById("sc-text-" + current).classList.remove("--visible");
+        document.getElementById("sc-dot-" + current).classList.remove("--active");
+        current = idx;
+        document.getElementById("sc-img-" + current).classList.add("--visible");
+        document.getElementById("sc-text-" + current).classList.add("--visible");
+        document.getElementById("sc-dot-" + current).classList.add("--active");
+      }
+    }
+
+    window.addEventListener("scroll", function () {
+      requestAnimationFrame(update);
+    }, { passive: true });
+    update();
+  })();
+  </script>
+
+  <!-- Split-scroll: drive active state from scroll progress -->
+  <script>
+  (function () {
+    var split = document.getElementById("split");
+    if (!split) return;
+
+    var items  = split.querySelectorAll(".split__item");
+    var images = split.querySelectorAll(".split__img");
+    var count  = items.length;
+    var current = 0;
+
+    function update() {
+      var rect = split.getBoundingClientRect();
+      var scrollable = split.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      var progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+      var idx = Math.min(Math.floor(progress * count), count - 1);
+
+      if (idx !== current) {
+        items[current].classList.remove("--active");
+        images[current].classList.remove("--visible");
+        current = idx;
+        items[current].classList.add("--active");
+        images[current].classList.add("--visible");
+      }
+    }
+
+    window.addEventListener("scroll", function () {
+      requestAnimationFrame(update);
+    }, { passive: true });
+    update();
+  })();
+  </script>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,820 @@
+/* =============================================================
+   PORTFOLIO STYLESHEET
+   ─────────────────────
+   Sections:
+     1. CSS Custom Properties (design tokens)
+     2. Reset & Base
+     3. Layout – Header
+     4. Layout – Stage & Project Grid (homepage)
+     5. Components – Project Cards
+     6. Components – Project-Page Sections (hero, content)
+     7. Components – Keyhole Scroll Effect
+     8. Components – Prev / Next Project Navigation
+     9. Preloader Overlay
+    10. Reveal-Animation Defaults
+    11. Animations (keyframes)
+    12. Responsive Breakpoints
+   ============================================================= */
+
+
+/* =============================================================
+   1. CSS CUSTOM PROPERTIES
+   Design tokens for colours, spacing, and max-widths.
+   Changing a value here updates the entire site.
+   ============================================================= */
+
+:root {
+  /* Brand colours */
+  --color-blue:       #2f4aa1;
+  --color-red:        #d6402c;
+  --color-dark:       #1a1a1a;
+  --color-white:      #ffffff;
+  --color-grey-bg:    #f5f5f5;
+  --color-grey-thumb: #d9d9d9;
+  --color-grey-mid:   #999999;
+  --color-grey-border:#e0e0e0;
+  --color-hover-bg:   #f0f0f0;
+
+  /* Typography */
+  --font-stack: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+                "Apple Color Emoji", "Segoe UI Emoji";
+
+  /* Layout */
+  --content-max:      900px;
+  --grid-max:         980px;
+  --header-pad-x:     60px;
+  --header-pad-top:   56px;
+}
+
+
+/* =============================================================
+   2. RESET & BASE
+   Minimal reset (box-sizing) and document-level defaults.
+   ============================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-stack);
+  background: var(--color-white);
+  color: var(--color-dark);
+}
+
+
+/* =============================================================
+   3. LAYOUT – HEADER
+   Fixed top bar: logo | about | centred name | language dropdown
+   ============================================================= */
+
+.top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 18px var(--header-pad-x);
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  align-items: center;
+  gap: 24px;
+  z-index: 100;
+  background: transparent;
+}
+
+/* ── Logo ── */
+.top__logo {
+  display: flex;
+  align-items: center;
+}
+
+.top__logo img {
+  height: 30px;
+  width: auto;
+  display: block;
+  transition: filter 0.3s ease;
+}
+
+/* When header is on a coloured/dark background, invert logo to white */
+.top.--inverted .top__logo img {
+  filter: brightness(0) invert(1);
+}
+
+/* ── About link (left area) ── */
+.top__link {
+  text-decoration: none;
+  color: var(--color-dark);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: opacity 0.2s ease;
+}
+.top__link:hover { opacity: 0.55; }
+.top__link:focus-visible {
+  outline: 2px solid var(--color-dark);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ── Name link (centred via flex on the 1fr column) ── */
+.name {
+  display: block;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  color: var(--color-blue);
+  font-size: clamp(14px, 1.4vw, 20px);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.name:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* Inverted header state (on coloured backgrounds) */
+.top.--inverted .name {
+  color: var(--color-white);
+}
+.top.--inverted .top__link {
+  color: var(--color-white);
+}
+.top.--inverted .lang-dropdown__trigger {
+  color: var(--color-white);
+}
+
+/* ── Right-side nav container (language dropdown) ── */
+.top__nav {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Language dropdown ── */
+.lang-dropdown {
+  position: relative;
+}
+
+.lang-dropdown__trigger {
+  border: 0;
+  background: transparent;
+  padding: 4px 2px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  transition: opacity 0.2s ease;
+}
+.lang-dropdown__trigger:hover { opacity: 0.55; }
+
+.lang-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  background: var(--color-white, #fff);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  min-width: 140px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 50;
+}
+
+.lang-dropdown:hover .lang-dropdown__menu,
+.lang-dropdown:focus-within .lang-dropdown__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.lang-dropdown__menu li { margin: 0; }
+
+/* Language buttons inside dropdown */
+.lang {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  text-align: left;
+  color: var(--color-dark, #111);
+  transition: background 0.15s ease;
+}
+
+.lang:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+.lang[aria-pressed="true"] {
+  font-weight: 700;
+}
+
+.lang:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+/* ── Projects dropdown ── */
+.projects-dropdown {
+  position: relative;
+}
+
+.projects-dropdown__trigger {
+  border: 0;
+  background: transparent;
+  padding: 4px 2px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  transition: opacity 0.2s ease;
+}
+.projects-dropdown__trigger:hover { opacity: 0.55; }
+
+.projects-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  background: var(--color-white, #fff);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 50;
+}
+
+.projects-dropdown:hover .projects-dropdown__menu,
+.projects-dropdown:focus-within .projects-dropdown__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.projects-dropdown__menu li { margin: 0; }
+
+.projects-dropdown__link {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  text-align: left;
+  color: var(--color-dark, #111);
+  transition: background 0.15s ease;
+}
+
+.projects-dropdown__link:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+.projects-dropdown__link:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+/* Inverted state */
+.top.--inverted .projects-dropdown__trigger {
+  color: var(--color-white);
+}
+
+/* Old separator dots — hide if still in DOM */
+.dot {
+  display: none;
+}
+
+/* Old .langs class — keep for backwards compat on project pages */
+.langs {
+  position: absolute;
+  top: 30px;
+  right: var(--header-pad-x);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-red);
+  text-transform: uppercase;
+}
+
+
+/* =============================================================
+   4. LAYOUT – STAGE & PROJECT GRID (homepage)
+   Vertically centred grid of project cards.
+   ============================================================= */
+
+.stage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 90px 24px 60px;
+}
+
+.projects {
+  width: min(var(--grid-max), 100%);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(18px, 3vw, 44px);
+  align-items: end;
+}
+
+
+/* =============================================================
+   5. COMPONENTS – PROJECT CARDS
+   Each card: big number → thumbnail → meta caption.
+   Thumbnail starts B/W and turns colour on hover.
+   ============================================================= */
+
+.card {
+  text-decoration: none;
+  color: inherit;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  justify-items: center;
+  gap: 10px;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* Large blue project number */
+.num {
+  font-weight: 900;
+  color: var(--color-blue);
+  font-size: clamp(54px, 6vw, 96px);
+  line-height: 0.9;
+}
+
+/* Grey placeholder square for thumbnails */
+.thumb {
+  width: 190px;
+  aspect-ratio: 1 / 1;
+  background: var(--color-grey-thumb);
+  overflow: hidden;
+  position: relative;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* B/W → colour transition on hover */
+  filter: grayscale(1);
+  transition: filter 220ms ease;
+}
+
+.card:hover .thumb img,
+.card:focus-visible .thumb img {
+  filter: grayscale(0);
+}
+
+/* Caption below thumbnail (hidden by default; appears on hover) */
+.meta {
+  text-align: center;
+  max-width: 190px;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.card:hover .meta,
+.card:focus-visible .meta {
+  opacity: 0.9;
+}
+
+.title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+
+/* =============================================================
+   6. COMPONENTS – PROJECT-PAGE SECTIONS (hero, content)
+   Full-width hero image with text overlay, then a content
+   section on a light-grey background.
+   ============================================================= */
+
+.section--hero {
+  background: var(--color-white);
+}
+
+/* Full-bleed hero figure */
+.section--hero figure {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  margin: 0 0 1em;
+}
+
+.section--hero figure img {
+  width: 100%;
+  object-fit: cover;
+  min-height: 100vh;
+}
+
+.section--hero .section__content {
+  padding-top: 0;
+}
+
+.section--content {
+  background: var(--color-grey-bg);
+}
+
+.section__content {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 80px 40px;
+  line-height: 1.6;
+}
+
+.section__content h1 {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800;
+  color: var(--color-blue);
+  margin: 0 0 0.5em;
+}
+
+.section__content p {
+  margin: 0 0 1em;
+}
+
+.section__content .back {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: var(--color-blue);
+  font-weight: 700;
+}
+
+.section__content .back:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+
+/* =============================================================
+   7. COMPONENTS – KEYHOLE SCROLL EFFECT
+   Fixed blue overlay with a clip-path "window" that expands
+   as the user scrolls through the hero section.
+   ============================================================= */
+
+.keyhole {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: var(--color-blue);
+  clip-path: polygon(
+    0% 0%, 0% 100%, 0 100%, 0 0,
+    100% 0, 100% 100%, 0 100%, 0 100%,
+    100% 100%, 100% 0%
+  );
+  z-index: 1;
+}
+
+/* Bouncing scroll-down indicator */
+.scroll-arrow {
+  position: absolute;
+  top: 72.5vh;
+  left: 50%;
+  z-index: 2;
+  animation: float 1s ease-in-out infinite alternate both;
+}
+
+.scroll-arrow svg {
+  transform: rotate(90deg);
+  stroke: var(--color-dark);
+  width: 2rem;
+  margin-left: -1rem;
+  height: auto;
+}
+
+
+/* =============================================================
+   8. COMPONENTS – PREV / NEXT PROJECT NAVIGATION
+   Two-column bar at the bottom of every project page.
+   Thumbnails start B/W, turn colour on hover.
+   ============================================================= */
+
+.project-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--color-grey-border);
+}
+
+.project-nav__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 40px;
+  text-decoration: none;
+  color: var(--color-dark);
+  overflow: hidden;
+  transition: background 300ms ease;
+}
+
+.project-nav__link:hover {
+  background: var(--color-hover-bg);
+}
+
+.project-nav__link:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: -2px;
+}
+
+.project-nav__link--next {
+  justify-content: flex-end;
+  text-align: right;
+  border-left: 1px solid var(--color-grey-border);
+}
+
+.project-nav__arrow {
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--color-blue);
+  flex-shrink: 0;
+  transition: transform 300ms ease;
+}
+
+.project-nav__link--prev:hover .project-nav__arrow {
+  transform: translateX(-6px);
+}
+
+.project-nav__link--next:hover .project-nav__arrow {
+  transform: translateX(6px);
+}
+
+.project-nav__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.project-nav__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-grey-mid);
+}
+
+.project-nav__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-blue);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 400ms ease, opacity 300ms ease;
+}
+
+.project-nav__link:hover .project-nav__title {
+  max-height: 40px;
+  opacity: 1;
+}
+
+.project-nav__thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  flex-shrink: 0;
+  filter: grayscale(1);
+  transition: filter 300ms ease;
+}
+
+.project-nav__link:hover .project-nav__thumb {
+  filter: grayscale(0);
+}
+
+
+/* =============================================================
+   9. PRELOADER OVERLAY
+   Full-screen poster + counter that covers the page on load.
+   Hidden via .--done after the animation completes.
+   ============================================================= */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.preloader__bg {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0);
+  background: var(--color-dark);
+}
+
+.preloader__poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preloader__poster.--preloading {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+}
+
+.preloader__counter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 33vh;
+  display: grid;
+  place-items: center;
+  z-index: 10001;
+  pointer-events: none;
+}
+
+.preloader__number {
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--color-grey-mid);
+  font-variant-numeric: tabular-nums;
+}
+
+.preloader.--done {
+  display: none;
+}
+
+
+/* =============================================================
+   10. REVEAL-ANIMATION DEFAULTS
+   Images start hidden so GSAP can animate them in.
+   If JS is unavailable the [hidden] fallback keeps content
+   accessible (see noscript or graceful-fallback logic in JS).
+   ============================================================= */
+
+[data-reveal="image"] {
+  visibility: hidden;
+}
+
+
+/* =============================================================
+   11. ANIMATIONS (keyframes)
+   ============================================================= */
+
+@keyframes float {
+  from { transform: translateY(-50%); }
+  to   { transform: translateY(50%); }
+}
+
+
+/* =============================================================
+   CUSTOM CURSOR
+   Blue filled circle that follows the mouse.
+   Turns to outline-only on clickable elements.
+   ============================================================= */
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-blue);
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: background 200ms ease;
+  border: 2px solid var(--color-blue);
+}
+
+.cursor.--clickable {
+  background: transparent;
+}
+
+/* Hide custom cursor on touch devices */
+@media (pointer: coarse) {
+  .cursor { display: none; }
+}
+
+/* Hide default cursor everywhere when custom cursor is active */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+
+/* =============================================================
+   12. RESPONSIVE BREAKPOINTS
+   Desktop-first: two columns at ≤ 900 px, single at ≤ 520 px.
+   Language bar collapses below name on small screens.
+   ============================================================= */
+
+@media (max-width: 900px) {
+  .projects {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .thumb { width: 220px; }
+  .meta  { max-width: 220px; }
+
+  .top {
+    padding-left: 24px;
+    padding-right: 24px;
+    gap: 16px;
+  }
+
+  .name {
+    font-size: clamp(14px, 1.8vw, 22px);
+  }
+
+  /* Reduce project-nav padding */
+  .project-nav__link {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 520px) {
+  .projects {
+    grid-template-columns: 1fr;
+  }
+
+  .thumb { width: min(320px, 86vw); }
+  .meta  { max-width: min(320px, 86vw); }
+
+  .section__content {
+    padding: 48px 20px;
+  }
+
+  /* Stack prev/next nav vertically */
+  .project-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .project-nav__link--next {
+    border-left: 0;
+    border-top: 1px solid var(--color-grey-border);
+  }
+}

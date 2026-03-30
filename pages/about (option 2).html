@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CV — Luciana Noemi Rudolph</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <style>
+    .cv {
+      width: min(960px, 90vw);
+      margin: 0 auto;
+      padding: 20px 0 100px;
+      font-family: var(--font-stack);
+      color: #1a1a1a;
+    }
+
+    /* Flip target (invisible, just marks position) */
+    .cv-title {
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      color: var(--color-blue);
+      font-size: clamp(30px, 4vw, 48px);
+      text-transform: uppercase;
+      visibility: hidden;
+      height: 0; overflow: hidden;
+      margin: 0;
+    }
+
+    /* ── Intro: photo + bio ── */
+    .cv-intro {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 48px;
+      align-items: start;
+      padding-bottom: 80px;
+    }
+    .cv-intro__photo {
+      width: 220px;
+      height: 280px;
+      object-fit: cover;
+      filter: grayscale(1);
+    }
+    .cv-intro__text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #444;
+      padding-top: 4px;
+    }
+
+    /* ── Download button ── */
+    .cv-download-btn {
+      display: inline-block;
+      padding: 12px 36px;
+      border: 1px solid #000;
+      border-radius: 50px;
+      background: #f0f0f0;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #000;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 200ms;
+    }
+    .cv-download-btn:hover {
+      background: #e0e0e0;
+    }
+
+    /* ── Sections ── */
+    .cv-section {
+      text-align: center;
+      padding: 80px 0;
+    }
+    .cv-section + .cv-section {
+      border-top: 1px solid #eee;
+    }
+    .cv-section__heading {
+      font-size: 24px;
+      font-weight: 700;
+      color: #000;
+      margin: 0 0 8px;
+    }
+    .cv-section__sub {
+      font-size: 14px;
+      color: #666;
+      margin: 0 0 48px;
+      font-weight: 400;
+    }
+
+    /* ── Skill bars grid (languages + software) ── */
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px 48px;
+      text-align: left;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .skill-item__label {
+      font-size: 14px;
+      color: #000;
+      margin-bottom: 8px;
+    }
+    .skill-bar {
+      width: 100%;
+      height: 6px;
+      background: #e6e6e6;
+    }
+    .skill-bar__fill {
+      height: 100%;
+      background: #4d4d4d;
+      width: 0;
+      transition: width 1s ease;
+    }
+
+    /* ── Circle cards grid (employers + education) ── */
+    .circle-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .circle-card {
+      text-align: center;
+    }
+    .circle-card__icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      background: #fafafa;
+      overflow: hidden;
+    }
+    .circle-card__icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .circle-card__name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #000;
+      margin: 0 0 4px;
+    }
+    .circle-card__role {
+      font-size: 13px;
+      color: #666;
+      margin: 0;
+    }
+
+    /* ── Contact section ── */
+    .cv-contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      text-align: left;
+      padding: 80px 0;
+      border-top: 1px solid #eee;
+    }
+    .cv-contact__heading {
+      font-size: 24px;
+      font-weight: 700;
+      color: #000;
+      margin: 0 0 32px;
+    }
+    .cv-form label {
+      display: block;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .cv-form input,
+    .cv-form textarea {
+      width: 100%;
+      border: 1px solid #000;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fff;
+      margin-bottom: 20px;
+      outline: none;
+    }
+    .cv-form input:focus,
+    .cv-form textarea:focus {
+      border-color: var(--color-blue);
+    }
+    .cv-form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .cv-form__btn {
+      display: inline-block;
+      padding: 12px 36px;
+      border: 1px solid #000;
+      border-radius: 50px;
+      background: #f0f0f0;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 200ms;
+    }
+    .cv-form__btn:hover {
+      background: #e0e0e0;
+    }
+    .cv-contact__right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      text-align: center;
+    }
+    .cv-download-text {
+      font-size: 13px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .cv-photo {
+      width: 220px;
+      height: 280px;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      filter: grayscale(1);
+    }
+
+    /* ── Social links ── */
+    .cv-social {
+      text-align: center;
+      padding: 80px 0 0;
+      border-top: 1px solid #eee;
+    }
+    .cv-social__heading {
+      font-size: 24px;
+      font-weight: 700;
+      color: #000;
+      margin: 0 0 48px;
+    }
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .social-card {
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+    }
+    .social-card:hover .social-card__icon {
+      background: #333;
+    }
+    .social-card__icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #555;
+      margin: 0 auto 12px;
+      display: grid;
+      place-items: center;
+      transition: background 200ms;
+    }
+    .social-card__icon svg {
+      width: 28px;
+      height: 28px;
+      fill: #fff;
+    }
+    .social-card__name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #000;
+      margin: 0 0 2px;
+    }
+    .social-card__sub {
+      font-size: 12px;
+      color: #888;
+      margin: 0;
+    }
+
+    /* ── Back link ── */
+    .back {
+      display: inline-block;
+      margin-top: 60px;
+      text-decoration: none;
+      color: var(--color-blue);
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* ── Reveal ── */
+    [data-cv-reveal] { opacity: 0; transform: translateY(30px); }
+
+    /* ── Print ── */
+    @media print {
+      .top, .back, .cv-contact, .cv-social { display: none; }
+      [data-cv-reveal] { opacity: 1; transform: none; }
+      .cv-title { visibility: visible; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 720px) {
+      .cv-intro { grid-template-columns: 180px 1fr; gap: 32px; }
+      .cv-intro__photo { width: 180px; height: 230px; }
+      .skill-grid { grid-template-columns: repeat(2, 1fr); }
+      .circle-grid { grid-template-columns: repeat(2, 1fr); }
+      .cv-contact { grid-template-columns: 1fr; gap: 40px; }
+      .social-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    }
+    @media (max-width: 480px) {
+      .cv-intro { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .skill-grid { grid-template-columns: 1fr; }
+      .circle-grid { grid-template-columns: repeat(2, 1fr); }
+      .cv-section { padding: 56px 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="top">
+    <a class="name" id="cv-name-link" href="../index.html" aria-label="Back to portfolio home">LUCIANA NOEMI RUDOLPH</a>
+    <nav class="langs" aria-label="Language switcher">
+      <button class="lang" type="button" data-lang="de" aria-pressed="false">HALLO</button>
+      <span class="dot" aria-hidden="true">•</span>
+      <button class="lang" type="button" data-lang="pt" aria-pressed="false">OLÁ</button>
+      <span class="dot" aria-hidden="true">•</span>
+      <button class="lang" type="button" data-lang="en" aria-pressed="true">HELLO</button>
+      <span class="dot" aria-hidden="true">•</span>
+      <button class="lang" type="button" data-lang="es" aria-pressed="false">HOLA</button>
+      <span class="dot" aria-hidden="true">•</span>
+      <button class="lang" type="button" data-lang="it" aria-pressed="false">CIAO</button>
+      <span class="dot" aria-hidden="true">•</span>
+      <button class="lang" type="button" data-lang="nl" aria-pressed="false">GOEDENDAG</button>
+    </nav>
+  </header>
+
+  <main class="cv">
+
+    <h1 class="cv-title" id="cv-title">LUCIANA NOEMI RUDOLPH</h1>
+
+    <!-- ════════════ INTRO ════════════ -->
+    <div class="cv-intro" data-cv-reveal>
+      <img class="cv-intro__photo" src="../assets/img/profile.jpg" alt="Luciana Noemi Rudolph" />
+      <p class="cv-intro__text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+
+    <!-- ════════════ LANGUAGES ════════════ -->
+    <section class="cv-section" data-cv-reveal>
+      <h2 class="cv-section__heading">Languages</h2>
+
+      <div class="skill-grid">
+        <div class="skill-item">
+          <div class="skill-item__label">German</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="100"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Portuguese</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="100"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">English</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="83"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Spanish</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="83"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Italian</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="17"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Dutch</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="17"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SOFTWARE SKILLS ════════════ -->
+    <section class="cv-section" data-cv-reveal>
+      <h2 class="cv-section__heading">Software Skills</h2>
+
+      <div class="skill-grid">
+        <div class="skill-item">
+          <div class="skill-item__label">Archicad</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="90"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Rhinoceros</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="85"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Enscape</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="75"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Revit</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="70"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Grasshopper</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="60"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Autocad</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="80"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Photoshop</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="85"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">InDesign</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="80"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__label">Illustrator</div>
+          <div class="skill-bar"><div class="skill-bar__fill" data-level="75"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ EXPERIENCE ════════════ -->
+    <section class="cv-section" data-cv-reveal>
+      <h2 class="cv-section__heading">Experience</h2>
+      <p class="cv-section__sub">My current &amp; past employers</p>
+      <div class="circle-grid">
+        <div class="circle-card">
+          <div class="circle-card__icon"></div>
+          <p class="circle-card__name">TU Delft</p>
+          <p class="circle-card__role">Student Assistant</p>
+        </div>
+        <div class="circle-card">
+          <div class="circle-card__icon"></div>
+          <p class="circle-card__name">MVRDV</p>
+          <p class="circle-card__role">Architectural Assistant</p>
+        </div>
+        <div class="circle-card">
+          <div class="circle-card__icon"></div>
+          <p class="circle-card__name">HTB / Hochtief</p>
+          <p class="circle-card__role">Intern</p>
+        </div>
+        <div class="circle-card">
+          <div class="circle-card__icon"></div>
+          <p class="circle-card__name">RSE+ Architekten</p>
+          <p class="circle-card__role">Intern</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ EDUCATION ════════════ -->
+    <section class="cv-section" data-cv-reveal>
+      <h2 class="cv-section__heading">Education</h2>
+      <p class="cv-section__sub">My academic background</p>
+      <div class="circle-grid">
+        <div class="circle-card">
+          <div class="circle-card__icon"></div>
+          <p class="circle-card__name">TU Delft</p>
+          <p class="circle-card__role">MSc Architecture, 2025 – 2027</p>
+        </div>
+        <div class="circle-card">
+          <div class="circle-card__icon"></div>
+          <p class="circle-card__name">TU Munich</p>
+          <p class="circle-card__role">B.A. Architecture, 2020 – 2024</p>
+        </div>
+        <div class="circle-card">
+          <div class="circle-card__icon"></div>
+          <p class="circle-card__name">UFRJ Rio de Janeiro</p>
+          <p class="circle-card__role">Exchange Program, 2022 – 2023</p>
+        </div>
+        <div class="circle-card">
+          <div class="circle-card__icon"></div>
+          <p class="circle-card__name">Baufritz Award</p>
+          <p class="circle-card__role">Sustainability "Transformathon"</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ CONTACT ════════════ -->
+    <div class="cv-contact" data-cv-reveal>
+      <div>
+        <h2 class="cv-contact__heading">Contact me</h2>
+        <form class="cv-form" onsubmit="return false;">
+          <label for="cv-name">Name</label>
+          <input type="text" id="cv-name" placeholder="Your name" />
+          <label for="cv-email">Email</label>
+          <input type="email" id="cv-email" placeholder="Your email" />
+          <label for="cv-subject">Subject</label>
+          <input type="text" id="cv-subject" placeholder="Subject" />
+          <label for="cv-message">Message</label>
+          <textarea id="cv-message" placeholder="Your message"></textarea>
+          <button type="submit" class="cv-form__btn">Send Message</button>
+        </form>
+      </div>
+      <div class="cv-contact__right">
+        <a class="cv-download-btn" href="../assets/docs/Luciana-Rudolph-CV.pdf" download>Download my CV &amp; Portfolio</a>
+      </div>
+    </div>
+
+    <!-- ════════════ SOCIAL ════════════ -->
+    <div class="cv-social" data-cv-reveal>
+      <h2 class="cv-social__heading">Find me here</h2>
+      <div class="social-grid">
+        <a class="social-card" href="https://linkedin.com" target="_blank" rel="noopener">
+          <div class="social-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.27c-.97 0-1.75-.79-1.75-1.76s.78-1.76 1.75-1.76 1.75.79 1.75 1.76-.78 1.76-1.75 1.76zm13.5 11.27h-3v-5.6c0-3.37-4-3.12-4 0v5.6h-3v-10h3v1.77c1.4-2.59 7-2.78 7 2.48v5.75z"/></svg>
+          </div>
+          <p class="social-card__name">LinkedIn</p>
+          <p class="social-card__sub">Connect with me</p>
+        </a>
+        <a class="social-card" href="https://instagram.com" target="_blank" rel="noopener">
+          <div class="social-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.97.25 2.43.41.61.24 1.05.52 1.51.98.46.46.74.9.98 1.51.17.46.36 1.26.41 2.43.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.97-.41 2.43-.24.61-.52 1.05-.98 1.51-.46.46-.9.74-1.51.98-.46.17-1.26.36-2.43.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.97-.25-2.43-.41-.61-.24-1.05-.52-1.51-.98-.46-.46-.74-.9-.98-1.51-.17-.46-.36-1.26-.41-2.43-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.97.41-2.43.24-.61.52-1.05.98-1.51.46-.46.9-.74 1.51-.98.46-.17 1.26-.36 2.43-.41 1.27-.06 1.65-.07 4.85-.07m0-2.16c-3.26 0-3.67.01-4.95.07-1.28.06-2.15.26-2.91.56-.79.31-1.46.72-2.13 1.38-.67.67-1.08 1.34-1.38 2.13-.3.77-.5 1.64-.56 2.91-.06 1.28-.07 1.69-.07 4.95s.01 3.67.07 4.95c.06 1.28.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.67 1.34 1.08 2.13 1.38.77.3 1.64.5 2.91.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.28-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.67-.67 1.08-1.34 1.38-2.13.3-.77.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.28-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13-.67-.67-1.34-1.08-2.13-1.38-.77-.3-1.64-.5-2.91-.56-1.28-.06-1.69-.07-4.95-.07zm0 5.84a6.16 6.16 0 100 12.33 6.16 6.16 0 000-12.33zm0 10.16a4 4 0 110-8 4 4 0 010 8zm6.41-10.41a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+          </div>
+          <p class="social-card__name">Instagram</p>
+          <p class="social-card__sub">Follow me</p>
+        </a>
+        <a class="social-card" href="https://issuu.com" target="_blank" rel="noopener">
+          <div class="social-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M3 3h18v18h-18v-18zm2 2v14h14v-14h-14zm3 3h8v2h-8v-2zm0 4h8v2h-8v-2zm0 4h5v2h-5v-2z"/></svg>
+          </div>
+          <p class="social-card__name">Issuu</p>
+          <p class="social-card__sub">View portfolio</p>
+        </a>
+      </div>
+    </div>
+
+    <a class="back" href="../index.html" data-cv-reveal>← Back to portfolio</a>
+  </main>
+
+  <!-- GSAP + plugins -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Flip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

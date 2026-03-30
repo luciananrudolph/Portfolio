@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Luciana Noemi Rudolph — Portfolio</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    /* ══════════════════════════════════════════
+       STICKY GRID SCROLL — Option 3
+       Based on Codrops tutorial by Theo Plawinski
+       ══════════════════════════════════════════ */
+
+    /* ── Fluid rem (1rem = 1px at 1440px) ── */
+    html { font-size: calc(100vw / 1440); }
+    body {
+      font-size: 16rem;
+      overflow-x: hidden;
+      background: var(--color-white, #fff);
+    }
+
+    /* ── Header fixed ── */
+    .top {
+      position: fixed !important;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+
+    /* ── Loading state ── */
+    body.loading .block--main { visibility: hidden; }
+
+    /* ═══════════════════════════════════════
+       INTRO BLOCK — Full-screen hero image
+       ═══════════════════════════════════════ */
+    .block--intro {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 48rem 40rem;
+    }
+    .block--intro__image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .block--intro__slide {
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .block--intro__slide.--active {
+      opacity: 1;
+    }
+
+    .block--intro__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0) 40%,
+        rgba(0,0,0,0.45) 100%
+      );
+      z-index: 1;
+    }
+    .block--intro__content {
+      position: relative;
+      z-index: 2;
+      max-width: 600rem;
+    }
+    .block--intro__title {
+      font-size: clamp(28rem, 4vw, 48rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+      margin: 0 0 12rem;
+    }
+    .block--intro__subtitle {
+      font-size: 14rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+    .block--intro__scroll {
+      position: absolute;
+      bottom: 28rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      font-size: 11rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ═══════════════════════════════════════
+       MAIN BLOCK — Sticky scroll container
+       425vh creates the temporal space
+       ═══════════════════════════════════════ */
+    .block.block--main {
+      height: 500vh;
+      position: relative;
+    }
+
+    /* ── Sticky wrapper: the fixed stage ── */
+    .block__wrapper {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      padding: 0 24rem;
+      overflow: hidden;
+      background: var(--color-white, #fff);
+    }
+
+    /* ── Centered content (name + subheading) ── */
+    .content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+      text-align: center;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .content__title {
+      font-size: clamp(32rem, 5vw, 64rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: #111;
+      margin: 0;
+    }
+    .content__description {
+      font-size: 16rem;
+      line-height: 1.6;
+      color: #555;
+      max-width: 440rem;
+      margin-top: 16rem;
+    }
+    .content__button {
+      margin-top: 28rem;
+      padding: 12rem 32rem;
+      font-size: 13rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #fff;
+      background: #111;
+      border: none;
+      border-radius: 100rem;
+      cursor: pointer;
+      pointer-events: all;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.25s ease;
+    }
+    .content__button:hover { background: #333; }
+
+    .content__buttons {
+      display: flex;
+      gap: 12rem;
+      margin-top: 28rem;
+      pointer-events: all;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .content__buttons .content__button {
+      margin-top: 0;
+    }
+
+    /* ── Scroll-progress button ── */
+    .content__button--scroll {
+      position: relative;
+      overflow: hidden;
+      background: transparent;
+      border: 2px solid #111;
+      color: #111;
+    }
+    .content__button--scroll:hover {
+      background: transparent;
+    }
+    .content__button-fill {
+      position: absolute;
+      inset: 0;
+      background: #111;
+      transform-origin: left center;
+      transform: scaleX(0);
+      transition: none;
+      z-index: 0;
+    }
+    .content__button-label {
+      position: relative;
+      z-index: 1;
+      transition: color 0.2s ease;
+    }
+    .content__button--scroll.--filled {
+      color: #fff;
+    }
+    .content__button--scroll.--filled .content__button-label {
+      color: #fff;
+    }
+
+    /* ── Gallery grid ── */
+    .gallery {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      width: 736rem;
+    }
+    .gallery__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 32rem;
+      row-gap: 40rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .gallery__item {
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 8rem;
+    }
+    .gallery__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ═══════════════════════════════════════
+       OUTRO BLOCK
+       ═══════════════════════════════════════ */
+    .block--outro {
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-white, #fff);
+    }
+    .block--outro__inner {
+      text-align: center;
+    }
+    .block--outro__inner p {
+      font-size: 14rem;
+      color: #999;
+      margin-bottom: 20rem;
+      letter-spacing: 0.04em;
+    }
+    .block--outro__inner a {
+      font-size: 13rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #111;
+      text-decoration: none;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4rem;
+      transition: border-color 0.25s ease;
+    }
+    .block--outro__inner a:hover { border-color: #111; }
+
+    /* ── Footer ── */
+    .site-footer { height: 0; }
+
+    /* ── Mobile fallback ── */
+    @media (max-width: 768px) {
+      html { font-size: calc(100vw / 375); }
+      .block--intro { padding: 32rem 20rem; }
+      .block.block--main { height: auto; }
+      .block__wrapper {
+        position: relative;
+        height: auto;
+        padding: 60rem 20rem 40rem;
+      }
+      .content {
+        height: auto;
+        padding: 40rem 0;
+      }
+      .gallery {
+        position: relative;
+        top: auto; left: auto;
+        transform: none;
+        width: 100%;
+      }
+      .gallery__grid {
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 12rem;
+        row-gap: 16rem;
+      }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .block.block--main { height: auto; }
+      .block__wrapper { position: relative; }
+      .gallery__item, .content__title, .content__description, .content__button {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="loading">
+
+  <!-- ── HEADER ── -->
+  <header class="top --inverted">
+    <a class="top__logo" href="index.html" aria-label="Home">
+      <img src="assets/img/logo-blue.png" alt="LAR logo" />
+    </a>
+
+    <a class="name" href="index.html" aria-label="Home">
+      LUCIANA NOEMI RUDOLPH
+    </a>
+
+    <div class="projects-dropdown">
+      <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false">Projects</button>
+      <ul class="projects-dropdown__menu">
+        <li><a class="projects-dropdown__link" href="projects/project1.html">Djilakh Education Campus</a></li>
+        <li><a class="projects-dropdown__link" href="projects/project2.html">IPAI Communication Center</a></li>
+        <li><a class="projects-dropdown__link" href="projects/project3.html">The Supertecture Project</a></li>
+        <li><a class="projects-dropdown__link" href="projects/project4.html">Inside Out</a></li>
+      </ul>
+    </div>
+
+    <a class="top__link" href="pages/about.html">About</a>
+
+    <nav class="top__nav" aria-label="Language switcher">
+      <div class="lang-dropdown">
+        <button class="lang-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false">
+          <span class="lang-dropdown__active" id="lang-active">EN</span>
+        </button>
+        <ul class="lang-dropdown__menu">
+          <li><button class="lang" type="button" data-lang="en" aria-pressed="true">English</button></li>
+          <li><button class="lang" type="button" data-lang="de" aria-pressed="false">Deutsch</button></li>
+          <li><button class="lang" type="button" data-lang="pt" aria-pressed="false">Português</button></li>
+          <li><button class="lang" type="button" data-lang="es" aria-pressed="false">Español</button></li>
+          <li><button class="lang" type="button" data-lang="it" aria-pressed="false">Italiano</button></li>
+          <li><button class="lang" type="button" data-lang="nl" aria-pressed="false">Nederlands</button></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       INTRO — Full-screen hero image
+       ══════════════════════════════════════════ -->
+  <section class="block block--intro">
+    <img class="block--intro__image block--intro__slide --active" src="assets/img/p1.jpg" alt="Slide 1" />
+    <img class="block--intro__image block--intro__slide" src="assets/img/p2.jpg" alt="Slide 2" />
+    <img class="block--intro__image block--intro__slide" src="assets/img/p1/entrance.jpg" alt="Slide 3" />
+    <div class="block--intro__overlay"></div>
+    <div class="block--intro__content">
+      <h1 class="block--intro__title">Luciana Noemi Rudolph</h1>
+      <p class="block--intro__subtitle">Architecture Portfolio · Selected Works</p>
+    </div>
+    <span class="block--intro__scroll">Scroll ↓</span>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       STICKY GRID SCROLL — Main Block
+       ══════════════════════════════════════════ -->
+  <section class="block block--main">
+    <div class="block__wrapper">
+
+      <!-- Centered text content -->
+      <div class="content">
+        <h2 class="content__title">Luciana Noemi Rudolph</h2>
+        <p class="content__description">Architectural projects exploring circular construction, climate-responsive architecture, and socially responsible design.</p>
+        <div class="content__buttons">
+          <a class="content__button" href="pages/about.html">About me</a>
+          <a class="content__button content__button--scroll" href="projects/project1.html" id="scroll-btn">
+            <span class="content__button-fill" id="scroll-fill"></span>
+            <span class="content__button-label">Scroll down for Project 1</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 12-image gallery grid (3 cols × 4 rows) -->
+      <div class="gallery">
+        <ul class="gallery__grid">
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p1.jpg" alt="Senegal Secondary School" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p2.jpg" alt="IPAI Communication Center" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p3.jpg" alt="Project 3" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p4.jpg" alt="Project 4" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p1/entrance.jpg" alt="Senegal school entrance" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p2/terrace.png" alt="IPAI terrace" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p1/courtyard.jpg" alt="Senegal school courtyard" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p2/lookout.png" alt="IPAI lookout" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p1/interior.jpg" alt="Senegal classroom interior" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p2/exterior.jpg" alt="IPAI campus exterior" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p1/classroom.jpg" alt="Senegal classroom" />
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__image" src="assets/img/p2/model-aerial.jpg" alt="IPAI model aerial" />
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="site-footer"></footer>
+
+  <!-- ── GSAP + ScrollTrigger + Lenis ── -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+
+  <!-- ── Main JS (translations, language switcher, cursor) ── -->
+  <script src="assets/js/main.js"></script>
+
+  <!-- ══════════════════════════════════════════
+       STICKY GRID SCROLL — Animation Engine
+       ══════════════════════════════════════════ -->
+  <script>
+  (function () {
+    "use strict";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ═══════════════════════════════════════
+       0. Invert header over the hero image
+       ═══════════════════════════════════════ */
+    var headerEl = document.querySelector(".top");
+    if (headerEl) {
+      ScrollTrigger.create({
+        trigger: ".block--intro",
+        start: "top top",
+        end: "bottom top",
+        onLeave: function ()     { headerEl.classList.remove("--inverted"); },
+        onEnterBack: function () { headerEl.classList.add("--inverted"); }
+      });
+    }
+
+    /* ═══════════════════════════════════════
+       1. Smooth scrolling with Lenis
+       ═══════════════════════════════════════ */
+    function initSmoothScrolling() {
+      var lenis = new Lenis({
+        lerp: 0.08,
+        wheelMultiplier: 1.4
+      });
+
+      lenis.on("scroll", ScrollTrigger.update);
+
+      gsap.ticker.add(function (time) {
+        lenis.raf(time * 1000);
+      });
+
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    /* ═══════════════════════════════════════
+       2. Preload images then init
+       ═══════════════════════════════════════ */
+    var imgs = document.querySelectorAll(".gallery__image, .block--intro__image");
+    var loaded = 0;
+    var total = imgs.length;
+
+    function onAllLoaded() {
+      document.body.classList.remove("loading");
+      initSmoothScrolling();
+      new StickyGridScroll();
+    }
+
+    if (total === 0) { onAllLoaded(); return; }
+
+    imgs.forEach(function (img) {
+      if (img.complete) {
+        loaded++;
+        if (loaded >= total) onAllLoaded();
+      } else {
+        img.addEventListener("load", function () {
+          loaded++;
+          if (loaded >= total) onAllLoaded();
+        });
+        img.addEventListener("error", function () {
+          loaded++;
+          if (loaded >= total) onAllLoaded();
+        });
+      }
+    });
+
+    /* ═══════════════════════════════════════
+       3. StickyGridScroll Class
+       ═══════════════════════════════════════ */
+    function StickyGridScroll() {
+      this.getElements();
+      if (!this.block) return;
+
+      this.initContent();
+      this.groupItemsByColumn();
+
+      this.addParallaxOnScroll();
+      this.animateTitleOnScroll();
+      this.animateGridOnScroll();
+    }
+
+    /* ── Retrieve elements ── */
+    StickyGridScroll.prototype.getElements = function () {
+      this.block = document.querySelector(".block--main");
+      if (!this.block) return;
+
+      this.wrapper     = this.block.querySelector(".block__wrapper");
+      this.content     = this.block.querySelector(".content");
+      this.title       = this.block.querySelector(".content__title");
+      this.description = this.block.querySelector(".content__description");
+      this.button      = this.block.querySelector(".content__buttons");
+      this.grid        = this.block.querySelector(".gallery__grid");
+      this.items       = this.block.querySelectorAll(".gallery__item");
+    };
+
+    /* ── Prepare initial state ── */
+    StickyGridScroll.prototype.initContent = function () {
+      if (this.description && this.button) {
+        gsap.set([this.description, this.button], {
+          opacity: 0,
+          pointerEvents: "none"
+        });
+      }
+
+      if (this.content && this.title) {
+        var dy = (this.content.offsetHeight - this.title.offsetHeight) / 2;
+        this.titleOffsetY = (dy / this.content.offsetHeight) * 100;
+        gsap.set(this.title, { yPercent: this.titleOffsetY });
+      }
+    };
+
+    /* ── Group items into 3 columns ── */
+    StickyGridScroll.prototype.groupItemsByColumn = function () {
+      this.numColumns = 3;
+      this.columns = [[], [], []];
+      var cols = this.columns;
+      this.items.forEach(function (item, i) {
+        cols[i % 3].push(item);
+      });
+    };
+
+    /* ── Parallax on wrapper ── */
+    StickyGridScroll.prototype.addParallaxOnScroll = function () {
+      if (!this.block || !this.wrapper) return;
+
+      gsap.from(this.wrapper, {
+        yPercent: -100,
+        ease: "none",
+        scrollTrigger: {
+          trigger: this.block,
+          start: "top bottom",
+          end: "top top",
+          scrub: true
+        }
+      });
+    };
+
+    /* ── Title fade-in ── */
+    StickyGridScroll.prototype.animateTitleOnScroll = function () {
+      if (!this.block || !this.title) return;
+
+      gsap.from(this.title, {
+        opacity: 0,
+        duration: 0.7,
+        ease: "power1.out",
+        scrollTrigger: {
+          trigger: this.block,
+          start: "top 57%",
+          toggleActions: "play none none reset"
+        }
+      });
+    };
+
+    /* ── Main scroll-driven timeline ── */
+    StickyGridScroll.prototype.animateGridOnScroll = function () {
+      var self = this;
+
+      var timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: this.block,
+          start: "top 25%",
+          end: "bottom bottom",
+          scrub: true
+        }
+      });
+
+      timeline
+        .add(this.gridRevealTimeline())
+        .add(this.gridZoomTimeline(), "-=0.6")
+        .add(function () {
+          self.toggleContent(timeline.scrollTrigger.direction === 1);
+        }, "-=0.32");
+    };
+
+    /* ── Grid reveal: columns slide in ── */
+    StickyGridScroll.prototype.gridRevealTimeline = function () {
+      var timeline = gsap.timeline();
+      var wh = window.innerHeight;
+      var dy = wh - (wh - this.grid.offsetHeight) / 2;
+
+      this.columns.forEach(function (column, colIndex) {
+        var fromTop = colIndex % 2 === 0;
+
+        timeline.from(column, {
+          y: dy * (fromTop ? -1 : 1),
+          stagger: {
+            each: 0.06,
+            from: fromTop ? "end" : "start"
+          },
+          ease: "power1.inOut"
+        }, "grid-reveal");
+      });
+
+      return timeline;
+    };
+
+    /* ── Grid zoom: scale + spread columns ── */
+    StickyGridScroll.prototype.gridZoomTimeline = function () {
+      var columns = this.columns;
+      var timeline = gsap.timeline({
+        defaults: { duration: 1, ease: "power3.inOut" }
+      });
+
+      timeline.to(this.grid, { scale: 2.05 });
+      timeline.to(columns[0], { xPercent: -40 }, "<");
+      timeline.to(columns[2], { xPercent: 40 }, "<");
+
+      var midIndex = Math.floor(columns[1].length / 2);
+      timeline.to(columns[1], {
+        yPercent: function (index) {
+          return (index < midIndex ? -1 : 1) * 40;
+        },
+        duration: 0.5,
+        ease: "power1.inOut"
+      }, "-=0.5");
+
+      return timeline;
+    };
+
+    /* ── Toggle content visibility ── */
+    StickyGridScroll.prototype.toggleContent = function (isVisible) {
+      if (!this.title || !this.description || !this.button) return;
+
+      var self = this;
+
+      gsap.timeline({ defaults: { overwrite: true } })
+        .to(this.title, {
+          yPercent: isVisible ? 0 : self.titleOffsetY,
+          duration: 0.7,
+          ease: "power2.inOut"
+        })
+        .to([this.description, this.button], {
+          opacity: isVisible ? 1 : 0,
+          duration: 0.4,
+          ease: "power1." + (isVisible ? "inOut" : "out"),
+          pointerEvents: isVisible ? "all" : "none"
+        }, isVisible ? "-=90%" : "<");
+    };
+
+    /* ═══════════════════════════════════════
+       Scroll-progress button → Project 1
+       ═══════════════════════════════════════ */
+    var scrollFill = document.getElementById("scroll-fill");
+    var scrollBtn  = document.getElementById("scroll-btn");
+    var hasNavigated = false;
+
+    if (scrollFill && scrollBtn) {
+      ScrollTrigger.create({
+        trigger: ".block--main",
+        start: "85% bottom",
+        end: "bottom bottom",
+        scrub: true,
+        onUpdate: function (self) {
+          var p = self.progress;
+          scrollFill.style.transform = "scaleX(" + p + ")";
+
+          if (p > 0.5) {
+            scrollBtn.classList.add("--filled");
+          } else {
+            scrollBtn.classList.remove("--filled");
+          }
+
+          if (p >= 0.99 && !hasNavigated) {
+            hasNavigated = true;
+            window.location.href = scrollBtn.href;
+          }
+        }
+      });
+    }
+
+  })();
+  </script>
+
+  <!-- ── Hero slideshow ── -->
+  <script>
+  (function () {
+    var slides = document.querySelectorAll(".block--intro__slide");
+    if (slides.length < 2) return;
+    var current = 0;
+    setInterval(function () {
+      slides[current].classList.remove("--active");
+      current = (current + 1) % slides.length;
+      slides[current].classList.add("--active");
+    }, 2500);
+  })();
+  </script>
+
+</body>
+</html>
