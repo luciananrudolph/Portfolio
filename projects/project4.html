@@ -57,7 +57,8 @@
       font-weight: 500;
       z-index: 20;
       letter-spacing: 0.01em;
-      transition: color 0.5s ease;
+      transition: color 0.5s ease, text-shadow 0.5s ease;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.4);
     }
     .xh__label--left  { left: 40px; }
     .xh__label--right { right: 40px; }
@@ -486,7 +487,7 @@
     var BIG_TEXT = "How can minimal architectural interventions extend the life of existing buildings? The project proposes a strategy of transformation that reinterprets an existing structure.";
     var words = BIG_TEXT.split(" ");
     bigtextBody.innerHTML = words.map(function (w) {
-      return '<span style="color:#ccc">' + w + " </span>";
+      return '<span style="color:rgba(0,0,0,0.18)">' + w + " </span>";
     }).join("");
     var wordSpans = bigtextBody.querySelectorAll("span");
 
@@ -566,6 +567,9 @@
       headline.style.color = bgT < 0.5 ? "#f4f1e6" : "#111";
       lblLeft.style.color  = bgT < 0.5 ? "#f4f1e6" : "#111";
       lblRight.style.color = bgT < 0.5 ? "#f4f1e6" : "#111";
+      var lblShadow = bgT < 0.5 ? "0 1px 8px rgba(0,0,0,0.6)" : "0 1px 8px rgba(255,255,255,0.8)";
+      lblLeft.style.textShadow  = lblShadow;
+      lblRight.style.textShadow = lblShadow;
 
       if (headerEl) {
         if (bgT < 0.5) headerEl.classList.add("--inverted");
@@ -659,7 +663,7 @@
         var revealProgress = sub(progress, 0.82, 1.00);
         var wordsToReveal = Math.floor(revealProgress * wordSpans.length);
         for (var i = 0; i < wordSpans.length; i++) {
-          wordSpans[i].style.color = i < wordsToReveal ? "#111" : "#ccc";
+          wordSpans[i].style.color = i < wordsToReveal ? "#111" : "rgba(0,0,0,0.18)";
         }
       } else {
         bigtext.style.opacity = 0;
