@@ -9,12 +9,7 @@
    own content, splitting it out makes the dependency
    explicit and prevents a "I18N is undefined" crash if
    main.js ever fails to load.
-
-   To add a new key:
-     1. Add it to every language object below (English
-        is the fallback if a translation is missing).
-     2. Reference it in HTML via data-i18n="key_name"
-        or in JS via I18N[lang].key_name.
+  
    ================================================= */
 
 var I18N = {
@@ -22,13 +17,6 @@ var I18N = {
     /* ── Navigation ── */
     nav_projects: "Projects",
     nav_about: "About",
-
-    /* ── Cursor labels ── */
-    cur_view: "View project",
-    cur_open: "Open",
-    cur_explore: "Explore",
-    cur_back: "Back",
-    cur_menu: "Menu",
 
     /* ── Homepage ── */
     hero_subtitle: "Architecture Portfolio \u00b7 Selected Works",
@@ -173,11 +161,6 @@ var I18N = {
   de: {
     nav_projects: "Projekte",
     nav_about: "\u00dcber mich",
-    cur_view: "Projekt ansehen",
-    cur_open: "\u00d6ffnen",
-    cur_explore: "Entdecken",
-    cur_back: "Zur\u00fcck",
-    cur_menu: "Men\u00fc",
     hero_subtitle: "Architektur-Portfolio \u00b7 Ausgew\u00e4hlte Arbeiten",
     hero_scroll: "Scrollen \u2193",
     content_desc: "Architekturprojekte zu zirkul\u00e4rem Bauen, klimagerechter Architektur und sozial verantwortungsvollem Design.",

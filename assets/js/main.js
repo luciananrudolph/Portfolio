@@ -683,15 +683,10 @@ function initBurger() {
 
 
 /* =================================================
-   9. CUSTOM CURSOR + LABELS
-   Filled blue dot → outline on clickable elements.
-   Any element with `data-cursor="…"` (or
-   `data-cursor-key="…"` for a translation key) shows
-   that text inside the cursor pill on hover.
-
-   Examples (in HTML):
-     <a data-cursor="View project" …>
-     <button data-cursor-key="cv_send" …>     ← translated
+   9. CUSTOM CURSOR
+   Small filled blue circle that follows the mouse,
+   becomes a hollow ring on clickable elements.
+   Disabled on touch devices.
    ================================================= */
 
 function initCursor() {
@@ -699,13 +694,10 @@ function initCursor() {
 
   var cursor = document.createElement("div");
   cursor.className = "cursor";
-  var label = document.createElement("span");
-  label.className = "cursor__label";
-  cursor.appendChild(label);
   document.body.appendChild(cursor);
+
   /* Marker class lets the CSS hide the native cursor only
-     while the custom one is active — and only on the
-     element types that should be cursor-free. */
+     while the custom one is active. */
   document.body.classList.add("--has-custom-cursor");
 
   var mx = 0, my = 0, cx = 0, cy = 0;
@@ -726,40 +718,15 @@ function initCursor() {
 
   var clickables = "a, button, input, textarea, select, [role='button'], label";
 
-  /* Resolve a label string for an element. If it carries
-     data-cursor-key we look it up in I18N for the current
-     language; otherwise data-cursor is used as-is. */
-  function resolveLabel(el) {
-    var key = el.getAttribute("data-cursor-key");
-    if (key && typeof I18N !== "undefined") {
-      var lang = document.documentElement.lang || "en";
-      var dict = I18N[lang] || I18N.en;
-      return dict[key] || I18N.en[key] || key;
-    }
-    return el.getAttribute("data-cursor");
-  }
-
   document.addEventListener("mouseover", function (e) {
-    var clickable = e.target.closest(clickables);
-    if (clickable) cursor.classList.add("--clickable");
-
-    var labeled = e.target.closest("[data-cursor], [data-cursor-key]");
-    if (labeled) {
-      var text = resolveLabel(labeled);
-      if (text) {
-        label.textContent = text;
-        cursor.classList.add("--label");
-      }
+    if (e.target.closest(clickables)) {
+      cursor.classList.add("--clickable");
     }
   });
 
   document.addEventListener("mouseout", function (e) {
     if (e.target.closest(clickables)) {
       cursor.classList.remove("--clickable");
-    }
-    var labeled = e.target.closest("[data-cursor], [data-cursor-key]");
-    if (labeled && (!e.relatedTarget || !e.relatedTarget.closest("[data-cursor], [data-cursor-key]"))) {
-      cursor.classList.remove("--label");
     }
   });
 }

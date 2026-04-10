@@ -385,12 +385,6 @@ body {
 }
 
 
-/* ── Gallery link (homepage clickable images) ── */
-.gallery__link {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
 
 /* =============================================================
    4. LAYOUT – STAGE & PROJECT GRID (homepage)
@@ -789,7 +783,6 @@ body {
    Turns to outline-only on clickable elements.
    ============================================================= */
 
-/* The dot — always a small filled circle. Never grows. */
 .cursor {
   position: fixed;
   top: 0;
@@ -810,47 +803,25 @@ body {
   background: transparent;
 }
 
-/* Label pill — a separate element following the dot.
-   Sits a bit to the right and below so it doesn't cover
-   what the user is actually pointing at. */
-.cursor-label {
-  position: fixed;
-  top: 0;
-  left: 0;
-  transform: translate(18px, 12px);
-  background: var(--color-blue);
-  color: #fff;
-  font-family: var(--font-stack);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  padding: 6px 12px;
-  border-radius: 999px;
-  pointer-events: none;
-  z-index: 99999;
-  opacity: 0;
-  transition: opacity 180ms ease;
-}
-.cursor-label.--visible { opacity: 1; }
-
 /* Hide custom cursor on touch devices */
 @media (pointer: coarse) {
   .cursor { display: none; }
 }
 
-/* Hide default cursor when the custom cursor is active.
-   IMPORTANT: text inputs, textareas and content-editable
-   elements keep their native caret/I-beam cursor — hiding
-   it makes forms unusable. */
+/* Hide the native cursor everywhere when the custom dot is active.
+   EXCEPT on text inputs / textareas / contenteditable, where the
+   native I-beam caret is essential for usability. */
 @media (pointer: fine) {
   body.--has-custom-cursor,
-  body.--has-custom-cursor a,
-  body.--has-custom-cursor button,
-  body.--has-custom-cursor [role="button"],
-  body.--has-custom-cursor label {
+  body.--has-custom-cursor *,
+  body.--has-custom-cursor *::before,
+  body.--has-custom-cursor *::after {
     cursor: none;
+  }
+  body.--has-custom-cursor input,
+  body.--has-custom-cursor textarea,
+  body.--has-custom-cursor [contenteditable="true"] {
+    cursor: text;
   }
 }
 
@@ -858,7 +829,14 @@ body {
 /* =============================================================
    12. HOMEPAGE STICKY-GRID SCROLL
    The index page builds a hero → sticky grid → outro flow.
-   Markup classes:
+
+   IMPORTANT: every selector in this section is scoped to
+   `body.home` so the rules CANNOT leak onto project pages.
+   The project pages also use class names like .gallery
+   and .block--intro for unrelated layouts — this scoping
+   keeps those styles isolated.
+
+   Markup classes (under body.home):
      .block--intro     full-screen hero with rotating slides
      .block--main      tall sticky stage hosting .gallery
      .block__wrapper   the pinned 100vh stage
@@ -881,10 +859,10 @@ body.home {
 }
 
 /* Loading state — hides the sticky stage until images preload */
-body.loading .block--main { visibility: hidden; }
+body.home.loading .block--main { visibility: hidden; }
 
 /* ── INTRO BLOCK — Full-screen hero ── */
-.block--intro {
+body.home .block--intro {
   position: relative;
   z-index: 2;
   width: 100%;
@@ -895,7 +873,7 @@ body.loading .block--main { visibility: hidden; }
   justify-content: flex-start;
   padding: 48rem 40rem;
 }
-.block--intro__image {
+body.home .block--intro__image {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -903,35 +881,35 @@ body.loading .block--main { visibility: hidden; }
   object-fit: cover;
   z-index: 0;
 }
-.block--intro__slide { opacity: 0; transition: opacity 1s ease; }
-.block--intro__slide.--active { opacity: 1; }
+body.home .block--intro__slide { opacity: 0; transition: opacity 1s ease; }
+body.home .block--intro__slide.--active { opacity: 1; }
 
-.block--intro__overlay {
+body.home .block--intro__overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%);
   z-index: 1;
 }
-.block--intro__content {
+body.home .block--intro__content {
   position: relative;
   z-index: 2;
   max-width: 600rem;
 }
-.block--intro__title {
+body.home .block--intro__title {
   font-size: clamp(28rem, 4vw, 48rem);
   font-weight: 700;
   color: #fff;
   line-height: 1.1;
   margin: 0 0 12rem;
 }
-.block--intro__subtitle {
+body.home .block--intro__subtitle {
   font-size: 14rem;
   font-weight: 400;
   color: rgba(255,255,255,0.75);
   letter-spacing: 0.04em;
   margin: 0;
 }
-.block--intro__scroll {
+body.home .block--intro__scroll {
   position: absolute;
   bottom: 28rem;
   left: 50%;
@@ -945,9 +923,9 @@ body.loading .block--main { visibility: hidden; }
 }
 
 /* ── MAIN BLOCK — sticky scroll container (5x viewport) ── */
-.block.block--main { height: 500vh; position: relative; }
+body.home .block.block--main { height: 500vh; position: relative; }
 
-.block__wrapper {
+body.home .block__wrapper {
   position: sticky;
   top: 0;
   width: 100%;
@@ -958,7 +936,7 @@ body.loading .block--main { visibility: hidden; }
 }
 
 /* Centred name + description + buttons */
-.content {
+body.home .content {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -970,7 +948,7 @@ body.loading .block--main { visibility: hidden; }
   z-index: 1;
   pointer-events: none;
 }
-.content__title {
+body.home .content__title {
   font-size: clamp(32rem, 5vw, 64rem);
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -978,14 +956,14 @@ body.loading .block--main { visibility: hidden; }
   color: #111;
   margin: 0;
 }
-.content__description {
+body.home .content__description {
   font-size: 16rem;
   line-height: 1.6;
   color: #555;
   max-width: 440rem;
   margin-top: 16rem;
 }
-.content__button {
+body.home .content__button {
   margin-top: 28rem;
   padding: 12rem 32rem;
   font-size: 13rem;
@@ -1002,9 +980,9 @@ body.loading .block--main { visibility: hidden; }
   display: inline-block;
   transition: background 0.25s ease;
 }
-.content__button:hover { background: #333; }
+body.home .content__button:hover { background: #333; }
 
-.content__buttons {
+body.home .content__buttons {
   display: flex;
   gap: 12rem;
   margin-top: 28rem;
@@ -1012,18 +990,18 @@ body.loading .block--main { visibility: hidden; }
   flex-wrap: wrap;
   justify-content: center;
 }
-.content__buttons .content__button { margin-top: 0; }
+body.home .content__buttons .content__button { margin-top: 0; }
 
 /* Scroll-progress button → fills as user scrolls */
-.content__button--scroll {
+body.home .content__button--scroll {
   position: relative;
   overflow: hidden;
   background: transparent;
   border: 2px solid #111;
   color: #111;
 }
-.content__button--scroll:hover { background: transparent; }
-.content__button-fill {
+body.home .content__button--scroll:hover { background: transparent; }
+body.home .content__button-fill {
   position: absolute;
   inset: 0;
   background: #111;
@@ -1032,23 +1010,23 @@ body.loading .block--main { visibility: hidden; }
   transition: none;
   z-index: 0;
 }
-.content__button-label {
+body.home .content__button-label {
   position: relative;
   z-index: 1;
   transition: color 0.2s ease;
 }
-.content__button--scroll.--filled,
-.content__button--scroll.--filled .content__button-label { color: #fff; }
+body.home .content__button--scroll.--filled,
+body.home .content__button--scroll.--filled .content__button-label { color: #fff; }
 
 /* ── Gallery grid ── */
-.gallery {
+body.home .gallery {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0);
   width: min(736rem, 80vw);
 }
-.gallery__grid {
+body.home .gallery__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   column-gap: 32rem;
@@ -1057,30 +1035,30 @@ body.loading .block--main { visibility: hidden; }
   padding: 0;
   margin: 0;
 }
-.gallery__item {
+body.home .gallery__item {
   width: 100%;
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 8rem;
   position: relative;
 }
-.gallery__link {
+body.home .gallery__link {
   display: block;
   width: 100%;
   height: 100%;
   position: relative;
 }
-.gallery__image {
+body.home .gallery__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
   transition: filter 0.4s ease;
 }
-.gallery__link:hover .gallery__image {
+body.home .gallery__link:hover .gallery__image {
   filter: grayscale(100%) brightness(0.55);
 }
-.gallery__overlay {
+body.home .gallery__overlay {
   position: absolute;
   inset: 0;
   display: flex;
@@ -1093,8 +1071,8 @@ body.loading .block--main { visibility: hidden; }
   pointer-events: none;
   z-index: 2;
 }
-.gallery__link:hover .gallery__overlay { opacity: 1; }
-.gallery__title {
+body.home .gallery__link:hover .gallery__overlay { opacity: 1; }
+body.home .gallery__title {
   color: #fff;
   font-size: clamp(10rem, 1.2vw, 16rem);
   font-weight: 600;
@@ -1104,21 +1082,21 @@ body.loading .block--main { visibility: hidden; }
 }
 
 /* ── OUTRO BLOCK ── */
-.block--outro {
+body.home .block--outro {
   height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--color-white, #fff);
 }
-.block--outro__inner { text-align: center; }
-.block--outro__inner p {
+body.home .block--outro__inner { text-align: center; }
+body.home .block--outro__inner p {
   font-size: 14rem;
   color: #999;
   margin-bottom: 20rem;
   letter-spacing: 0.04em;
 }
-.block--outro__inner a {
+body.home .block--outro__inner a {
   font-size: 13rem;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -1129,80 +1107,83 @@ body.loading .block--main { visibility: hidden; }
   padding-bottom: 4rem;
   transition: border-color 0.25s ease;
 }
-.block--outro__inner a:hover { border-color: #111; }
+body.home .block--outro__inner a:hover { border-color: #111; }
 
-.site-footer { height: 0; }
+body.home .site-footer { height: 0; }
 
 /* ── Homepage mobile fallback ── */
 @media (max-width: 768px) {
   html.home { font-size: 1px; }
   body.home { font-size: 16px; }
-  .block--intro {
+  body.home .block--intro {
     padding: 80px 20px 32px;
     height: 100svh;
   }
-  .block--intro__content { max-width: none; }
-  .block--intro__title { font-size: 28px; }
-  .block--intro__subtitle { font-size: 14px; }
-  .block--intro__scroll { font-size: 11px; bottom: 24px; }
-  .block.block--main { height: auto; }
-  .block__wrapper {
+  body.home .block--intro__content { max-width: none; }
+  body.home .block--intro__title { font-size: 28px; }
+  body.home .block--intro__subtitle { font-size: 14px; }
+  body.home .block--intro__scroll { font-size: 11px; bottom: 24px; }
+  body.home .block.block--main { height: auto; }
+  body.home .block__wrapper {
     position: relative;
     height: auto;
     padding: 40px 16px 32px;
   }
-  .content {
+  body.home .content {
     height: auto;
     padding: 24px 0 32px;
     pointer-events: all;
     opacity: 1;
   }
-  .content__title { font-size: 24px; }
-  .content__description {
+  body.home .content__title { font-size: 24px; }
+  body.home .content__description {
     font-size: 14px;
     max-width: none;
     margin-top: 12px;
     opacity: 1;
   }
-  .content__buttons {
+  body.home .content__buttons {
     margin-top: 20px;
     gap: 10px;
     opacity: 1;
     pointer-events: all;
   }
-  .content__button {
+  body.home .content__button {
     font-size: 13px;
     padding: 12px 24px;
     opacity: 1;
   }
-  .content__button--scroll { display: none; }
-  .gallery {
+  body.home .content__button--scroll { display: none; }
+  body.home .gallery {
     position: relative;
     top: auto; left: auto;
     transform: none;
     width: 100%;
   }
-  .gallery__grid {
+  body.home .gallery__grid {
     grid-template-columns: repeat(2, 1fr);
     column-gap: 10px;
     row-gap: 10px;
   }
-  .gallery__item { border-radius: 6px; }
-  .gallery__link {
+  body.home .gallery__item { border-radius: 6px; }
+  body.home .gallery__link {
     -webkit-tap-highlight-color: rgba(0,0,0,0.05);
   }
 }
 
 @media (max-width: 380px) {
-  .block--intro__title { font-size: 24px; }
-  .content__title { font-size: 20px; }
+  body.home .block--intro__title { font-size: 24px; }
+  body.home .content__title { font-size: 20px; }
 }
 
 /* Reduced motion: disable the sticky/parallax stage */
 @media (prefers-reduced-motion: reduce) {
-  .block.block--main { height: auto; }
-  .block__wrapper { position: relative; }
-  .gallery__item, .content__title, .content__description, .content__button {
+  body.home .block.block--main { height: auto; }
+  body.home .block__wrapper { position: relative; }
+  body.home .gallery__item,
+  body.home .content__title,
+  body.home .content__description,
+  body.home .content__button {
     opacity: 1 !important;
     transform: none !important;
   }

@@ -125,73 +125,73 @@
       <div class="gallery">
         <ul class="gallery__grid">
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project1.html">
               <img class="gallery__image" src="assets/img/p1.jpg" alt="Djilakh Education Campus" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project2.html">
               <img class="gallery__image" src="assets/img/p2.jpg" alt="IPAI Communication Center" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project3.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project3.html">
               <img class="gallery__image" src="assets/img/p3.jpg" alt="The Supertecture Project" />
               <span class="gallery__overlay"><span class="gallery__title">The Supertecture Project</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project4.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project4.html">
               <img class="gallery__image" src="assets/img/p4.jpg" alt="Inside Out" />
               <span class="gallery__overlay"><span class="gallery__title">Inside Out</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project1.html">
               <img class="gallery__image" src="assets/img/p1/entrance.jpg" alt="Senegal school entrance" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project2.html">
               <img class="gallery__image" src="assets/img/p2/terrace.png" alt="IPAI terrace" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project1.html">
               <img class="gallery__image" src="assets/img/p1/courtyard.jpg" alt="Senegal school courtyard" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project2.html">
               <img class="gallery__image" src="assets/img/p2/lookout.png" alt="IPAI lookout" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project1.html">
               <img class="gallery__image" src="assets/img/p1/interior.jpg" alt="Senegal classroom interior" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project2.html">
               <img class="gallery__image" src="assets/img/p2/exterior.jpg" alt="IPAI campus exterior" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project1.html">
               <img class="gallery__image" src="assets/img/p1/classroom.jpg" alt="Senegal classroom" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
+            <a class="gallery__link" href="projects/project2.html">
               <img class="gallery__image" src="assets/img/p2/model-aerial.jpg" alt="IPAI model aerial" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
@@ -478,13 +478,24 @@
     /* ═══════════════════════════════════════
        Scroll-progress button → Project 1
        ═══════════════════════════════════════ */
-    /* Scroll-progress button: fills as the user nears the bottom
-       of the sticky stage. Navigation only happens on an explicit
-       click — auto-navigation on scroll is disorienting. */
+    /* Scroll-progress button:
+         • fills left→right as the user nears the bottom
+         • clicking the button always navigates immediately
+         • if the user reaches the bottom AND stays there
+           for ~700 ms, we navigate automatically. The delay
+           prevents an accidental hijack when someone just
+           scrolls fast through the gallery. */
     var scrollFill = document.getElementById("scroll-fill");
     var scrollBtn  = document.getElementById("scroll-btn");
 
     if (scrollFill && scrollBtn) {
+      var navTimer = null;
+      var hasNavigated = false;
+
+      function cancelAutoNav() {
+        if (navTimer) { clearTimeout(navTimer); navTimer = null; }
+      }
+
       ScrollTrigger.create({
         trigger: ".block--main",
         start: "85% bottom",
@@ -494,8 +505,22 @@
           var p = self.progress;
           scrollFill.style.transform = "scaleX(" + p + ")";
           scrollBtn.classList.toggle("--filled", p > 0.5);
+
+          if (p >= 0.99 && !hasNavigated && !navTimer) {
+            /* Bottom reached — arm the delayed navigation. */
+            navTimer = setTimeout(function () {
+              hasNavigated = true;
+              window.location.href = scrollBtn.href;
+            }, 700);
+          } else if (p < 0.99) {
+            /* User scrolled back up — abort. */
+            cancelAutoNav();
+          }
         }
       });
+
+      /* If the user clicks the button, skip the wait. */
+      scrollBtn.addEventListener("click", cancelAutoNav);
     }
 
   })();
