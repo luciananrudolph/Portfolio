@@ -1,397 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="home">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Luciana Noemi Rudolph — Portfolio</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <!-- Homepage-only inline overrides (kept tiny — most styles
+       now live in styles.css → section 12 "Homepage Sticky-Grid Scroll").
+       The header is forced fixed here because it must overlay the hero. -->
   <style>
-    /* ══════════════════════════════════════════
-       STICKY GRID SCROLL — Option 3
-       Based on Codrops tutorial by Theo Plawinski
-       ══════════════════════════════════════════ */
+    /* The header on the homepage must overlay the hero image.
+       Other pages already get position:fixed from styles.css. */
+    .top { position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
 
-    /* ── Fluid rem (1rem = 1px at 1440px, floored for smaller desktops) ── */
-    html { font-size: clamp(0.8px, calc(100vw / 1440), 1.6px); }
-    body {
-      font-size: 16rem;
-      overflow-x: hidden;
-      background: var(--color-white, #fff);
-    }
-
-    /* ── Header fixed ── */
-    .top {
-      position: fixed !important;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-    }
-
-    /* ── Loading state ── */
-    body.loading .block--main { visibility: hidden; }
-
-    /* ═══════════════════════════════════════
-       INTRO BLOCK — Full-screen hero image
-       ═══════════════════════════════════════ */
-    .block--intro {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-start;
-      padding: 48rem 40rem;
-    }
-    .block--intro__image {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
-    }
-    .block--intro__slide {
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
-    .block--intro__slide.--active {
-      opacity: 1;
-    }
-
-    .block--intro__overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0) 40%,
-        rgba(0,0,0,0.45) 100%
-      );
-      z-index: 1;
-    }
-    .block--intro__content {
-      position: relative;
-      z-index: 2;
-      max-width: 600rem;
-    }
-    .block--intro__title {
-      font-size: clamp(28rem, 4vw, 48rem);
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.1;
-      margin: 0 0 12rem;
-    }
-    .block--intro__subtitle {
-      font-size: 14rem;
-      font-weight: 400;
-      color: rgba(255,255,255,0.75);
-      letter-spacing: 0.04em;
-      margin: 0;
-    }
-    .block--intro__scroll {
-      position: absolute;
-      bottom: 28rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      font-size: 11rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
-    }
-
-    /* ═══════════════════════════════════════
-       MAIN BLOCK — Sticky scroll container
-       425vh creates the temporal space
-       ═══════════════════════════════════════ */
-    .block.block--main {
-      height: 500vh;
-      position: relative;
-    }
-
-    /* ── Sticky wrapper: the fixed stage ── */
-    .block__wrapper {
-      position: sticky;
-      top: 0;
-      width: 100%;
-      height: 100vh;
-      padding: 0 24rem;
-      overflow: hidden;
-      background: var(--color-white, #fff);
-    }
-
-    /* ── Centered content (name + subheading) ── */
-    .content {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100vh;
-      text-align: center;
-      z-index: 1;
-      pointer-events: none;
-    }
-    .content__title {
-      font-size: clamp(32rem, 5vw, 64rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      color: #111;
-      margin: 0;
-    }
-    .content__description {
-      font-size: 16rem;
-      line-height: 1.6;
-      color: #555;
-      max-width: 440rem;
-      margin-top: 16rem;
-    }
-    .content__button {
-      margin-top: 28rem;
-      padding: 12rem 32rem;
-      font-size: 13rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #fff;
-      background: #111;
-      border: none;
-      border-radius: 100rem;
-      cursor: pointer;
-      pointer-events: all;
-      text-decoration: none;
-      display: inline-block;
-      transition: background 0.25s ease;
-    }
-    .content__button:hover { background: #333; }
-
-    .content__buttons {
-      display: flex;
-      gap: 12rem;
-      margin-top: 28rem;
-      pointer-events: all;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .content__buttons .content__button {
-      margin-top: 0;
-    }
-
-    /* ── Scroll-progress button ── */
-    .content__button--scroll {
-      position: relative;
-      overflow: hidden;
-      background: transparent;
-      border: 2px solid #111;
-      color: #111;
-    }
-    .content__button--scroll:hover {
-      background: transparent;
-    }
-    .content__button-fill {
-      position: absolute;
-      inset: 0;
-      background: #111;
-      transform-origin: left center;
-      transform: scaleX(0);
-      transition: none;
-      z-index: 0;
-    }
-    .content__button-label {
-      position: relative;
-      z-index: 1;
-      transition: color 0.2s ease;
-    }
-    .content__button--scroll.--filled {
-      color: #fff;
-    }
-    .content__button--scroll.--filled .content__button-label {
-      color: #fff;
-    }
-
-    /* ── Gallery grid ── */
-    .gallery {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate3d(-50%, -50%, 0);
-      width: min(736rem, 80vw);
-    }
-    .gallery__grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      column-gap: 32rem;
-      row-gap: 40rem;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .gallery__item {
-      width: 100%;
-      aspect-ratio: 1;
-      overflow: hidden;
-      border-radius: 8rem;
-      position: relative;
-    }
-    .gallery__link {
-      display: block;
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-    .gallery__image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: filter 0.4s ease;
-    }
-    .gallery__link:hover .gallery__image {
-      filter: grayscale(100%) brightness(0.55);
-    }
-    .gallery__overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 12rem;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-      z-index: 2;
-    }
-    .gallery__link:hover .gallery__overlay {
-      opacity: 1;
-    }
-    .gallery__title {
-      color: #fff;
-      font-size: clamp(10rem, 1.2vw, 16rem);
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      line-height: 1.3;
-      text-transform: uppercase;
-    }
-
-    /* ═══════════════════════════════════════
-       OUTRO BLOCK
-       ═══════════════════════════════════════ */
-    .block--outro {
-      height: 60vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--color-white, #fff);
-    }
-    .block--outro__inner {
-      text-align: center;
-    }
-    .block--outro__inner p {
-      font-size: 14rem;
-      color: #999;
-      margin-bottom: 20rem;
-      letter-spacing: 0.04em;
-    }
-    .block--outro__inner a {
-      font-size: 13rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #111;
-      text-decoration: none;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 4rem;
-      transition: border-color 0.25s ease;
-    }
-    .block--outro__inner a:hover { border-color: #111; }
-
-    /* ── Footer ── */
-    .site-footer { height: 0; }
-
-    /* ── Mobile fallback ── */
-    @media (max-width: 768px) {
-      html { font-size: 1px; }
-      body { font-size: 16px; }
-      .block--intro {
-        padding: 80px 20px 32px;
-        height: 100svh;
-      }
-      .block--intro__content { max-width: none; }
-      .block--intro__title { font-size: 28px; }
-      .block--intro__subtitle { font-size: 14px; }
-      .block--intro__scroll { font-size: 11px; bottom: 24px; }
-      .block.block--main { height: auto; }
-      .block__wrapper {
-        position: relative;
-        height: auto;
-        padding: 40px 16px 32px;
-      }
-      .content {
-        height: auto;
-        padding: 24px 0 32px;
-        pointer-events: all;
-      }
-      .content__title { font-size: 24px; }
-      .content__description {
-        font-size: 14px;
-        max-width: none;
-        margin-top: 12px;
-        opacity: 1 !important;
-      }
-      .content__buttons {
-        margin-top: 20px;
-        gap: 10px;
-        opacity: 1 !important;
-        pointer-events: all !important;
-      }
-      .content__button {
-        font-size: 13px;
-        padding: 12px 24px;
-        opacity: 1 !important;
-      }
-      .content__button--scroll { display: none; }
-      .gallery {
-        position: relative;
-        top: auto; left: auto;
-        transform: none;
-        width: 100%;
-      }
-      .gallery__grid {
-        grid-template-columns: repeat(2, 1fr);
-        column-gap: 10px;
-        row-gap: 10px;
-      }
-      .gallery__item {
-        border-radius: 6px;
-      }
-      .gallery__link {
-        -webkit-tap-highlight-color: rgba(0,0,0,0.05);
-      }
-    }
-
-    /* Small phones */
-    @media (max-width: 380px) {
-      .block--intro__title { font-size: 24px; }
-      .content__title { font-size: 20px; }
-    }
-
-    /* ── Reduced motion ── */
-    @media (prefers-reduced-motion: reduce) {
-      .block.block--main { height: auto; }
-      .block__wrapper { position: relative; }
-      .gallery__item, .content__title, .content__description, .content__button {
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    }
   </style>
 </head>
 
-<body class="loading">
+<body class="home loading">
 
   <!-- ── HEADER ── -->
   <header class="top --inverted">
@@ -438,11 +63,37 @@
 
   <!-- ══════════════════════════════════════════
        INTRO — Full-screen hero image
+       ─────────────────────────────────
+       Hero images use srcset so the browser picks the
+       smallest file that fits the viewport. To make this
+       work, export each photo at THREE widths and name
+       them like the example below:
+           p1-800.jpg   (≤ 800 px wide  — phones)
+           p1-1600.jpg  (≤ 1600 px wide — laptops/tablets)
+           p1-2400.jpg  (≤ 2400 px wide — large desktops/retina)
+       Aim for ~70 % JPEG quality. Use squoosh.app or
+       ImageMagick: `magick p1.jpg -resize 1600 -quality 70 p1-1600.jpg`.
+       Until those files exist the browser falls back to `src`.
        ══════════════════════════════════════════ -->
   <section class="block block--intro">
-    <img class="block--intro__image block--intro__slide --active" src="assets/img/p1.jpg" alt="Slide 1" />
-    <img class="block--intro__image block--intro__slide" src="assets/img/p2.jpg" alt="Slide 2" />
-    <img class="block--intro__image block--intro__slide" src="assets/img/p1/entrance.jpg" alt="Slide 3" />
+    <img class="block--intro__image block--intro__slide --active"
+         src="assets/img/p1.jpg"
+         srcset="assets/img/p1-800.jpg 800w,
+                 assets/img/p1-1600.jpg 1600w,
+                 assets/img/p1-2400.jpg 2400w"
+         sizes="100vw"
+         fetchpriority="high"
+         alt="Djilakh Education Campus — exterior view" />
+    <img class="block--intro__image block--intro__slide"
+         src="assets/img/p2.jpg"
+         srcset="assets/img/p2-800.jpg 800w,
+                 assets/img/p2-1600.jpg 1600w,
+                 assets/img/p2-2400.jpg 2400w"
+         sizes="100vw"
+         alt="IPAI Communication Center — facade study" />
+    <img class="block--intro__image block--intro__slide"
+         src="assets/img/p1/entrance.jpg"
+         alt="Senegal school entrance with children playing" />
     <div class="block--intro__overlay"></div>
     <div class="block--intro__content">
       <h1 class="block--intro__title">Luciana Noemi Rudolph</h1>
@@ -474,73 +125,73 @@
       <div class="gallery">
         <ul class="gallery__grid">
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html">
+            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p1.jpg" alt="Djilakh Education Campus" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html">
+            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p2.jpg" alt="IPAI Communication Center" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project3.html">
+            <a class="gallery__link" href="projects/project3.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p3.jpg" alt="The Supertecture Project" />
               <span class="gallery__overlay"><span class="gallery__title">The Supertecture Project</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project4.html">
+            <a class="gallery__link" href="projects/project4.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p4.jpg" alt="Inside Out" />
               <span class="gallery__overlay"><span class="gallery__title">Inside Out</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html">
+            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p1/entrance.jpg" alt="Senegal school entrance" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html">
+            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p2/terrace.png" alt="IPAI terrace" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html">
+            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p1/courtyard.jpg" alt="Senegal school courtyard" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html">
+            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p2/lookout.png" alt="IPAI lookout" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html">
+            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p1/interior.jpg" alt="Senegal classroom interior" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html">
+            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p2/exterior.jpg" alt="IPAI campus exterior" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html">
+            <a class="gallery__link" href="projects/project1.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p1/classroom.jpg" alt="Senegal classroom" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project2.html">
+            <a class="gallery__link" href="projects/project2.html" data-cursor-key="cur_view">
               <img class="gallery__image" src="assets/img/p2/model-aerial.jpg" alt="IPAI model aerial" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
@@ -559,7 +210,10 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
 
-  <!-- ── Main JS (translations, language switcher, cursor) ── -->
+  <!-- ── Translations dictionary (must load before main.js
+       and before any per-page inline script that reads I18N). ── -->
+  <script src="assets/js/i18n.js"></script>
+  <!-- ── Main JS (language switcher, cursor, dropdowns, etc.) ── -->
   <script src="assets/js/main.js"></script>
 
   <!-- ══════════════════════════════════════════
@@ -824,9 +478,11 @@
     /* ═══════════════════════════════════════
        Scroll-progress button → Project 1
        ═══════════════════════════════════════ */
+    /* Scroll-progress button: fills as the user nears the bottom
+       of the sticky stage. Navigation only happens on an explicit
+       click — auto-navigation on scroll is disorienting. */
     var scrollFill = document.getElementById("scroll-fill");
     var scrollBtn  = document.getElementById("scroll-btn");
-    var hasNavigated = false;
 
     if (scrollFill && scrollBtn) {
       ScrollTrigger.create({
@@ -837,17 +493,7 @@
         onUpdate: function (self) {
           var p = self.progress;
           scrollFill.style.transform = "scaleX(" + p + ")";
-
-          if (p > 0.5) {
-            scrollBtn.classList.add("--filled");
-          } else {
-            scrollBtn.classList.remove("--filled");
-          }
-
-          if (p >= 0.99 && !hasNavigated) {
-            hasNavigated = true;
-            window.location.href = scrollBtn.href;
-          }
+          scrollBtn.classList.toggle("--filled", p > 0.5);
         }
       });
     }

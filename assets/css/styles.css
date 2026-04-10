@@ -208,11 +208,20 @@ body {
   z-index: 50;
 }
 
+/* Open state — toggled by JS via aria-expanded on the trigger.
+   Hover/focus-within kept as a progressive enhancement on desktop. */
+.lang-dropdown.--open .lang-dropdown__menu,
 .lang-dropdown:hover .lang-dropdown__menu,
 .lang-dropdown:focus-within .lang-dropdown__menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+.lang-dropdown__trigger:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .lang-dropdown__menu li { margin: 0; }
@@ -288,11 +297,20 @@ body {
   z-index: 50;
 }
 
+/* Open state — toggled by JS via aria-expanded on the trigger.
+   Hover/focus-within kept as a progressive enhancement on desktop. */
+.projects-dropdown.--open .projects-dropdown__menu,
 .projects-dropdown:hover .projects-dropdown__menu,
 .projects-dropdown:focus-within .projects-dropdown__menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+.projects-dropdown__trigger:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .projects-dropdown__menu li { margin: 0; }
@@ -325,12 +343,6 @@ body {
 .top.--inverted .projects-dropdown__trigger {
   color: var(--color-white);
 }
-
-/* Old separator dots — hide if still in DOM */
-.dot {
-  display: none;
-}
-
 
 /* ── Hamburger button (hidden on desktop, shown on mobile) ── */
 .top__burger {
@@ -379,22 +391,6 @@ body {
   width: 100%;
   height: 100%;
 }
-
-/* Old .langs class — keep for backwards compat on project pages */
-.langs {
-  position: absolute;
-  top: 30px;
-  right: var(--header-pad-x);
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--color-red);
-  text-transform: uppercase;
-}
-
 
 /* =============================================================
    4. LAYOUT – STAGE & PROJECT GRID (homepage)
@@ -672,15 +668,25 @@ body {
   font-size: 16px;
   font-weight: 700;
   color: var(--color-blue);
-  max-height: 0;
-  opacity: 0;
+  max-height: 40px;
+  opacity: 1;
   overflow: hidden;
   transition: max-height 400ms ease, opacity 300ms ease;
 }
 
-.project-nav__link:hover .project-nav__title {
-  max-height: 40px;
-  opacity: 1;
+/* Desktop hover refinement: collapse the title when not
+   hovered so the nav reads as minimal until intent is shown.
+   Touch devices (no hover) keep the title visible by default. */
+@media (hover: hover) and (pointer: fine) {
+  .project-nav__title {
+    max-height: 0;
+    opacity: 0;
+  }
+  .project-nav__link:hover .project-nav__title,
+  .project-nav__link:focus-visible .project-nav__title {
+    max-height: 40px;
+    opacity: 1;
+  }
 }
 
 .project-nav__thumb {
@@ -783,6 +789,7 @@ body {
    Turns to outline-only on clickable elements.
    ============================================================= */
 
+/* The dot — always a small filled circle. Never grows. */
 .cursor {
   position: fixed;
   top: 0;
@@ -798,25 +805,412 @@ body {
   border: 2px solid var(--color-blue);
 }
 
+/* Hover state on any clickable: hollow ring */
 .cursor.--clickable {
   background: transparent;
 }
+
+/* Label pill — a separate element following the dot.
+   Sits a bit to the right and below so it doesn't cover
+   what the user is actually pointing at. */
+.cursor-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(18px, 12px);
+  background: var(--color-blue);
+  color: #fff;
+  font-family: var(--font-stack);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.cursor-label.--visible { opacity: 1; }
 
 /* Hide custom cursor on touch devices */
 @media (pointer: coarse) {
   .cursor { display: none; }
 }
 
-/* Hide default cursor everywhere when custom cursor is active */
+/* Hide default cursor when the custom cursor is active.
+   IMPORTANT: text inputs, textareas and content-editable
+   elements keep their native caret/I-beam cursor — hiding
+   it makes forms unusable. */
 @media (pointer: fine) {
-  *, *::before, *::after {
-    cursor: none !important;
+  body.--has-custom-cursor,
+  body.--has-custom-cursor a,
+  body.--has-custom-cursor button,
+  body.--has-custom-cursor [role="button"],
+  body.--has-custom-cursor label {
+    cursor: none;
   }
 }
 
 
 /* =============================================================
-   12. RESPONSIVE BREAKPOINTS
+   12. HOMEPAGE STICKY-GRID SCROLL
+   The index page builds a hero → sticky grid → outro flow.
+   Markup classes:
+     .block--intro     full-screen hero with rotating slides
+     .block--main      tall sticky stage hosting .gallery
+     .block__wrapper   the pinned 100vh stage
+     .content          centred title/description/buttons
+     .gallery          12-image grid moved by GSAP
+     .block--outro     small contact CTA at the end
+   These styles used to live inline in index.html — moved
+   here so HTML/CSS/JS stay properly separated.
+   ============================================================= */
+
+/* Fluid rem on the homepage only: 1rem ≈ 1px at 1440 px viewport.
+   Scoped via the .home class so other pages keep normal rem sizing.
+   The mobile breakpoint below resets it so pixel values stay sane
+   on phones. */
+html.home { font-size: clamp(0.8px, calc(100vw / 1440), 1.6px); }
+body.home {
+  font-size: 16rem;
+  overflow-x: hidden;
+  background: var(--color-white, #fff);
+}
+
+/* Loading state — hides the sticky stage until images preload */
+body.loading .block--main { visibility: hidden; }
+
+/* ── INTRO BLOCK — Full-screen hero ── */
+.block--intro {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 48rem 40rem;
+}
+.block--intro__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.block--intro__slide { opacity: 0; transition: opacity 1s ease; }
+.block--intro__slide.--active { opacity: 1; }
+
+.block--intro__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%);
+  z-index: 1;
+}
+.block--intro__content {
+  position: relative;
+  z-index: 2;
+  max-width: 600rem;
+}
+.block--intro__title {
+  font-size: clamp(28rem, 4vw, 48rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+  margin: 0 0 12rem;
+}
+.block--intro__subtitle {
+  font-size: 14rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+.block--intro__scroll {
+  position: absolute;
+  bottom: 28rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: 11rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ── MAIN BLOCK — sticky scroll container (5x viewport) ── */
+.block.block--main { height: 500vh; position: relative; }
+
+.block__wrapper {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  padding: 0 24rem;
+  overflow: hidden;
+  background: var(--color-white, #fff);
+}
+
+/* Centred name + description + buttons */
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  z-index: 1;
+  pointer-events: none;
+}
+.content__title {
+  font-size: clamp(32rem, 5vw, 64rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #111;
+  margin: 0;
+}
+.content__description {
+  font-size: 16rem;
+  line-height: 1.6;
+  color: #555;
+  max-width: 440rem;
+  margin-top: 16rem;
+}
+.content__button {
+  margin-top: 28rem;
+  padding: 12rem 32rem;
+  font-size: 13rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: #111;
+  border: none;
+  border-radius: 100rem;
+  cursor: pointer;
+  pointer-events: all;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.25s ease;
+}
+.content__button:hover { background: #333; }
+
+.content__buttons {
+  display: flex;
+  gap: 12rem;
+  margin-top: 28rem;
+  pointer-events: all;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.content__buttons .content__button { margin-top: 0; }
+
+/* Scroll-progress button → fills as user scrolls */
+.content__button--scroll {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 2px solid #111;
+  color: #111;
+}
+.content__button--scroll:hover { background: transparent; }
+.content__button-fill {
+  position: absolute;
+  inset: 0;
+  background: #111;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: none;
+  z-index: 0;
+}
+.content__button-label {
+  position: relative;
+  z-index: 1;
+  transition: color 0.2s ease;
+}
+.content__button--scroll.--filled,
+.content__button--scroll.--filled .content__button-label { color: #fff; }
+
+/* ── Gallery grid ── */
+.gallery {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: min(736rem, 80vw);
+}
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 32rem;
+  row-gap: 40rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.gallery__item {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8rem;
+  position: relative;
+}
+.gallery__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.gallery__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.4s ease;
+}
+.gallery__link:hover .gallery__image {
+  filter: grayscale(100%) brightness(0.55);
+}
+.gallery__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.gallery__link:hover .gallery__overlay { opacity: 1; }
+.gallery__title {
+  color: #fff;
+  font-size: clamp(10rem, 1.2vw, 16rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+/* ── OUTRO BLOCK ── */
+.block--outro {
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white, #fff);
+}
+.block--outro__inner { text-align: center; }
+.block--outro__inner p {
+  font-size: 14rem;
+  color: #999;
+  margin-bottom: 20rem;
+  letter-spacing: 0.04em;
+}
+.block--outro__inner a {
+  font-size: 13rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #111;
+  text-decoration: none;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4rem;
+  transition: border-color 0.25s ease;
+}
+.block--outro__inner a:hover { border-color: #111; }
+
+.site-footer { height: 0; }
+
+/* ── Homepage mobile fallback ── */
+@media (max-width: 768px) {
+  html.home { font-size: 1px; }
+  body.home { font-size: 16px; }
+  .block--intro {
+    padding: 80px 20px 32px;
+    height: 100svh;
+  }
+  .block--intro__content { max-width: none; }
+  .block--intro__title { font-size: 28px; }
+  .block--intro__subtitle { font-size: 14px; }
+  .block--intro__scroll { font-size: 11px; bottom: 24px; }
+  .block.block--main { height: auto; }
+  .block__wrapper {
+    position: relative;
+    height: auto;
+    padding: 40px 16px 32px;
+  }
+  .content {
+    height: auto;
+    padding: 24px 0 32px;
+    pointer-events: all;
+    opacity: 1;
+  }
+  .content__title { font-size: 24px; }
+  .content__description {
+    font-size: 14px;
+    max-width: none;
+    margin-top: 12px;
+    opacity: 1;
+  }
+  .content__buttons {
+    margin-top: 20px;
+    gap: 10px;
+    opacity: 1;
+    pointer-events: all;
+  }
+  .content__button {
+    font-size: 13px;
+    padding: 12px 24px;
+    opacity: 1;
+  }
+  .content__button--scroll { display: none; }
+  .gallery {
+    position: relative;
+    top: auto; left: auto;
+    transform: none;
+    width: 100%;
+  }
+  .gallery__grid {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+    row-gap: 10px;
+  }
+  .gallery__item { border-radius: 6px; }
+  .gallery__link {
+    -webkit-tap-highlight-color: rgba(0,0,0,0.05);
+  }
+}
+
+@media (max-width: 380px) {
+  .block--intro__title { font-size: 24px; }
+  .content__title { font-size: 20px; }
+}
+
+/* Reduced motion: disable the sticky/parallax stage */
+@media (prefers-reduced-motion: reduce) {
+  .block.block--main { height: auto; }
+  .block__wrapper { position: relative; }
+  .gallery__item, .content__title, .content__description, .content__button {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+
+/* =============================================================
+   13. RESPONSIVE BREAKPOINTS
    Desktop-first: two columns at ≤ 900 px, single at ≤ 520 px.
    Language bar collapses below name on small screens.
    ============================================================= */

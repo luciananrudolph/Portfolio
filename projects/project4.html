@@ -441,20 +441,20 @@
   <!-- NAV: Previous / Next Project Links            -->
   <!-- ============================================= -->
   <nav class="project-nav" aria-label="Project navigation">
-    <a class="project-nav__link project-nav__link--prev" href="project1.html" aria-label="Previous project: Djilakh Education Campus">
+    <a class="project-nav__link project-nav__link--prev" data-cursor-key="cur_back" href="project1.html" aria-label="Previous project: Djilakh Education Campus">
       <span class="project-nav__arrow" aria-hidden="true">←</span>
-      <img class="project-nav__thumb" src="../assets/img/p1.jpg" alt="" />
+      <img class="project-nav__thumb" src="../assets/img/p1.jpg" alt="" loading="lazy" decoding="async" />
       <span class="project-nav__text">
         <span class="project-nav__label">Previous project</span>
         <span class="project-nav__title">Djilakh Education Campus</span>
       </span>
     </a>
-    <a class="project-nav__link project-nav__link--next" href="project3.html" aria-label="Next project: Project 3">
+    <a class="project-nav__link project-nav__link--next" data-cursor-key="cur_view" href="project3.html" aria-label="Next project: Project 3">
       <span class="project-nav__text">
         <span class="project-nav__label">Next project</span>
         <span class="project-nav__title">Project 3</span>
       </span>
-      <img class="project-nav__thumb" src="../assets/img/p3.jpg" alt="" />
+      <img class="project-nav__thumb" src="../assets/img/p3.jpg" alt="" loading="lazy" decoding="async" />
       <span class="project-nav__arrow" aria-hidden="true">→</span>
     </a>
   </nav>
@@ -689,6 +689,7 @@
   })();
   </script>
 
+  <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/main.js"></script>
 </body>
 </html>
