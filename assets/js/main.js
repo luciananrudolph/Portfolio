@@ -334,6 +334,26 @@ function initTransitions() {
 
   /* ── CV page: Flip in + reveal sections ── */
   if (isCV) {
+    /* Name-as-title shrink effect.
+       At scroll-top the header .name is enlarged to act as the
+       page H1 (CSS rule body.cv:not(.--scrolled) .name). Once the
+       user scrolls past the threshold we add .--scrolled and the
+       CSS transition snaps the name back to its normal header
+       size and position. */
+    var nameShrinkThreshold = 60;
+    var nameShrinkTicking = false;
+    function updateNameShrink() {
+      nameShrinkTicking = false;
+      document.body.classList.toggle("--scrolled", window.scrollY > nameShrinkThreshold);
+    }
+    window.addEventListener("scroll", function () {
+      if (!nameShrinkTicking) {
+        nameShrinkTicking = true;
+        requestAnimationFrame(updateNameShrink);
+      }
+    }, { passive: true });
+    updateNameShrink();
+
     var sections = document.querySelectorAll("[data-cv-reveal]");
     var raw = sessionStorage.getItem("flipState");
 
@@ -456,29 +476,16 @@ function initTransitions() {
     }
 
     /* ── Leaving CV: reverse the Flip ── */
+    /* Leaving the CV: fade the content sections, then navigate.
+       (The old version performed a Flip back into the homepage
+       name position; that was tied to the duplicate cv-title H1
+       which no longer exists.) */
     function handleLeave(e, link) {
       e.preventDefault();
       gsap.to(sections, {
-        opacity: 0, y: -20, duration: 0.3, ease: "power2.in"
+        opacity: 0, y: -20, duration: 0.3, ease: "power2.in",
+        onComplete: function () { window.location.href = link.href; }
       });
-      if (nameLink) {
-        var state = Flip.getState(cvTitle);
-        var nameRect = nameLink.getBoundingClientRect();
-        gsap.set(cvTitle, {
-          position: "fixed", top: nameRect.top, left: nameRect.left,
-          width: nameRect.width,
-          fontSize: getComputedStyle(nameLink).fontSize,
-          letterSpacing: getComputedStyle(nameLink).letterSpacing,
-          zIndex: 100
-        });
-        gsap.set(nameLink, { opacity: 0 });
-        Flip.from(state, {
-          duration: 0.7, ease: "expo.inOut",
-          onComplete: function () { window.location.href = link.href; }
-        });
-      } else {
-        window.location.href = link.href;
-      }
     }
 
     var backLink = document.querySelector('.back[href="../index.html"]');

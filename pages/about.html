@@ -15,17 +15,50 @@
       color: #1a1a1a;
     }
 
-    /* ── Flip title (hidden — only used as a Flip target position) ── */
+    /* ── The duplicate H1 used to live here. We hide it because
+         the header .name itself now acts as the page title (it
+         starts large at scroll-top and shrinks back into the
+         header as the user scrolls — see "CV NAME-AS-TITLE"
+         below). Element stays in the DOM so existing Flip
+         transition code can still reference it harmlessly. ── */
     .cv-title {
-      font-weight: 800;
-      letter-spacing: 0.03em;
-      color: var(--color-blue);
-      font-size: clamp(30px, 4vw, 48px);
-      margin: 0 0 48px;
-      text-transform: uppercase;
-      visibility: hidden;
-      height: 0;
-      overflow: hidden;
+      display: none;
+    }
+
+    /* Reserve vertical space at the top of the CV main column
+       so the cv-top section doesn't sit directly under the
+       enlarged header name. */
+    main.cv { padding-top: 170px; }
+
+    /* ────────────────────────────────────────────────────────
+       CV NAME-AS-TITLE
+       The .name in the header acts as the page H1.
+       • At scroll-top:   large, blue, translated down to the
+                          centre of the page width.
+       • After scroll:    snaps back to its normal header size
+                          and position via the .--scrolled class
+                          set on <body> by main.js.
+       ──────────────────────────────────────────────────────── */
+    body.cv .name {
+      transform-origin: center top;
+      transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1),
+                  font-size  600ms cubic-bezier(0.4, 0, 0.2, 1),
+                  letter-spacing 600ms ease;
+      will-change: transform, font-size;
+    }
+    body.cv:not(.--scrolled) .name {
+      font-size: clamp(22px, 2.6vw, 34px);
+      letter-spacing: 0.04em;
+      transform: translateY(70px);
+      pointer-events: auto;
+    }
+    /* On smaller screens the translate distance is too much. */
+    @media (max-width: 720px) {
+      body.cv:not(.--scrolled) .name {
+        font-size: clamp(18px, 3.6vw, 24px);
+        transform: translateY(48px);
+      }
+      main.cv { padding-top: 130px; }
     }
 
     /* ── Top section: photo + education ── */
@@ -368,11 +401,19 @@
       color: #000;
       margin: 0 0 24px;
     }
+    /* 4 cards in one row when there is space, 2×2 below 720 px,
+       and a single column on phones — never the awkward 3+1. */
     .social-grid {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
-      flex-wrap: wrap;
       margin-bottom: 28px;
+    }
+    @media (max-width: 720px) {
+      .social-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 420px) {
+      .social-grid { grid-template-columns: 1fr; }
     }
     .social-card {
       display: flex;
@@ -462,9 +503,11 @@
   </style>
 </head>
 
-<body>
+<body class="cv">
 
-  <!-- HEADER (name link is the Flip source — it animates into .cv-title) -->
+  <!-- HEADER. The .name link doubles as the page H1: at scroll-top
+       it is enlarged via CSS (body.cv:not(.--scrolled) .name) and
+       shrinks back to normal once the user scrolls past 60 px. -->
   <header class="top">
     <a class="top__logo" href="../index.html" aria-label="Home">
       <img src="../assets/img/logo-blue.png" alt="LAR logo" />
