@@ -338,7 +338,7 @@
     <a class="name" href="../index.html" aria-label="Home">LUCIANA NOEMI RUDOLPH</a>
 
     <div class="projects-dropdown">
-      <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false">Projects</button>
+      <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false" data-i18n="nav_projects">Projects</button>
       <ul class="projects-dropdown__menu">
         <li><a class="projects-dropdown__link" href="project1.html">Djilakh Education Campus</a></li>
         <li><a class="projects-dropdown__link" href="project2.html">IPAI Communication Center</a></li>
@@ -347,12 +347,12 @@
       </ul>
     </div>
 
-    <a class="top__link" href="../pages/about.html">About</a>
+    <a class="top__link" href="../pages/about.html" data-i18n="nav_about">About</a>
 
     <nav class="top__nav" aria-label="Language switcher">
       <div class="lang-dropdown">
         <button class="lang-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false">
-          <span class="lang-dropdown__active">EN</span>
+          <span class="lang-dropdown__active" id="lang-active">EN</span>
         </button>
         <ul class="lang-dropdown__menu">
           <li><button class="lang" type="button" data-lang="en" aria-pressed="true">English</button></li>
@@ -380,7 +380,7 @@
       <div class="xh__bg" id="xh-bg"></div>
 
       <!-- Headline -->
-      <h1 class="xh__headline" id="xh-headline">IPAI Communication Center</h1>
+      <h1 class="xh__headline" id="xh-headline" data-i18n="p2_headline">IPAI Communication Center</h1>
 
       <!-- Image A: exterior (small → large → thumbnail) -->
       <div class="xh__img" id="img-a">
@@ -395,18 +395,18 @@
       <!-- Sidebar text (states 3 & 4) -->
       <div class="xh__sidebar" id="xh-sidebar">
         <p id="xh-sidebar-text"></p>
-        <a href="#project-details" id="xh-sidebar-link">View project details</a>
+        <a href="#project-details" id="xh-sidebar-link" data-i18n="view_details">View project details</a>
       </div>
 
       <!-- Big text block (state 5) -->
       <div class="xh__bigtext" id="xh-bigtext">
         <div class="xh__bigtext__body" id="xh-bigtext-body"></div>
-        <a class="xh__bigtext__cta" href="#project-details">Explore the project</a>
+        <a class="xh__bigtext__cta" href="#project-details" data-i18n="explore_project">Explore the project</a>
       </div>
 
       <!-- Corner labels -->
-      <span class="xh__label xh__label--left" id="xh-lbl-left">IPAI Communication Center</span>
-      <span class="xh__label xh__label--right" id="xh-lbl-right">Heilbronn, Germany</span>
+      <span class="xh__label xh__label--left" id="xh-lbl-left" data-i18n="p2_lbl_left">IPAI Communication Center</span>
+      <span class="xh__label xh__label--right" id="xh-lbl-right" data-i18n="p2_lbl_right">Heilbronn, Germany</span>
 
     </div>
   </section>
@@ -419,48 +419,48 @@
       <div class="project-info__grid">
         <div class="project-info__meta">
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Project</span>
-            <span class="project-info__meta-value">IPAI Communication Center</span>
+            <span class="project-info__meta-label" data-i18n="label_project">Project</span>
+            <span class="project-info__meta-value" data-i18n="p2_meta_project">IPAI Communication Center</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Location</span>
-            <span class="project-info__meta-value">Heilbronn, Germany</span>
+            <span class="project-info__meta-label" data-i18n="label_location">Location</span>
+            <span class="project-info__meta-value" data-i18n="p2_meta_location">Heilbronn, Germany</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Office</span>
-            <span class="project-info__meta-value">MVRDV (Internship)</span>
+            <span class="project-info__meta-label" data-i18n="label_office">Office</span>
+            <span class="project-info__meta-value" data-i18n="p2_meta_office">MVRDV (Internship)</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Role</span>
-            <span class="project-info__meta-value">Architectural Intern — Communication Center Design Team</span>
+            <span class="project-info__meta-label" data-i18n="label_role">Role</span>
+            <span class="project-info__meta-value" data-i18n="p2_meta_role">Architectural Intern — Communication Center Design Team</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Client</span>
-            <span class="project-info__meta-value">IPAI Konsortium (Stadt Heilbronn, Dieter Schwarz Stiftung, Schwarz Gruppe)</span>
+            <span class="project-info__meta-label" data-i18n="label_client">Client</span>
+            <span class="project-info__meta-value" data-i18n="p2_meta_client">IPAI Konsortium (Stadt Heilbronn, Dieter Schwarz Stiftung, Schwarz Gruppe)</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Status</span>
-            <span class="project-info__meta-value">On site (construction began 2025)</span>
+            <span class="project-info__meta-label" data-i18n="label_status">Status</span>
+            <span class="project-info__meta-value" data-i18n="p2_meta_status">On site (construction began 2025)</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Campus Area</span>
-            <span class="project-info__meta-value">265,000 m²</span>
+            <span class="project-info__meta-label" data-i18n="label_campus_area">Campus Area</span>
+            <span class="project-info__meta-value" data-i18n="p2_meta_campus">265,000 m²</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Certifications</span>
-            <span class="project-info__meta-value">DGNB Platinum (targeted)</span>
+            <span class="project-info__meta-label" data-i18n="label_certifications">Certifications</span>
+            <span class="project-info__meta-value" data-i18n="p2_meta_cert">DGNB Platinum (targeted)</span>
           </div>
         </div>
 
         <div class="project-info__description">
-          <h3>Design Concept</h3>
-          <p>
+          <h3 data-i18n="design_concept">Design Concept</h3>
+          <p data-i18n="p2_concept_1">
             The Innovation Park Artificial Intelligence (IPAI) campus in Heilbronn is a 30-hectare hub for over 5,000 researchers, designed by MVRDV around a distinctive circular masterplan. The striking geometry — visible even in satellite imagery — positions the campus as a global landmark for responsible AI development, with laboratories, housing, offices, and a central cultural building for public engagement.
           </p>
-          <p>
+          <p data-i18n="p2_concept_2">
             At the heart of the campus stands the Communication Center, a cylindrical tower with a reflective facade that serves as the public interface between the AI research community and visitors. The building houses exhibitions, conferences, seminars, and a visitor centre, conceived in collaboration with Berlin-based placemaking experts REALACE to invite the public into dialogue with emerging technologies.
           </p>
-          <p>
+          <p data-i18n="p2_concept_3">
             The design emphasises human wellbeing as a counterpoint to screen-intensive AI work. A car-free campus, bioclimatic facades, hybrid timber construction, and a parametric landscape by LOLA create an environment where tactile organic materials and generous green spaces encourage outdoor collaboration. Energy consumption is projected at 80% below a typical campus, with carbon neutrality achieved over the building's lifespan through renewable energy, reforestation, and bio-based construction systems.
           </p>
         </div>
@@ -499,13 +499,13 @@
       <span class="project-nav__arrow" aria-hidden="true">←</span>
       <img class="project-nav__thumb" src="../assets/img/p1.jpg" alt="" />
       <span class="project-nav__text">
-        <span class="project-nav__label">Previous project</span>
+        <span class="project-nav__label" data-i18n="prev_project">Previous project</span>
         <span class="project-nav__title">Djilakh Education Campus</span>
       </span>
     </a>
     <a class="project-nav__link project-nav__link--next" href="project3.html" aria-label="Next project: Project 3">
       <span class="project-nav__text">
-        <span class="project-nav__label">Next project</span>
+        <span class="project-nav__label" data-i18n="next_project">Next project</span>
         <span class="project-nav__title">Project 3</span>
       </span>
       <img class="project-nav__thumb" src="../assets/img/p3.jpg" alt="" />
@@ -739,6 +739,22 @@
 
     window.addEventListener("scroll", onScroll, { passive: true });
     tick();
+
+    /* Listen for language changes */
+    window.addEventListener("langchange", function (e) {
+      var d = e.detail.dict;
+      var fb = I18N.en;
+      var BIG = d.p2_bigtext || fb.p2_bigtext;
+      words = BIG.split(" ");
+      bigtextBody.innerHTML = words.map(function (w) {
+        return '<span style="color:rgba(0,0,0,0.18)">' + w + " </span>";
+      }).join("");
+      wordSpans = bigtextBody.querySelectorAll("span");
+
+      SIDEBAR_COPY[3] = { text: d.p2_sidebar_3 || fb.p2_sidebar_3, link: d.view_details || fb.view_details };
+      SIDEBAR_COPY[4] = { text: d.p2_sidebar_4 || fb.p2_sidebar_4, link: d.view_details || fb.view_details };
+      tick();
+    });
 
   })();
   </script>

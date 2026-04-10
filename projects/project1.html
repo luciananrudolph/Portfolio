@@ -527,7 +527,7 @@
     <a class="name" href="../index.html" aria-label="Home">LUCIANA NOEMI RUDOLPH</a>
 
     <div class="projects-dropdown">
-      <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false">Projects</button>
+      <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false" data-i18n="nav_projects">Projects</button>
       <ul class="projects-dropdown__menu">
         <li><a class="projects-dropdown__link" href="project1.html">Djilakh Education Campus</a></li>
         <li><a class="projects-dropdown__link" href="project2.html">IPAI Communication Center</a></li>
@@ -536,12 +536,12 @@
       </ul>
     </div>
 
-    <a class="top__link" href="../pages/about.html">About</a>
+    <a class="top__link" href="../pages/about.html" data-i18n="nav_about">About</a>
 
     <nav class="top__nav" aria-label="Language switcher">
       <div class="lang-dropdown">
         <button class="lang-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false">
-          <span class="lang-dropdown__active">EN</span>
+          <span class="lang-dropdown__active" id="lang-active">EN</span>
         </button>
         <ul class="lang-dropdown__menu">
           <li><button class="lang" type="button" data-lang="en" aria-pressed="true">English</button></li>
@@ -569,7 +569,7 @@
       <div class="xh__bg" id="xh-bg"></div>
 
       <!-- Headline -->
-      <h1 class="xh__headline" id="xh-headline">Djilakh Education Campus</h1>
+      <h1 class="xh__headline" id="xh-headline" data-i18n="p1_headline">Djilakh Education Campus</h1>
 
       <!-- Image A: entrance exterior -->
       <div class="xh__img" id="img-a">
@@ -579,18 +579,18 @@
       <!-- Sidebar text -->
       <div class="xh__sidebar" id="xh-sidebar">
         <p id="xh-sidebar-text"></p>
-        <a href="#project-details" id="xh-sidebar-link">View project details</a>
+        <a href="#project-details" id="xh-sidebar-link" data-i18n="view_details">View project details</a>
       </div>
 
       <!-- Big text block (state 5) -->
       <div class="xh__bigtext" id="xh-bigtext">
         <div class="xh__bigtext__body" id="xh-bigtext-body"></div>
-        <a class="xh__bigtext__cta" href="#project-details">Explore the project</a>
+        <a class="xh__bigtext__cta" href="#project-details" data-i18n="explore_project">Explore the project</a>
       </div>
 
       <!-- Corner labels -->
-      <span class="xh__label xh__label--left" id="xh-lbl-left">Senegal Secondary School</span>
-      <span class="xh__label xh__label--right" id="xh-lbl-right">Djilakh, Thiès Region</span>
+      <span class="xh__label xh__label--left" id="xh-lbl-left" data-i18n="p1_lbl_left">Senegal Secondary School</span>
+      <span class="xh__label xh__label--right" id="xh-lbl-right" data-i18n="p1_lbl_right">Djilakh, Thiès Region</span>
 
     </div>
   </section>
@@ -645,27 +645,27 @@
       <nav class="split__nav">
         <div class="split__item --active" data-split="0">
           <div class="split__number">01</div>
-          <h2 class="split__title">Site &amp; Context</h2>
+          <h2 class="split__title" data-i18n="p1_split_01">Site &amp; Context</h2>
           <p class="split__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         </div>
         <div class="split__item" data-split="1">
           <div class="split__number">02</div>
-          <h2 class="split__title">Masterplan &amp; Layout</h2>
+          <h2 class="split__title" data-i18n="p1_split_02">Masterplan &amp; Layout</h2>
           <p class="split__desc">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
         </div>
         <div class="split__item" data-split="2">
           <div class="split__number">03</div>
-          <h2 class="split__title">Structure &amp; Materials</h2>
+          <h2 class="split__title" data-i18n="p1_split_03">Structure &amp; Materials</h2>
           <p class="split__desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
         </div>
         <div class="split__item" data-split="3">
           <div class="split__number">04</div>
-          <h2 class="split__title">Interior &amp; Learning Spaces</h2>
+          <h2 class="split__title" data-i18n="p1_split_04">Interior &amp; Learning Spaces</h2>
           <p class="split__desc">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos.</p>
         </div>
         <div class="split__item" data-split="4">
           <div class="split__number">05</div>
-          <h2 class="split__title">Community &amp; Impact</h2>
+          <h2 class="split__title" data-i18n="p1_split_05">Community &amp; Impact</h2>
           <p class="split__desc">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.</p>
         </div>
       </nav>
@@ -690,40 +690,40 @@
       <div class="project-info__grid">
         <div class="project-info__meta">
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Project</span>
-            <span class="project-info__meta-value">Senegal Secondary School — Building Opportunity in Djilakh</span>
+            <span class="project-info__meta-label" data-i18n="label_project">Project</span>
+            <span class="project-info__meta-value" data-i18n="p1_meta_project">Senegal Secondary School — Building Opportunity in Djilakh</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Location</span>
-            <span class="project-info__meta-value">Djilakh, Thiès Region (Sindia Commune), Senegal</span>
+            <span class="project-info__meta-label" data-i18n="label_location">Location</span>
+            <span class="project-info__meta-value" data-i18n="p1_meta_location">Djilakh, Thiès Region (Sindia Commune), Senegal</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Competition</span>
-            <span class="project-info__meta-value">Archstorming × Let's Build My School (LBMS)</span>
+            <span class="project-info__meta-label" data-i18n="label_competition">Competition</span>
+            <span class="project-info__meta-value" data-i18n="p1_meta_competition">Archstorming × Let's Build My School (LBMS)</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Program</span>
-            <span class="project-info__meta-value">4 classrooms, admin wing, multipurpose hall, storage, restrooms — approx. 160 students</span>
+            <span class="project-info__meta-label" data-i18n="label_program">Program</span>
+            <span class="project-info__meta-value" data-i18n="p1_meta_program">4 classrooms, admin wing, multipurpose hall, storage, restrooms — approx. 160 students</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Budget</span>
-            <span class="project-info__meta-value">€48,000 – €60,000</span>
+            <span class="project-info__meta-label" data-i18n="label_budget">Budget</span>
+            <span class="project-info__meta-value" data-i18n="p1_meta_budget">€48,000 – €60,000</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Construction</span>
-            <span class="project-info__meta-value">Compressed earth blocks, bamboo structure, corrugated metal roofing</span>
+            <span class="project-info__meta-label" data-i18n="label_construction">Construction</span>
+            <span class="project-info__meta-value" data-i18n="p1_meta_construction">Compressed earth blocks, bamboo structure, corrugated metal roofing</span>
           </div>
         </div>
 
         <div class="project-info__description">
-          <h3>Design Concept</h3>
-          <p>
+          <h3 data-i18n="design_concept">Design Concept</h3>
+          <p data-i18n="p1_concept_1">
             The design responds to Djilakh's educational crisis — a village of 4,000 inhabitants where the absence of a secondary school leads to high dropout rates. The proposal creates a modular campus of interconnected circular pavilions arranged around two large courtyards, preserving six existing trees at the heart of the site.
           </p>
-          <p>
+          <p data-i18n="p1_concept_2">
             A radial structural system of bamboo posts and ring beams supports deeply overhanging roofs, enabling passive cooling through cross-ventilation and shaded circulation. Stabilised compressed earth blocks form the building envelope, providing thermal mass against extreme heat while remaining constructable by local workers without heavy machinery.
           </p>
-          <p>
+          <p data-i18n="p1_concept_3">
             Colorful translucent panels in cobalt blue, amber yellow, and lime green punctuate the earth-toned facades, filtering light into classrooms and marking thresholds between learning and gathering spaces. The courtyard amphitheatre doubles as a multipurpose cultural venue — the school as social hub.
           </p>
         </div>
@@ -746,13 +746,13 @@
       <span class="project-nav__arrow" aria-hidden="true">←</span>
       <img class="project-nav__thumb" src="../assets/img/p4.jpg" alt="" />
       <span class="project-nav__text">
-        <span class="project-nav__label">Previous project</span>
+        <span class="project-nav__label" data-i18n="prev_project">Previous project</span>
         <span class="project-nav__title">Project 4</span>
       </span>
     </a>
     <a class="project-nav__link project-nav__link--next" href="project2.html" aria-label="Next project: IPAI Communication Center">
       <span class="project-nav__text">
-        <span class="project-nav__label">Next project</span>
+        <span class="project-nav__label" data-i18n="next_project">Next project</span>
         <span class="project-nav__title">IPAI Communication Center</span>
       </span>
       <img class="project-nav__thumb" src="../assets/img/p2.jpg" alt="" />
@@ -965,6 +965,22 @@
 
     window.addEventListener("scroll", onScroll, { passive: true });
     tick();
+
+    /* Listen for language changes */
+    window.addEventListener("langchange", function (e) {
+      var d = e.detail.dict;
+      var fb = I18N.en;
+      var BIG = d.p1_bigtext || fb.p1_bigtext;
+      words = BIG.split(" ");
+      bigtextBody.innerHTML = words.map(function (w) {
+        return '<span style="color:rgba(0,0,0,0.18)">' + w + " </span>";
+      }).join("");
+      wordSpans = bigtextBody.querySelectorAll("span");
+
+      SIDEBAR_COPY[3] = { text: d.p1_sidebar_3 || fb.p1_sidebar_3, link: d.view_details || fb.view_details };
+      SIDEBAR_COPY[4] = { text: d.p1_sidebar_4 || fb.p1_sidebar_4, link: d.view_details || fb.view_details };
+      tick();
+    });
 
   })();
   </script>
