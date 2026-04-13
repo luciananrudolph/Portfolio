@@ -211,6 +211,24 @@
       margin: 0;
     }
 
+    .split__subtitle {
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #111;
+      margin: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.4s ease;
+    }
+
+    .split__item.--active .split__subtitle {
+      max-height: 80px;
+      opacity: 1;
+      margin-top: 10px;
+    }
+
     .split__desc {
       font-size: 0.85rem;
       line-height: 1.6;
@@ -223,9 +241,9 @@
     }
 
     .split__item.--active .split__desc {
-      max-height: 200px;
+      max-height: 400px;
       opacity: 1;
-      margin-top: 10px;
+      margin-top: 6px;
     }
 
     /* Right: stacked images, one visible at a time */
@@ -245,6 +263,14 @@
       object-fit: cover;
       opacity: 0;
       transition: opacity 0.5s ease;
+    }
+
+    .split__img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
     }
 
     .split__img.--visible {
@@ -646,38 +672,43 @@
       <nav class="split__nav">
         <div class="split__item --active" data-split="0">
           <div class="split__number">01</div>
-          <h2 class="split__title" data-i18n="p1_split_01">Site &amp; Context</h2>
-          <p class="split__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <h2 class="split__title" data-i18n="p1_split_01">Radial Geometry</h2>
+          <p class="split__subtitle" data-i18n="p1_split_01_sub">Open centers shape learning and community.</p>
+          <p class="split__desc" data-i18n="p1_split_01_desc">Radial geometry organizes the school around two complementary courtyards: The first courtyard wraps around existing trees, using their shade as a calm learning heart and climatic anchor while defining a clear entry. The second courtyard forms a generous open space for play, gathering, and gardening. A deliberately open edge extends the campus toward the existing primary school.</p>
         </div>
         <div class="split__item" data-split="1">
           <div class="split__number">02</div>
-          <h2 class="split__title" data-i18n="p1_split_02">Masterplan &amp; Layout</h2>
-          <p class="split__desc">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+          <h2 class="split__title" data-i18n="p1_split_02">Framework for expansion</h2>
+          <p class="split__subtitle" data-i18n="p1_split_02_sub">The radial system enables phased expansion.</p>
+          <p class="split__desc" data-i18n="p1_split_02_desc">Phase 1 establishes the first center with four classrooms, a teachers' room, a community space, and separate sanitary units. A sheltered garden roof can already be built to define a protected expansion zone, reducing heat stress while collecting rainwater for reuse. Phase 2 adds four additional classrooms within this structure, while Phase 3 enables further extensions toward the primary school.</p>
         </div>
         <div class="split__item" data-split="2">
           <div class="split__number">03</div>
-          <h2 class="split__title" data-i18n="p1_split_03">Structure &amp; Materials</h2>
-          <p class="split__desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+          <h2 class="split__title" data-i18n="p1_split_03">Wall typologies</h2>
+          <p class="split__subtitle" data-i18n="p1_split_03_sub">Three wall types define climate, use, and flexibility.</p>
+          <p class="split__desc" data-i18n="p1_split_03_desc">The 30 cm radial outer wall is load-bearing, enclosing and stabilising the building through its curved geometry. The 30 cm courtyard wall is more permeable, with large openings fitted with textile screens for ventilation. Inside, 15 cm non-load-bearing walls allow classrooms to be flexibly divided. All walls are built from 15 × 15 × 30 cm rammed-earth bricks with optional reinforcement, enabling local, modular on-site assembly.</p>
         </div>
         <div class="split__item" data-split="3">
           <div class="split__number">04</div>
-          <h2 class="split__title" data-i18n="p1_split_04">Interior &amp; Learning Spaces</h2>
-          <p class="split__desc">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos.</p>
+          <h2 class="split__title" data-i18n="p1_split_04">Structural roof logic</h2>
+          <p class="split__subtitle" data-i18n="p1_split_04_sub">The roof stabilizes and ties the building together.</p>
+          <p class="split__desc" data-i18n="p1_split_04_desc">A bamboo ceiling plane cantilevers over the circulation area and protects the construction with a ventilated air gap allowing continuous air circulation through the roof build-up. Below sits a secondary roof layer made from bamboo, clay, and other locally available materials, which remains permanently shaded. Its thermal mass adds weight and compression while stabilizing the upper roof against tensile forces.</p>
         </div>
         <div class="split__item" data-split="4">
           <div class="split__number">05</div>
-          <h2 class="split__title" data-i18n="p1_split_05">Community &amp; Impact</h2>
-          <p class="split__desc">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.</p>
+          <h2 class="split__title" data-i18n="p1_split_05">Roof as cooling machine</h2>
+          <p class="split__subtitle" data-i18n="p1_split_05_sub">A double roof creates comfortable learning spaces.</p>
+          <p class="split__desc" data-i18n="p1_split_05_desc">The upper roof layer shades the building and protects walls, circulation, and openings from rain. A ventilated air gap allows hot air to escape and enables continuous airflow through the section. The lower roof layer acts as permanently shaded thermal mass which delays heat transfer into the classrooms. Together with the 30 cm outer walls and cross-ventilation through opposite openings, the system creates stable, shaded, and naturally ventilated learning spaces.</p>
         </div>
       </nav>
 
       <!-- Right: stacked images, one visible at a time -->
       <div class="split__images">
-        <div class="split__img --visible" data-split-img="0"></div>
-        <div class="split__img" data-split-img="1"></div>
-        <div class="split__img" data-split-img="2"></div>
-        <div class="split__img" data-split-img="3"></div>
-        <div class="split__img" data-split-img="4"></div>
+        <div class="split__img --visible" data-split-img="0"><img src="../assets/img/p1/design_principle_1.png" alt="Radial Geometry"></div>
+        <div class="split__img" data-split-img="1"><img src="../assets/img/p1/design_principle_2.png" alt="Framework for expansion"></div>
+        <div class="split__img" data-split-img="2"><img src="../assets/img/p1/design_principle_3.png" alt="Wall typologies"></div>
+        <div class="split__img" data-split-img="3"><img src="../assets/img/p1/design_principle_4.png" alt="Structural roof logic"></div>
+        <div class="split__img" data-split-img="4"><img src="../assets/img/p1/design_principle_5.png" alt="Roof as cooling machine"></div>
       </div>
 
     </div>
@@ -719,13 +750,19 @@
         <div class="project-info__description">
           <h3 data-i18n="design_concept">Design Concept</h3>
           <p data-i18n="p1_concept_1">
-            The design responds to Djilakh's educational crisis — a village of 4,000 inhabitants where the absence of a secondary school leads to high dropout rates. The proposal creates a modular campus of interconnected circular pavilions arranged around two large courtyards, preserving six existing trees at the heart of the site.
+            The design is structured around six existing trees, which define the centre of the site. A first courtyard is formed around them, using their shade as a climatic anchor and a central space for learning and gathering. Classrooms are arranged radially around this courtyard, establishing a clear organisation and direct connections between spaces.
           </p>
           <p data-i18n="p1_concept_2">
-            A radial structural system of bamboo posts and ring beams supports deeply overhanging roofs, enabling passive cooling through cross-ventilation and shaded circulation. Stabilised compressed earth blocks form the building envelope, providing thermal mass against extreme heat while remaining constructable by local workers without heavy machinery.
+            A second courtyard complements this system. In contrast to the enclosed character of the first, it remains more open and supports play, gathering, and outdoor learning. A shared community space connects both courtyards and acts as a central interface between education and social activity.
           </p>
           <p data-i18n="p1_concept_3">
-            Colorful translucent panels in cobalt blue, amber yellow, and lime green punctuate the earth-toned facades, filtering light into classrooms and marking thresholds between learning and gathering spaces. The courtyard amphitheatre doubles as a multipurpose cultural venue — the school as social hub.
+            The project is conceived as an incremental system. Parts of the site are predefined but initially remain in use for planting and temporary activities. Over time, these areas can be converted into additional classrooms, allowing the school to expand step by step according to available resources and changing needs.
+          </p>
+          <p data-i18n="p1_concept_4">
+            The construction follows a simple and robust logic. Load-bearing earthen walls provide thermal mass and protect against heat while remaining easy to construct using local labour. The roof combines a lightweight bamboo structure with a protective outer layer. Its load is transferred through the walls, stabilising the system and allowing for large overhangs that create shaded circulation spaces.
+          </p>
+          <p data-i18n="p1_concept_5">
+            Rather than relying on complex systems, the project proposes a building method that can be constructed, adapted, and maintained locally, ensuring long-term usability and resilience.
           </p>
         </div>
       </div>
@@ -794,8 +831,8 @@
 
     /* ── Sidebar copy ── */
     var SIDEBAR_COPY = {
-      3: { text: "Circular pavilions arranged around shared courtyards, preserving six existing trees and creating shaded gathering spaces for 160 students.", link: "View project details" },
-      4: { text: "Compressed earth blocks, bamboo structure, and colorful translucent panels — built by local workers, designed for passive cooling.", link: "View project details" },
+      3: { text: "A secondary school designed for Djilakh, Senegal — responding to limited infrastructure, harsh climate conditions, and the need for long-term adaptability.", link: "View project details" },
+      4: { text: "The project combines local materials, passive strategies, and incremental construction to create a resilient learning environment.", link: "View project details" },
     };
 
     /* ── Measurements ── */

@@ -14,7 +14,7 @@
         Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       color: #111;
-      background: #f4f1e6;
+      background: #ffffff;
       overflow-x: hidden;
     }
 
@@ -209,7 +209,7 @@
     }
     .gallery__img {
       width: 100%;
-      border-radius: 12px;
+      border-radius: 0;
       display: block;
     }
     .gallery__img--full {
@@ -223,11 +223,17 @@
       margin: 0 auto;
       padding: 60px 40px;
     }
+    .pdf-section__wrap {
+      position: relative;
+    }
     .pdf-section embed {
       display: block;
       width: 100%;
-      border-radius: 12px;
       border: none;
+    }
+    .pdf-section__overlay {
+      position: absolute;
+      inset: 0;
     }
 
     .back-link {
@@ -278,7 +284,7 @@
         margin-top: 20px;
       }
       .xh__label { display: none; }
-      .xh__bg { background: #f4f1e6 !important; }
+      .xh__bg { background: #ffffff !important; }
       .project-info { padding: 60px 20px 40px; }
       .project-info__grid {
         grid-template-columns: 1fr;
@@ -453,13 +459,22 @@
   </div>
 
   <div class="pdf-section">
-    <embed src="../assets/img/p4/floor_plan.pdf" type="application/pdf" height="700px" />
+    <div class="pdf-section__wrap">
+      <embed src="../assets/img/p4/floor_plan.pdf#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" height="700px" />
+      <div class="pdf-section__overlay"></div>
+    </div>
   </div>
   <div class="pdf-section">
-    <embed src="../assets/img/p4/section.pdf" type="application/pdf" height="500px" />
+    <div class="pdf-section__wrap">
+      <embed src="../assets/img/p4/section.pdf#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" height="500px" />
+      <div class="pdf-section__overlay"></div>
+    </div>
   </div>
   <div class="pdf-section">
-    <embed src="../assets/img/p4/sketch1.pdf" type="application/pdf" height="700px" />
+    <div class="pdf-section__wrap">
+      <embed src="../assets/img/p4/sketch1.pdf#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" height="700px" />
+      <div class="pdf-section__overlay"></div>
+    </div>
   </div>
 
   <!-- ============================================= -->
@@ -581,7 +596,7 @@
       var s5 = sub(progress, 0.80, 1.00);
 
       /* ─── BACKGROUND ─── */
-      // Cool grey (#8a9bae) → cream (#f4f1e6)
+      // Cool grey (#8a9bae) → cream (#ffffff)
       var bgT = eo(s1);
       var r = Math.round(lerp(138, 244, bgT));
       var g = Math.round(lerp(155, 241, bgT));
@@ -589,9 +604,9 @@
       bg.style.background = "rgb(" + r + "," + g + "," + b + ")";
 
       /* ─── HEADLINE ─── */
-      headline.style.color = bgT < 0.5 ? "#f4f1e6" : "#111";
-      lblLeft.style.color  = bgT < 0.5 ? "#f4f1e6" : "#111";
-      lblRight.style.color = bgT < 0.5 ? "#f4f1e6" : "#111";
+      headline.style.color = bgT < 0.5 ? "#ffffff" : "#111";
+      lblLeft.style.color  = bgT < 0.5 ? "#ffffff" : "#111";
+      lblRight.style.color = bgT < 0.5 ? "#ffffff" : "#111";
       var lblShadow = bgT < 0.5 ? "0 1px 8px rgba(0,0,0,0.6)" : "0 1px 8px rgba(255,255,255,0.8)";
       lblLeft.style.textShadow  = lblShadow;
       lblRight.style.textShadow = lblShadow;
