@@ -249,6 +249,13 @@
     .split__img.--visible {
       opacity: 1;
     }
+    .split__img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+    }
 
     @media (max-width: 768px) {
       .split {
@@ -266,12 +273,11 @@
       }
     }
 
-    /* ── Showcase: full-screen image + sidebar text (like the scroll narrative) ── */
+    /* ── Showcase: full-screen image + sidebar text ── */
     .showcase {
       position: relative;
-      height: 300vh; /* 3 panels × 100vh */
+      height: 300vh;
     }
-
     .showcase__stage {
       position: sticky;
       top: 0;
@@ -279,18 +285,21 @@
       overflow: hidden;
       background: #f4f1e6;
     }
-
-    /* Stacked images */
     .showcase__img {
       position: absolute;
       border-radius: 24px;
       overflow: hidden;
       z-index: 5;
-      opacity: 0;
-      transition: opacity 0.6s ease;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18vw;
+      aspect-ratio: 627 / 867;
+      opacity: 0.25;
+      transition: opacity 0.5s ease;
     }
     .showcase__img.--visible {
       opacity: 1;
+      z-index: 6;
     }
     .showcase__img img {
       width: 100%;
@@ -298,12 +307,6 @@
       object-fit: cover;
       display: block;
     }
-    /* Placeholder when no img tag */
-    .showcase__img--placeholder {
-      background: #d0cdc5;
-    }
-
-    /* Sidebar text */
     .showcase__text {
       position: absolute;
       right: 6vw;
@@ -329,8 +332,6 @@
       text-decoration: underline;
       text-underline-offset: 3px;
     }
-
-    /* Counter dots */
     .showcase__dots {
       position: absolute;
       right: 2vw;
@@ -382,13 +383,13 @@
 
     /* ── Project info section (below scroll narrative) ── */
     .project-info {
-      max-width: 1100px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 100px 40px 80px;
     }
     .project-info__grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 0.35fr 1fr;
       gap: 60px 80px;
     }
     .project-info__meta {
@@ -573,7 +574,7 @@
 
       <!-- Image A: entrance exterior -->
       <div class="xh__img" id="img-a">
-        <img src="../assets/img/p1/entrance.jpg" alt="Exterior view of the Senegal Secondary School entrance with children playing" />
+        <img src="../assets/img/p3/construction.jpg" alt="Construction of the Recycle Residence" />
       </div>
 
       <!-- Sidebar text -->
@@ -602,26 +603,29 @@
     <div class="showcase__stage">
 
       <!-- Image 1 -->
-      <div class="showcase__img showcase__img--placeholder --visible" id="sc-img-0"
-           style="left:10vw; top:12vh; width:55vw; height:70vh;"></div>
+      <div class="showcase__img --visible" id="sc-img-0" style="left:5vw;">
+        <img src="../assets/img/p3/design_principles_woodcut1.jpg" alt="Design principles woodcut 1" />
+      </div>
       <!-- Image 2 -->
-      <div class="showcase__img showcase__img--placeholder" id="sc-img-1"
-           style="left:8vw; top:10vh; width:58vw; height:74vh;"></div>
+      <div class="showcase__img" id="sc-img-1" style="left:26vw;">
+        <img src="../assets/img/p3/design_principles_woodcut2.jpg" alt="Design principles woodcut 2" />
+      </div>
       <!-- Image 3 -->
-      <div class="showcase__img showcase__img--placeholder" id="sc-img-2"
-           style="left:12vw; top:14vh; width:52vw; height:66vh;"></div>
+      <div class="showcase__img" id="sc-img-2" style="left:47vw;">
+        <img src="../assets/img/p3/design_principles_woodcut3.jpg" alt="Design principles woodcut 3" />
+      </div>
 
       <!-- Text panels -->
       <div class="showcase__text --visible" id="sc-text-0">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+        <p>Resources are used intentionally and sparingly, while the floor plan remains clear and well-organized. This deliberate reduction follows the principle of "Less is more." The intentional simplicity of the forms shifts the focus to the materials themselves, emphasizing their inherent value and aesthetic qualities.</p>
         <a href="#project-details">View project details</a>
       </div>
       <div class="showcase__text" id="sc-text-1">
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+        <p>The design emphasizes clean, simplified forms while avoiding unnecessary complexity in construction. This approach reduces material and labor requirements, enabling the participation of volunteer helpers. "Building Simply" represents a resource-efficient architecture that stands out for its accessibility and clarity.</p>
         <a href="#project-details">View project details</a>
       </div>
       <div class="showcase__text" id="sc-text-2">
-        <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+        <p>Material choices in the design are closely tied to their availability within the circular economy. The design adapts flexibly to the properties of the materials, thoughtfully integrating the unique characteristics of reused elements into both the design and the construction process.</p>
         <a href="#project-details">View project details</a>
       </div>
 
@@ -672,11 +676,11 @@
 
       <!-- Right: stacked images, one visible at a time -->
       <div class="split__images">
-        <div class="split__img --visible" data-split-img="0"></div>
-        <div class="split__img" data-split-img="1"></div>
-        <div class="split__img" data-split-img="2"></div>
-        <div class="split__img" data-split-img="3"></div>
-        <div class="split__img" data-split-img="4"></div>
+        <div class="split__img --visible" data-split-img="0"><img src="../assets/img/p3/construction.jpg" alt="Construction of the Recycle Residence" /></div>
+        <div class="split__img" data-split-img="1"><img src="../assets/img/p3/site_model.jpg" alt="Site model" /></div>
+        <div class="split__img" data-split-img="2"><img src="../assets/img/p3/mahogani_engraved.jpg" alt="Mahogany engraved detail" /></div>
+        <div class="split__img" data-split-img="3"><img src="../assets/img/p3/design_principles_woodcut.jpg" alt="Design principles woodcut" /></div>
+        <div class="split__img" data-split-img="4"><img src="../assets/img/p3/construction.jpg" alt="Construction of the Recycle Residence" /></div>
       </div>
 
     </div>
@@ -691,40 +695,49 @@
         <div class="project-info__meta">
           <div class="project-info__meta-item">
             <span class="project-info__meta-label">Project</span>
-            <span class="project-info__meta-value">Senegal Secondary School — Building Opportunity in Djilakh</span>
+            <span class="project-info__meta-value">Recycle Residence — Designing with Reused Materials</span>
           </div>
           <div class="project-info__meta-item">
             <span class="project-info__meta-label">Location</span>
-            <span class="project-info__meta-value">Djilakh, Thiès Region (Sindia Commune), Senegal</span>
+            <span class="project-info__meta-value">Irsee, Bavaria, Germany</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Competition</span>
-            <span class="project-info__meta-value">Archstorming × Let's Build My School (LBMS)</span>
+            <span class="project-info__meta-label">Collaboration</span>
+            <span class="project-info__meta-value">Supertecture (non-profit, volunteer-based construction initiative)</span>
           </div>
           <div class="project-info__meta-item">
             <span class="project-info__meta-label">Program</span>
-            <span class="project-info__meta-value">4 classrooms, admin wing, multipurpose hall, storage, restrooms — approx. 160 students</span>
+            <span class="project-info__meta-value">Single-family house for a real family of four</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label">Budget</span>
-            <span class="project-info__meta-value">€48,000 – €60,000</span>
+            <span class="project-info__meta-label">Status</span>
+            <span class="project-info__meta-value">Design proposal — further planning currently on hold</span>
           </div>
           <div class="project-info__meta-item">
             <span class="project-info__meta-label">Construction</span>
-            <span class="project-info__meta-value">Compressed earth blocks, bamboo structure, corrugated metal roofing</span>
+            <span class="project-info__meta-value">Reclaimed timber from industrial surplus (modular "Home Bricks" system), reused parquet from church deconstruction, and additional reclaimed materials</span>
           </div>
         </div>
 
         <div class="project-info__description">
           <h3>Design Concept</h3>
           <p>
-            The design responds to Djilakh's educational crisis — a village of 4,000 inhabitants where the absence of a secondary school leads to high dropout rates. The proposal creates a modular campus of interconnected circular pavilions arranged around two large courtyards, preserving six existing trees at the heart of the site.
+            Developed as an independent Bachelor's thesis, the project moves beyond a purely academic design exercise. Instead of responding to a fictional brief, it is conceived as a real-world project for a specific family, integrating design, material sourcing, and organizational processes into a single architectural framework.
           </p>
           <p>
-            A radial structural system of bamboo posts and ring beams supports deeply overhanging roofs, enabling passive cooling through cross-ventilation and shaded circulation. Stabilised compressed earth blocks form the building envelope, providing thermal mass against extreme heat while remaining constructable by local workers without heavy machinery.
+            The proposal is embedded within the non-profit initiative Supertecture, combining volunteer-based construction with circular building strategies. This context expands the role of the architect from designer to coordinator — involving collaboration with companies, sourcing reclaimed materials, and organizing construction processes beyond the conventional scope of architectural design.
           </p>
           <p>
-            Colorful translucent panels in cobalt blue, amber yellow, and lime green punctuate the earth-toned facades, filtering light into classrooms and marking thresholds between learning and gathering spaces. The courtyard amphitheatre doubles as a multipurpose cultural venue — the school as social hub.
+            At its core, the project explores a radical approach to material reuse. Based on the principle of "form follows availability," the design is developed entirely from materials already in circulation. Industrial timber offcuts, reclaimed parquet from a church deconstruction, and surplus construction elements define both the spatial organization and the construction logic.
+          </p>
+          <p>
+            This approach is materialized through the development of a modular building system — the "Home Bricks." These elements transform small-scale timber waste into load-bearing components, enabling a flexible and scalable construction method that can be assembled with limited resources and without specialized labor.
+          </p>
+          <p>
+            The architecture is deliberately reduced in form and complexity. A clear spatial organization allows the material system to remain legible, while enabling efficient construction and the participation of non-professional builders. The building is slightly elevated, minimizing ground intervention and simplifying assembly.
+          </p>
+          <p>
+            Rather than optimizing a predefined system, the project tests the boundaries of what is possible within circular construction. It proposes an architecture that is not defined by ideal conditions, but by the realities of available resources, social context, and collective building processes.
           </p>
         </div>
       </div>
@@ -732,9 +745,8 @@
 
     <!-- Gallery -->
     <section class="gallery" aria-label="Project gallery">
-      <img class="gallery__img gallery__img--full" src="../assets/img/p1/courtyard.jpg" alt="Courtyard view with colorful openings and children playing" />
-      <img class="gallery__img" src="../assets/img/p1/interior.jpg" alt="Aerial view of the campus with circular pavilions and courtyards" />
-      <img class="gallery__img" src="../assets/img/p1/classroom.jpg" alt="Classroom interior with students at desks and teacher at the chalkboard" />
+      <img class="gallery__img gallery__img--full" src="../assets/img/p3/construction.jpg" alt="Construction of the Recycle Residence" />
+      <img class="gallery__img" src="../assets/img/p3/site_model.jpg" alt="Site model of the Recycle Residence" />
     </section>
   </div>
 
@@ -969,7 +981,7 @@
   })();
   </script>
 
-  <!-- Showcase: scroll-driven image/text swap -->
+  <!-- Showcase: scroll-driven image swap -->
   <script>
   (function () {
     var showcase = document.getElementById("showcase");
@@ -986,13 +998,13 @@
       var idx = Math.min(Math.floor(progress * count), count - 1);
 
       if (idx !== current) {
-        document.getElementById("sc-img-" + current).classList.remove("--visible");
+        document.getElementById("sc-img-"  + current).classList.remove("--visible");
         document.getElementById("sc-text-" + current).classList.remove("--visible");
-        document.getElementById("sc-dot-" + current).classList.remove("--active");
+        document.getElementById("sc-dot-"  + current).classList.remove("--active");
         current = idx;
-        document.getElementById("sc-img-" + current).classList.add("--visible");
+        document.getElementById("sc-img-"  + current).classList.add("--visible");
         document.getElementById("sc-text-" + current).classList.add("--visible");
-        document.getElementById("sc-dot-" + current).classList.add("--active");
+        document.getElementById("sc-dot-"  + current).classList.add("--active");
       }
     }
 
