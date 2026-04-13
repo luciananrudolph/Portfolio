@@ -153,6 +153,12 @@
       background: #333;
     }
 
+    /* ── Split section orange wrapper ── */
+    .split-wrap {
+      background: #c4754b;
+      padding: 60px 40px;
+    }
+
     /* ── Sticky-Split Scroll Sections ── */
     .split {
       position: relative;
@@ -185,12 +191,12 @@
       border-left: 2px solid transparent;
       padding-left: 24px;
       transition: border-color 0.4s ease, opacity 0.4s ease;
-      opacity: 0.25;
+      opacity: 0.35;
       cursor: default;
     }
 
     .split__item.--active {
-      border-left-color: #111;
+      border-left-color: #fff;
       opacity: 1;
     }
 
@@ -199,7 +205,7 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #999;
+      color: rgba(255,255,255,0.7);
       margin-bottom: 6px;
     }
 
@@ -207,7 +213,7 @@
       font-size: clamp(1rem, 1.6vw, 1.3rem);
       font-weight: 700;
       line-height: 1.2;
-      color: #111;
+      color: #fff;
       margin: 0;
     }
 
@@ -215,7 +221,7 @@
       font-size: 0.85rem;
       font-weight: 700;
       line-height: 1.4;
-      color: #111;
+      color: #fff;
       margin: 0;
       max-height: 0;
       overflow: hidden;
@@ -232,7 +238,7 @@
     .split__desc {
       font-size: 0.85rem;
       line-height: 1.6;
-      color: #555;
+      color: rgba(255,255,255,0.85);
       margin: 0;
       max-height: 0;
       overflow: hidden;
@@ -665,6 +671,7 @@
   <!-- ═══════════════════════════════════════════
        STICKY-SPLIT SCROLL SECTIONS
        ═══════════════════════════════════════════ -->
+  <div class="split-wrap">
   <div class="split" id="split">
     <div class="split__stage">
 
@@ -712,6 +719,7 @@
       </div>
 
     </div>
+  </div>
   </div>
 
   <!-- ═══════════════════════════════════════════
@@ -780,12 +788,12 @@
   <!-- NAV: Previous / Next Project Links            -->
   <!-- ============================================= -->
   <nav class="project-nav" aria-label="Project navigation">
-    <a class="project-nav__link project-nav__link--prev" href="project4.html" aria-label="Previous project: Project 4">
+    <a class="project-nav__link project-nav__link--prev" href="../pages/about.html" aria-label="About">
       <span class="project-nav__arrow" aria-hidden="true">←</span>
-      <img class="project-nav__thumb" src="../assets/img/p4.jpg" alt="" loading="lazy" decoding="async" />
+      <img class="project-nav__thumb" src="../assets/img/home+about/profile.jpg" alt="" loading="lazy" decoding="async" />
       <span class="project-nav__text">
-        <span class="project-nav__label" data-i18n="prev_project">Previous project</span>
-        <span class="project-nav__title">Project 4</span>
+        <span class="project-nav__label" data-i18n="prev_project">Previous</span>
+        <span class="project-nav__title">Get to know me!</span>
       </span>
     </a>
     <a class="project-nav__link project-nav__link--next" href="project2.html" aria-label="Next project: IPAI Communication Center">
@@ -910,7 +918,13 @@
       lblRight.style.textShadow = lblShadow;
 
       if (headerEl) {
-        if (bgT < 0.5) headerEl.classList.add("--inverted");
+        var splitWrapEl = document.querySelector(".split-wrap");
+        var onSplitOrange = false;
+        if (splitWrapEl) {
+          var swRect = splitWrapEl.getBoundingClientRect();
+          onSplitOrange = swRect.top < 60 && swRect.bottom > 0;
+        }
+        if (bgT < 0.5 || onSplitOrange) headerEl.classList.add("--inverted");
         else headerEl.classList.remove("--inverted");
       }
 
@@ -1120,6 +1134,36 @@
       requestAnimationFrame(update);
     }, { passive: true });
     update();
+  })();
+  </script>
+
+  <!-- Header white when over orange split-wrap (covers scroll outside hero range) -->
+  <script>
+  (function () {
+    var header    = document.querySelector(".top");
+    var splitWrap = document.querySelector(".split-wrap");
+    if (!header || !splitWrap) return;
+
+    function check() {
+      var r = splitWrap.getBoundingClientRect();
+      if (r.top < 60 && r.bottom > 0) {
+        header.classList.add("--inverted");
+      } else {
+        // Only remove if the hero isn't already driving --inverted
+        // (hero handler adds it when bgT < 0.5; if we're past the hero it won't)
+        var heroSection = document.querySelector(".xh");
+        if (heroSection) {
+          var hr = heroSection.getBoundingClientRect();
+          if (hr.bottom > 60) return; // hero still visible, let it control the class
+        }
+        header.classList.remove("--inverted");
+      }
+    }
+
+    window.addEventListener("scroll", function () {
+      requestAnimationFrame(check);
+    }, { passive: true });
+    check();
   })();
   </script>
 
