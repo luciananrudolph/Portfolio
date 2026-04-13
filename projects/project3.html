@@ -446,6 +446,19 @@
     }
 
     /* ── Back nav ── */
+    /* ── PDF embeds ── */
+    .pdf-section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+    .pdf-section embed {
+      display: block;
+      width: 100%;
+      border-radius: 12px;
+      border: none;
+    }
+
     .back-link {
       display: inline-flex;
       align-items: center;
@@ -689,6 +702,10 @@
   <!-- ═══════════════════════════════════════════
        PROJECT DETAILS
        ═══════════════════════════════════════════ -->
+  <div class="pdf-section">
+    <embed src="../assets/img/p3/exploded_axo.pdf" type="application/pdf" height="800px" />
+  </div>
+
   <div id="project-details">
     <section class="project-info">
       <div class="project-info__grid">
@@ -748,6 +765,10 @@
       <img class="gallery__img gallery__img--full" src="../assets/img/p3/construction.jpg" alt="Construction of the Recycle Residence" />
       <img class="gallery__img" src="../assets/img/p3/site_model.jpg" alt="Site model of the Recycle Residence" />
     </section>
+  </div>
+
+  <div class="pdf-section">
+    <embed src="../assets/img/p3/timeline.pdf" type="application/pdf" height="600px" />
   </div>
 
   <!-- ============================================= -->
@@ -997,15 +1018,34 @@
       var progress = Math.max(0, Math.min(1, -rect.top / scrollable));
       var idx = Math.min(Math.floor(progress * count), count - 1);
 
-      if (idx !== current) {
-        document.getElementById("sc-img-"  + current).classList.remove("--visible");
-        document.getElementById("sc-text-" + current).classList.remove("--visible");
-        document.getElementById("sc-dot-"  + current).classList.remove("--active");
-        current = idx;
-        document.getElementById("sc-img-"  + current).classList.add("--visible");
-        document.getElementById("sc-text-" + current).classList.add("--visible");
-        document.getElementById("sc-dot-"  + current).classList.add("--active");
-      }
+      if (idx !== current) activate(idx);
+    }
+
+    function activate(idx) {
+      document.getElementById("sc-img-"  + current).classList.remove("--visible");
+      document.getElementById("sc-text-" + current).classList.remove("--visible");
+      document.getElementById("sc-dot-"  + current).classList.remove("--active");
+      current = idx;
+      document.getElementById("sc-img-"  + current).classList.add("--visible");
+      document.getElementById("sc-text-" + current).classList.add("--visible");
+      document.getElementById("sc-dot-"  + current).classList.add("--active");
+    }
+
+    function goTo(idx) {
+      if (idx === current) return;
+      activate(idx);
+      var scrollable = showcase.offsetHeight - window.innerHeight;
+      var target = showcase.offsetTop + (idx / count) * scrollable;
+      window.scrollTo({ top: target, behavior: "smooth" });
+    }
+
+    for (var i = 0; i < count; i++) {
+      (function (i) {
+        document.getElementById("sc-img-" + i).style.cursor = "pointer";
+        document.getElementById("sc-img-" + i).addEventListener("click", function () {
+          goTo(i);
+        });
+      })(i);
     }
 
     window.addEventListener("scroll", function () {
@@ -1033,14 +1073,29 @@
       var progress = Math.max(0, Math.min(1, -rect.top / scrollable));
       var idx = Math.min(Math.floor(progress * count), count - 1);
 
-      if (idx !== current) {
-        items[current].classList.remove("--active");
-        images[current].classList.remove("--visible");
-        current = idx;
-        items[current].classList.add("--active");
-        images[current].classList.add("--visible");
-      }
+      if (idx !== current) activate(idx);
     }
+
+    function activate(idx) {
+      items[current].classList.remove("--active");
+      images[current].classList.remove("--visible");
+      current = idx;
+      items[current].classList.add("--active");
+      images[current].classList.add("--visible");
+    }
+
+    function goTo(idx) {
+      if (idx === current) return;
+      activate(idx);
+      var scrollable = split.offsetHeight - window.innerHeight;
+      var target = split.offsetTop + (idx / count) * scrollable;
+      window.scrollTo({ top: target, behavior: "smooth" });
+    }
+
+    items.forEach(function (item, i) {
+      item.style.cursor = "pointer";
+      item.addEventListener("click", function () { goTo(i); });
+    });
 
     window.addEventListener("scroll", function () {
       requestAnimationFrame(update);

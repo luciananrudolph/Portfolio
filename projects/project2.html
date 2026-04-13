@@ -254,6 +254,29 @@
     .slideshow__dot.active {
       background: #111;
     }
+    .slideshow__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255,255,255,0.75);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      backdrop-filter: blur(4px);
+    }
+    .slideshow__arrow--prev { left: 16px; }
+    .slideshow__arrow--next { right: 16px; }
+    .slideshow__arrow svg { width: 16px; height: 16px; stroke: #111; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .slideshow__container:hover .slideshow__arrow { opacity: 1; }
+    .slideshow__arrow:hover { background: rgba(255,255,255,0.95); }
 
     /* ── Day / Night split image ── */
     .day-night-row {
@@ -596,6 +619,12 @@
           <img src="../assets/img/p2/exterior.jpg" alt="Distance view of the IPAI campus with faceted communication center tower rising above the treeline" />
           <div class="slideshow__overlay"></div>
         </div>
+        <button class="slideshow__arrow slideshow__arrow--prev" id="slideshow-prev" aria-label="Previous slide">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="slideshow__arrow slideshow__arrow--next" id="slideshow-next" aria-label="Next slide">
+          <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
       </div>
       <div class="slideshow__dots" id="slideshow-dots"></div>
     </section>
@@ -898,9 +927,21 @@
       dots[current].classList.add('active');
     }
 
-    setInterval(function () {
+    var timer = setInterval(function () { goTo(current + 1); }, 3000);
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(function () { goTo(current + 1); }, 5000);
+    }
+
+    document.getElementById('slideshow-prev').addEventListener('click', function () {
+      goTo((current - 1 + total) % total);
+      resetTimer();
+    });
+    document.getElementById('slideshow-next').addEventListener('click', function () {
       goTo(current + 1);
-    }, 2000);
+      resetTimer();
+    });
   })();
   </script>
 
