@@ -256,28 +256,34 @@
     }
 
     /* ── Day / Night split image ── */
-    .day-night {
-      max-width: 1280px;
+    .day-night-row {
+      max-width: 1100px;
       margin: 0 auto;
       padding: 80px 40px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 80px;
+    }
+    .day-night {
+      flex: 1;
     }
     .day-night__wrap {
       position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
       border-radius: 16px;
       overflow: hidden;
       cursor: none;
     }
-    .day-night__wrap img {
+    .day-night__day {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .day-night__night {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
-    }
-    .day-night__night {
       clip-path: inset(0 100% 0 0);
     }
     .day-night__divider {
@@ -381,7 +387,7 @@
       }
       .xh__label { display: none; }
       .xh__bg { background: #f4f1e6 !important; }
-      .day-night { padding: 40px 20px 0; }
+      .day-night-row { flex-direction: column; padding: 40px 20px 0; gap: 20px; }
       .project-info { padding: 60px 20px 40px; }
       .project-info__grid {
         grid-template-columns: 1fr;
@@ -491,15 +497,28 @@
   <!-- ═══════════════════════════════════════════
        DAY / NIGHT IMAGE
        ═══════════════════════════════════════════ -->
-  <div class="day-night">
-    <div class="day-night__wrap" id="day-night-wrap" aria-label="Move cursor to compare day and night render">
-      <img class="day-night__day"   src="../assets/img/p2/exterior_distance_render_day.jpg"   alt="IPAI campus exterior — daytime render" />
-      <img class="day-night__night" id="day-night-night" src="../assets/img/p2/exterior_distance_render_night.jpg" alt="IPAI campus exterior — nighttime render" />
-      <div class="day-night__divider" id="day-night-divider">
-        <div class="day-night__handle"></div>
+  <div class="day-night-row">
+    <div class="day-night">
+      <div class="day-night__wrap" aria-label="Move cursor to compare day and night render">
+        <img class="day-night__day"   src="../assets/img/p2/plaza_exterior_render_day.jpg"   alt="IPAI plaza exterior — daytime render" />
+        <img class="day-night__night" src="../assets/img/p2/plaza_exterior_render_night.png" alt="IPAI plaza exterior — nighttime render" />
+        <div class="day-night__divider">
+          <div class="day-night__handle"></div>
+        </div>
       </div>
+      <p class="day-night__caption">Move cursor to compare day / night</p>
     </div>
-    <p class="day-night__caption">Move cursor to compare day / night</p>
+
+    <div class="day-night">
+      <div class="day-night__wrap" aria-label="Move cursor to compare day and night render">
+        <img class="day-night__day"   src="../assets/img/p2/exterior_distance_render_day.jpg"   alt="IPAI campus exterior — daytime render" />
+        <img class="day-night__night" src="../assets/img/p2/exterior_distance_render_night.jpg" alt="IPAI campus exterior — nighttime render" />
+        <div class="day-night__divider">
+          <div class="day-night__handle"></div>
+        </div>
+      </div>
+      <p class="day-night__caption">Move cursor to compare day / night</p>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════════
@@ -886,27 +905,23 @@
   </script>
 
   <script>
-    (function () {
-      const wrap     = document.getElementById('day-night-wrap');
-      const night    = document.getElementById('day-night-night');
-      const divider  = document.getElementById('day-night-divider');
-      if (!wrap) return;
+    document.querySelectorAll('.day-night__wrap').forEach(function (wrap) {
+      const night   = wrap.querySelector('.day-night__night');
+      const divider = wrap.querySelector('.day-night__divider');
 
-      function update(x) {
-        const pct = Math.max(0, Math.min(100, x));
-        night.style.clipPath  = `inset(0 ${100 - pct}% 0 0)`;
-        divider.style.left    = pct + '%';
+      function update(pct) {
+        pct = Math.max(0, Math.min(100, pct));
+        night.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+        divider.style.left   = pct + '%';
       }
 
-      update(50); // start centred
+      update(50);
 
       wrap.addEventListener('mousemove', function (e) {
         const rect = wrap.getBoundingClientRect();
-        const pct  = ((e.clientX - rect.left) / rect.width) * 100;
-        update(pct);
+        update(((e.clientX - rect.left) / rect.width) * 100);
       });
-
-    })();
+    });
   </script>
 
   <script src="../assets/js/i18n.js"></script>
