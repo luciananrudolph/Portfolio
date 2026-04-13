@@ -255,6 +255,82 @@
       background: #111;
     }
 
+    /* ── Day / Night split image ── */
+    .day-night {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 80px 40px 0;
+    }
+    .day-night__wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: none;
+    }
+    .day-night__wrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .day-night__night {
+      clip-path: inset(0 100% 0 0);
+    }
+    .day-night__divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(255,255,255,0.85);
+      transform: translateX(-50%);
+      pointer-events: none;
+      box-shadow: 0 0 8px rgba(0,0,0,0.35);
+      left: 50%;
+    }
+    .day-night__handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .day-night__handle::before,
+    .day-night__handle::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+    .day-night__handle::before {
+      border-right: 7px solid #333;
+      margin-right: 4px;
+    }
+    .day-night__handle::after {
+      border-left: 7px solid #333;
+    }
+    .day-night__caption {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: #888;
+      text-align: center;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
     /* ── Back nav ── */
     .back-link {
       display: inline-flex;
@@ -305,6 +381,7 @@
       }
       .xh__label { display: none; }
       .xh__bg { background: #f4f1e6 !important; }
+      .day-night { padding: 40px 20px 0; }
       .project-info { padding: 60px 20px 40px; }
       .project-info__grid {
         grid-template-columns: 1fr;
@@ -389,7 +466,7 @@
 
       <!-- Image B: terrace (appears state 3 → hero state 5) -->
       <div class="xh__img" id="img-b">
-        <img src="../assets/img/p2/terrace.png" alt="Elevated terrace of the communication center with curved glass facade and integrated landscaping" />
+        <img src="../assets/img/p2/plaza_exterior_render_day.jpg" alt="Elevated terrace of the communication center with curved glass facade and integrated landscaping" />
       </div>
 
       <!-- Sidebar text (states 3 & 4) -->
@@ -410,6 +487,20 @@
 
     </div>
   </section>
+
+  <!-- ═══════════════════════════════════════════
+       DAY / NIGHT IMAGE
+       ═══════════════════════════════════════════ -->
+  <div class="day-night">
+    <div class="day-night__wrap" id="day-night-wrap" aria-label="Move cursor to compare day and night render">
+      <img class="day-night__day"   src="../assets/img/p2/exterior_distance_render_day.jpg"   alt="IPAI campus exterior — daytime render" />
+      <img class="day-night__night" id="day-night-night" src="../assets/img/p2/exterior_distance_render_night.jpg" alt="IPAI campus exterior — nighttime render" />
+      <div class="day-night__divider" id="day-night-divider">
+        <div class="day-night__handle"></div>
+      </div>
+    </div>
+    <p class="day-night__caption">Move cursor to compare day / night</p>
+  </div>
 
   <!-- ═══════════════════════════════════════════
        PROJECT DETAILS
@@ -475,7 +566,7 @@
           <div class="slideshow__overlay"></div>
         </div>
         <div class="slideshow__slide">
-          <img src="../assets/img/p2/terrace.png" alt="Communication center terrace with curved glass walls and timber decking" />
+          <img src="../assets/img/p2/plaza_exterior_render_day.jpg" alt="Communication center terrace with curved glass walls and timber decking" />
           <div class="slideshow__overlay"></div>
         </div>
         <div class="slideshow__slide">
@@ -792,6 +883,30 @@
       goTo(current + 1);
     }, 2000);
   })();
+  </script>
+
+  <script>
+    (function () {
+      const wrap     = document.getElementById('day-night-wrap');
+      const night    = document.getElementById('day-night-night');
+      const divider  = document.getElementById('day-night-divider');
+      if (!wrap) return;
+
+      function update(x) {
+        const pct = Math.max(0, Math.min(100, x));
+        night.style.clipPath  = `inset(0 ${100 - pct}% 0 0)`;
+        divider.style.left    = pct + '%';
+      }
+
+      update(50); // start centred
+
+      wrap.addEventListener('mousemove', function (e) {
+        const rect = wrap.getBoundingClientRect();
+        const pct  = ((e.clientX - rect.left) / rect.width) * 100;
+        update(pct);
+      });
+
+    })();
   </script>
 
   <script src="../assets/js/i18n.js"></script>
