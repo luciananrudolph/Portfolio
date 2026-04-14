@@ -988,11 +988,147 @@
   </div>
 
   <!-- ═══════════════════════════════════════════
-       PROJECT DETAILS
+       EXPLODED AXONOMETRIC — interactive diagram
        ═══════════════════════════════════════════ -->
-  <div class="pdf-section">
-    <embed src="../assets/img/p3/exploded_axo.pdf" type="application/pdf" height="800px" />
+  <div class="axo-section">
+    <div class="axo-outer" id="axoOuter">
+
+      <div class="axo-wrap" id="axoWrap">
+        <img src="../assets/img/p3/exploded_axo.png" alt="Exploded axonometric diagram" class="axo-img" id="axoImg" />
+
+        <button class="axo-pin" style="left:52%;top:6%;"  data-title="Roof Tiles"           data-text="GIMA overproduction"                                     aria-label="Roof Tiles"></button>
+        <button class="axo-pin" style="left:62%;top:20%;" data-title="Roof Beams"            data-text="Reclaimed from demolition site, Lichtenhaag"             aria-label="Roof Beams"></button>
+        <button class="axo-pin" style="left:58%;top:42%;" data-title="Home Bricks"           data-text="BAUFRITZ timber offcuts"                                 aria-label="Home Bricks"></button>
+        <button class="axo-pin" style="left:48%;top:55%;" data-title="Mahogany Parquet"      data-text="Reclaimed from church deconstruction, Füssen"             aria-label="Mahogany Parquet"></button>
+        <button class="axo-pin" style="left:32%;top:45%;" data-title="Wooden Shingle Facade" data-text="Reclaimed from church deconstruction, Füssen"             aria-label="Wooden Shingle Facade"></button>
+        <button class="axo-pin" style="left:44%;top:80%;" data-title="Foundation System"     data-text="Oak logs and concrete slabs from barn demolition, Munich" aria-label="Foundation System"></button>
+      </div>
+
+      <!-- Label sits outside the image, vertically aligned to the active pin via JS -->
+      <div class="axo-floatlabel" id="axoFloatLabel">
+        <span class="axo-fl-title" id="axoFLTitle"></span>
+        <span class="axo-fl-text"  id="axoFLText"></span>
+      </div>
+
+    </div>
   </div>
+
+  <style>
+    .axo-section {
+      width: 100%;
+      padding: 0 0 4rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .axo-outer {
+      position: relative;
+      width: min(820px, 92vw);
+    }
+
+    .axo-wrap {
+      position: relative;
+    }
+
+    .axo-img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* "+" pins */
+    .axo-pin {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+      border: 1.5px solid #3a6ea5;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 300;
+      color: #3a6ea5;
+      line-height: 1;
+      padding: 0;
+      transition: background 0.15s;
+    }
+    .axo-pin::before { content: "+"; }
+    .axo-pin:hover,
+    .axo-pin.is-active {
+      background: rgba(255,255,255,0.95);
+    }
+
+    /* Floating label — outside the image, right side, vertically set by JS */
+    .axo-floatlabel {
+      position: absolute;
+      left: calc(100% + 14px);
+      width: 150px;
+      transform: translateY(-50%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.12s;
+    }
+    .axo-floatlabel.is-visible { opacity: 1; }
+
+    .axo-fl-title {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #111;
+      line-height: 1;
+    }
+    .axo-fl-text {
+      display: block;
+      font-size: 0.72rem;
+      color: #555;
+      line-height: 1;
+      margin-top: 3px;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const img     = document.getElementById('axoImg');
+      const label   = document.getElementById('axoFloatLabel');
+      const flTitle = document.getElementById('axoFLTitle');
+      const flText  = document.getElementById('axoFLText');
+      const pins    = document.querySelectorAll('#axoWrap .axo-pin');
+      let activePin = null;
+
+      function show(pin) {
+        const topPct = parseFloat(pin.style.top) / 100;
+        label.style.top = (topPct * img.offsetHeight) + 'px';
+        flTitle.textContent = pin.dataset.title;
+        flText.textContent  = pin.dataset.text;
+        label.classList.add('is-visible');
+        if (activePin && activePin !== pin) activePin.classList.remove('is-active');
+        pin.classList.add('is-active');
+        activePin = pin;
+      }
+
+      function hide() {
+        label.classList.remove('is-visible');
+        if (activePin) activePin.classList.remove('is-active');
+        activePin = null;
+      }
+
+      pins.forEach(function (pin) {
+        pin.addEventListener('mouseenter', function () { show(pin); });
+        pin.addEventListener('mouseleave', function () { hide(); });
+        pin.addEventListener('click', function (e) {
+          e.stopPropagation();
+          activePin === pin ? hide() : show(pin);
+        });
+      });
+
+      document.addEventListener('click', function () { hide(); });
+    })();
+  </script>
 
   <div id="project-details">
     <section class="project-info">
