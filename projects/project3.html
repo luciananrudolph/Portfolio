@@ -1016,8 +1016,18 @@
         interaction-prompt="none"
       ></model-viewer>
 
-      <!-- Caption -->
-      <p class="mv-caption" id="mvCaption">A modular unit developed from reclaimed industrial materials.</p>
+      <!-- "Did you know?" title — appears with orbit ring (phase 1), stays -->
+      <h4 class="mv-fact-title" id="mvFactTitle" aria-hidden="false">Did you know?</h4>
+
+      <!-- Rest of captions — appear at phase 3 -->
+      <div class="mv-caption" id="mvCaption">
+        <!-- Bottom-left: aligned with "FROM TIMBER OFFCUTS" left edge -->
+        <p class="mv-caption__main">A modular unit<br>developed from<br>reclaimed materials.</p>
+        <!-- Top-right: fact body -->
+        <div class="mv-caption__fact">
+          <p class="mv-caption__fact-text">Up to <span class="mv-caption__stat">20–30%</span> of timber<br>in prefabrication processes<br>become offcuts.</p>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -1086,28 +1096,81 @@
       --poster-color: transparent;
       transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .mv-model--grow {
-      transform: scale(1.12);
+    .mv-model--grow      { transform: scale(1.12); }
+    .mv-model--grow-more { transform: scale(1.28); }
+
+    /* ── Caption overlay — fills the sticky frame ── */
+    .mv-caption {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.6s ease 0.2s;
+    }
+    .mv-caption.is-visible { opacity: 1; }
+
+    /* Bottom-left: aligned with "FROM TIMBER OFFCUTS" left edge (left: 3%) */
+    .mv-caption__main {
+      position: absolute;
+      bottom: 7%;
+      left: 3%;
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #111;
     }
 
-    /* ── Caption ── */
-    .mv-caption {
-      position: relative;
-      z-index: 1;
-      margin-top: 1.25rem;
-      font-size: 0.9rem;
-      color: #555;
-      letter-spacing: 0.01em;
-      line-height: 1.6;
-      text-align: center;
-      max-width: 480px;
+    /* "Did you know?" title — phase 1, stays */
+    .mv-fact-title {
+      position: absolute;
+      top: 10%;
+      right: 3%;
+      z-index: 3;
+      font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #111;
+      line-height: 1;
+      text-align: right;
+      pointer-events: none;
       opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+      transform: translateY(-8px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .mv-caption.is-visible {
+    .mv-fact-title.is-visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* Top-right: fact body (phase 3) */
+    .mv-caption__fact {
+      position: absolute;
+      top: 10%;
+      right: 3%;
+      text-align: right;
+      max-width: 380px;
+      /* push body text below the title — title is roughly 1 line at ~2.8rem */
+      padding-top: clamp(2.5rem, 4vw, 3.8rem);
+    }
+    .mv-caption__fact-text {
+      font-size: clamp(1.2rem, 2vw, 1.7rem);
+      font-weight: 500;
+      color: #333;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+    .mv-caption__stat {
+      color: #b03a10;
+      font-weight: 800;
+    }
+
+    @media (max-width: 640px) {
+      .mv-caption__main  { font-size: 1rem; bottom: 10%; }
+      .mv-caption__fact  { top: 4%; right: 3%; max-width: 180px; }
+      .mv-caption__fact-title { font-size: 1rem; }
+      .mv-caption__fact-text  { font-size: 0.8rem; }
     }
 
     /* ── Orbit hint ring ── */
@@ -1158,17 +1221,35 @@
 
   <script>
   (function () {
-    var outer     = document.getElementById("mvOuter");
-    var model     = document.getElementById("mvModel");
-    var right     = document.getElementById("mvRight");
-    var caption   = document.getElementById("mvCaption");
-    var hintBack  = document.getElementById("mvHintBack");
-    var hintFront = document.getElementById("mvHintFront");
+    var outer      = document.getElementById("mvOuter");
+    var model      = document.getElementById("mvModel");
+    var right      = document.getElementById("mvRight");
+    var caption    = document.getElementById("mvCaption");
+    var hintBack   = document.getElementById("mvHintBack");
+    var hintFront  = document.getElementById("mvHintFront");
+    var factTitle  = document.getElementById("mvFactTitle");
     if (!outer || !model) return;
 
-    var phase         = -1;
-    var rafPending    = false;
-    var autoTimer     = null;
+    var phase           = -1;
+    var rafPending      = false;
+    var autoTimer       = null;
+    var phase1EnteredAt = 0;
+    var hintHideTimer   = null;
+
+    function showHint() {
+      if (hintBack)  hintBack.classList.add("is-visible");
+      if (hintFront) hintFront.classList.add("is-visible");
+    }
+    function hideHint() {
+      if (hintBack)  hintBack.classList.remove("is-visible");
+      if (hintFront) hintFront.classList.remove("is-visible");
+    }
+    function scheduleHintHide() {
+      var elapsed = Date.now() - phase1EnteredAt;
+      var remaining = Math.max(0, 2000 - elapsed);
+      clearTimeout(hintHideTimer);
+      hintHideTimer = setTimeout(hideHint, remaining);
+    }
 
     function scrollToPhase(target) {
       var scrollable = outer.offsetHeight - window.innerHeight;
@@ -1180,16 +1261,27 @@
       phase = p;
 
       model.setAttribute("rotation-per-second", p >= 1 && p < 2 ? "80deg" : "18deg");
-      model.classList.toggle("mv-model--grow",    p >= 2);
-      if (hintBack)  hintBack.classList.toggle("is-visible",  p === 1);
-      if (hintFront) hintFront.classList.toggle("is-visible", p === 1);
+      model.classList.toggle("mv-model--grow",      p >= 2 && p < 3);
+      model.classList.toggle("mv-model--grow-more", p >= 3);
+      /* hint visibility managed separately by scheduleHintHide() */
+      if (factTitle) factTitle.classList.toggle("is-visible", p >= 1);
       right.classList.toggle("mv-right--hidden",  p < 3);
       caption.classList.toggle("is-visible",      p >= 3);
 
       /* entering phase 1 — auto-advance to phase 3 after 4 s if user hasn't scrolled */
       if (p === 1) {
+        phase1EnteredAt = Date.now();
+        showHint();
         autoTimer = setTimeout(function () { scrollToPhase(0.82); }, 4000);
+      } else if (p === 0) {
+        /* scrolled back up — hide hint immediately */
+        clearTimeout(hintHideTimer);
+        hideHint();
+        clearTimeout(autoTimer);
+        autoTimer = null;
       } else {
+        /* p >= 2: leaving phase 1 forward — respect 2s minimum */
+        scheduleHintHide();
         clearTimeout(autoTimer);
         autoTimer = null;
       }
