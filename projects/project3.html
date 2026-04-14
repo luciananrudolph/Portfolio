@@ -526,6 +526,294 @@
       .xh__img { opacity: 1 !important; transform: none !important; }
       .xh__sidebar, .xh__bigtext { opacity: 1 !important; }
     }
+
+
+    /* =============================================================
+       TIMELINE — vertical scroll drives horizontal pan
+       Path zigzags between HIGH (y=227) and LOW (y=337) levels
+       with 90° rectangular turns at x=650, 1050, 1650.
+       Sections:
+         A. Scroll canvas (section, height set by JS)
+         B. Sticky viewport
+         C. Header: intro + phase bar
+         D. Track clip + track
+         E. SVG zigzag path
+         F. Event cards (absolutely positioned)
+         G. Mobile fallback
+         H. Reduced motion
+       ============================================================= */
+
+    /* ── A. Scroll canvas ── */
+    .timeline {
+      position: relative;
+      min-height: 100vh;
+      background: #f4f1e6;
+    }
+
+    /* ── B. Sticky viewport ── */
+    .timeline__sticky {
+      position: sticky;
+      top: 0;
+      height: 100svh; /* svh = excludes mobile browser chrome */
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #f4f1e6;
+    }
+
+    /* ── C. Header (compact so the track has room) ── */
+    .timeline__header {
+      flex-shrink: 0;
+      padding: 20px clamp(20px, 4vw, 60px) 0;
+    }
+
+    .timeline__intro { margin-bottom: 0; }
+
+    .timeline__intro-label {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .timeline__intro h2 {
+      font-size: clamp(1.15rem, 2vw, 1.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: #111;
+      margin: 0;
+    }
+
+    /* Phase bar — all 6 always visible via flex: 1 */
+    .timeline__phases {
+      display: flex;
+      margin-top: 12px;
+      border-top: 1px solid #d8d8d8;
+      border-bottom: 1px solid #d8d8d8;
+    }
+
+    .timeline__phase {
+      flex: 1;
+      padding: 8px 4px;
+      font-size: 0.57rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #bbb;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.3s ease, border-color 0.3s ease;
+      user-select: none;
+    }
+
+    .timeline__phase.--active {
+      color: #111;
+      border-bottom-color: #111;
+    }
+
+    /* ── D. Track clip ── */
+    /* Clips the oversized track; JS pans via translateX */
+    .timeline__track-clip {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── E. Track: fixed size canvas for absolute-positioned cards + SVG ── */
+    /* Geometry (all in px):
+         HIGH_Y = 227   (y of upper path segment, from track top)
+         LOW_Y  = 337   (y of lower path segment)
+         STEP   = 110   (vertical drop between levels)
+         HIGH events: top = 12  → card bottom ≈ 213, stem to 223, dot centre ≈ 227 ✓
+         LOW  events: top = 332 → dot centre ≈ 336, stem to 346, card bottom ≈ 536
+         Track height = 560px                                                       */
+    .timeline__track {
+      position: relative;
+      height: 560px;
+      min-width: 2200px; /* 10 events × 200px pitch + 200px padding */
+      will-change: transform;
+    }
+
+    /* ── F. SVG zigzag path ── */
+    /* Path: M 0,227 H 650 V 337 H 1050 V 227 H 1650 V 337 H 2200
+       Corners at x = 650, 1050, 1650 (midpoints between events 2↔3, 4↔5, 7↔8) */
+    .timeline__path {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    /* ── G. Event cards (absolutely positioned) ── */
+    .timeline__event {
+      position: absolute;
+      width: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+
+    .timeline__event.--visible { opacity: 1; }
+
+    /* HIGH: card sits ABOVE the path line */
+    .timeline__event.--high { top: 12px; }
+
+    /* LOW: dot sits on the path line, card hangs BELOW */
+    .timeline__event.--low  { top: 332px; }
+
+    /* Stem: vertical connector between card and path */
+    .timeline__stem {
+      width: 1px;
+      height: 10px;
+      background: #d8d8d8;
+      flex-shrink: 0;
+    }
+
+    /* Dot: sits on the SVG path at the junction */
+    .timeline__dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ccc;
+      border: 2px solid #f4f1e6;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+      transition: background 0.3s ease;
+    }
+
+    .timeline__event.--visible .timeline__dot { background: #2f4aa1; }
+
+    /* Card shell */
+    .timeline__card {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #e4e4e4;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: box-shadow 0.25s ease;
+    }
+
+    .timeline__card:hover { box-shadow: 0 4px 18px rgba(0, 0, 0, 0.09); }
+
+    /* 16:9 image keeps cards short */
+    .timeline__img {
+      margin: 0;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+
+    .timeline__img img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .timeline__card:hover .timeline__img img { transform: scale(1.05); }
+
+    .timeline__body { padding: 8px 10px 10px; }
+
+    .timeline__date {
+      display: block;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 3px;
+    }
+
+    .timeline__title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #111;
+      margin: 0 0 3px;
+    }
+
+    .timeline__desc {
+      font-size: 0.68rem;
+      line-height: 1.45;
+      color: #777;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── H. Mobile: native horizontal scroll, zigzag collapses to straight ── */
+    @media (max-width: 600px) {
+      .timeline { height: auto !important; min-height: 0; }
+
+      .timeline__sticky {
+        position: relative;
+        height: auto;
+        overflow: visible;
+      }
+
+      .timeline__track-clip {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 16px;
+        scrollbar-width: thin;
+        scrollbar-color: #ccc transparent;
+      }
+      .timeline__track-clip::-webkit-scrollbar { height: 2px; }
+      .timeline__track-clip::-webkit-scrollbar-thumb { background: #ccc; }
+
+      /* On mobile, flatten all events to a single HIGH row */
+      .timeline__track {
+        transform: none !important;
+        height: 340px; /* enough for HIGH cards only */
+        min-width: 1800px;
+      }
+
+      /* All events show as HIGH on mobile */
+      .timeline__event.--low {
+        top: 12px;
+      }
+
+      /* Hide the SVG zigzag; show a simple horizontal line instead */
+      .timeline__path { display: none; }
+
+      .timeline__track::before {
+        content: "";
+        position: absolute;
+        top: 218px; /* card(190) + stem(10) + dot-radius(4.5) + top(12) ≈ 216 */
+        left: 0; right: 0;
+        height: 1px;
+        background: #d8d8d8;
+      }
+
+      /* Flip LOW events so dot is at bottom (like HIGH) */
+      .timeline__event.--low {
+        flex-direction: column;
+      }
+      .timeline__event.--low .timeline__dot { order: 3; }
+      .timeline__event.--low .timeline__stem { order: 2; }
+      .timeline__event.--low .timeline__card { order: 1; }
+
+      .timeline__phase { font-size: 0.5rem; padding: 7px 3px; }
+    }
+
+    /* ── I. Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .timeline__event { opacity: 1 !important; transition: none !important; }
+      .timeline__img img { transition: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -770,6 +1058,236 @@
   <div class="pdf-section">
     <embed src="../assets/img/p3/timeline.pdf" type="application/pdf" height="600px" />
   </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TIMELINE — zigzag path, scroll-driven horizontal pan
+
+       Path geometry (px, relative to track top):
+         HIGH_Y = 227  LOW_Y = 337  step corners at x = 650, 1050, 1650
+
+       Level layout:
+         HIGH (card above): E0 E1 E2        E5 E6 E7
+         LOW  (card below):          E3 E4           E8 E9
+
+       Event x positions (left edge of 180px card, pitch = 200px):
+         E0=60  E1=260  E2=460  E3=660  E4=860
+         E5=1060 E6=1260 E7=1460 E8=1660 E9=1860
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="timeline" id="timeline" aria-label="Project timeline">
+  <div class="timeline__sticky" id="timeline-sticky">
+
+    <div class="timeline__header">
+      <div class="timeline__intro">
+        <span class="timeline__intro-label">Development Process</span>
+        <h2>Project Timeline</h2>
+      </div>
+      <div class="timeline__phases" id="timeline-phases" role="list" aria-label="Project phases">
+        <div class="timeline__phase --active" data-phase="0" role="listitem">Creating the framework</div>
+        <div class="timeline__phase"          data-phase="1" role="listitem">Founding of the corporation</div>
+        <div class="timeline__phase"          data-phase="2" role="listitem">Design process at TUM</div>
+        <div class="timeline__phase"          data-phase="3" role="listitem">Approval planning</div>
+        <div class="timeline__phase"          data-phase="4" role="listitem">Execution planning</div>
+        <div class="timeline__phase"          data-phase="5" role="listitem">Construction process</div>
+      </div>
+    </div>
+
+    <div class="timeline__track-clip" id="timeline-track-clip">
+      <div class="timeline__track" id="timeline-track">
+
+        <!-- ── SVG zigzag path ──
+             Straight segments connected by 90° turns.
+             Dots mark event nodes; corner circles mark the bend points. -->
+        <svg class="timeline__path" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 2200 560" preserveAspectRatio="none" aria-hidden="true">
+
+          <!-- Main path: HIGH(y=227) → step down at x=650 → LOW(y=337) →
+               step up at x=1050 → HIGH → step down at x=1650 → LOW -->
+          <path d="M 0,227 H 650 V 337 H 1050 V 227 H 1650 V 337 H 2200"
+                stroke="#d0d0d0" stroke-width="1" fill="none" />
+
+          <!-- Corner bend markers (small circles at each 90° turn) -->
+          <circle cx="650"  cy="227" r="3" fill="#c8c8c8" />
+          <circle cx="650"  cy="337" r="3" fill="#c8c8c8" />
+          <circle cx="1050" cy="337" r="3" fill="#c8c8c8" />
+          <circle cx="1050" cy="227" r="3" fill="#c8c8c8" />
+          <circle cx="1650" cy="227" r="3" fill="#c8c8c8" />
+          <circle cx="1650" cy="337" r="3" fill="#c8c8c8" />
+        </svg>
+
+        <!-- ══ HIGH events (card above path, left=60..460 and 1060..1460) ══ -->
+
+        <!-- E0 · Jan 2024 · phase 0 · HIGH · left=60 -->
+        <article class="timeline__event --high" data-phase="0" style="left:60px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/construction.jpg" alt="Client and project finding" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-01">Jan 2024</time>
+              <h3 class="timeline__title">Client + Project Finding</h3>
+              <p class="timeline__desc">First contact with the client family and identification of the project site in Irsee.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E1 · Feb 2024 · phase 0 · HIGH · left=260 -->
+        <article class="timeline__event --high" data-phase="0" style="left:260px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/site_model.jpg" alt="Collaboration begins at TUM" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-02">Feb 2024</time>
+              <h3 class="timeline__title">Start of Collaboration at TUM</h3>
+              <p class="timeline__desc">Project embedded as a Bachelor's thesis; academic framework established with faculty.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E2 · Apr 2024 · phase 1 · HIGH · left=460 -->
+        <article class="timeline__event --high" data-phase="1" style="left:460px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/mahogani_engraved.jpg" alt="Visiting GIMA, closing partnerships" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-04">Apr 2024</time>
+              <h3 class="timeline__title">Visiting GIMA / Closing Partnerships</h3>
+              <p class="timeline__desc">Industrial agreements secured; surplus timber forms the material basis for the Home Bricks system.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- ══ LOW events (card below path, left=660..860) ══ -->
+
+        <!-- E3 · Jun 2024 · phase 1 · LOW · left=660 -->
+        <article class="timeline__event --low" data-phase="1" style="left:660px">
+          <div class="timeline__dot"></div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/design_principles_woodcut1.jpg" alt="Wood workshop visit" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-06">Jun 2024</time>
+              <h3 class="timeline__title">Wood Workshop Riedle &amp; Bader</h3>
+              <p class="timeline__desc">On-site evaluation of reclaimed timber informs module dimensions and joinery logic.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- E4 · Jul 2024 · phase 2 · LOW · left=860 -->
+        <article class="timeline__event --low" data-phase="2" style="left:860px">
+          <div class="timeline__dot"></div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/design_principles_woodcut2.jpg" alt="Bachelor thesis submitted" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-07">Jul 2024</time>
+              <h3 class="timeline__title">Submission of Bachelor Thesis</h3>
+              <p class="timeline__desc">"Recycle Residence" submitted to TUM, consolidating design, material research, and structural system.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- ══ HIGH events (card above path, left=1060..1460) ══ -->
+
+        <!-- E5 · Sep 2024 · phase 2 · HIGH · left=1060 -->
+        <article class="timeline__event --high" data-phase="2" style="left:1060px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/design_principles_woodcut3.jpg" alt="ARTE filming begins" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-09">Sep 2024</time>
+              <h3 class="timeline__title">ARTE Filming Begins</h3>
+              <p class="timeline__desc">ARTE documents Supertecture, featuring the Recycle Residence as a circular construction case study.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E6 · Oct 2024 · phase 3 · HIGH · left=1260 -->
+        <article class="timeline__event --high" data-phase="3" style="left:1260px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/design_principles_woodcut.jpg" alt="Transformathon 1st place" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-10">Oct 2024</time>
+              <h3 class="timeline__title">Transformathon — 1st Place</h3>
+              <p class="timeline__desc">First place at the Transformathon, opening visibility and further funding conversations.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E7 · Dec 2024 · phase 3 · HIGH · left=1460 -->
+        <article class="timeline__event --high" data-phase="3" style="left:1460px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/construction.jpg" alt="Building permit submitted" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-12">Dec 2024</time>
+              <h3 class="timeline__title">Building Permit Submitted</h3>
+              <p class="timeline__desc">Approval drawings submitted with structural, fire, and energy compliance documentation.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- ══ LOW events (card below path, left=1660..1860) ══ -->
+
+        <!-- E8 · Jan 2025 · phase 4 · LOW · left=1660 -->
+        <article class="timeline__event --low" data-phase="4" style="left:1660px">
+          <div class="timeline__dot"></div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/site_model.jpg" alt="Lecture series launch" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2025-01">Jan 2025</time>
+              <h3 class="timeline__title">Lecture Series Launch</h3>
+              <p class="timeline__desc">Public lecture series on circular construction launched, building community and recruiting volunteer helpers.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- E9 · Apr 2025 · phase 5 · LOW · left=1860 -->
+        <article class="timeline__event --low" data-phase="5" style="left:1860px">
+          <div class="timeline__dot"></div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/mahogani_engraved.jpg" alt="Construction begins" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2025-04">Apr 2025</time>
+              <h3 class="timeline__title">Beginning of Construction</h3>
+              <p class="timeline__desc">Ground broken in Irsee. Volunteer teams begin assembling Home Bricks modules on site.</p>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /.timeline__track -->
+    </div><!-- /.timeline__track-clip -->
+
+  </div><!-- /.timeline__sticky -->
+  </section>
+
 
   <!-- ============================================= -->
   <!-- NAV: Previous / Next Project Links            -->
@@ -1101,6 +1619,136 @@
       requestAnimationFrame(update);
     }, { passive: true });
     update();
+  })();
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TIMELINE SCRIPT — vertical scroll → horizontal pan
+       How it works:
+         The .timeline section is given a tall height by JS so
+         that normal page scrolling provides distance. While the
+         section is in view, .timeline__sticky pins to the top
+         (position: sticky; height: 100vh). Each scroll tick maps
+         the section's scroll progress to a translateX on the track.
+
+       Responsibilities:
+         1. Measure track overflow and set section height.
+         2. On scroll: pan track, reveal cards, update phase bar.
+         3. Mobile (≤600px): skip JS pan, use native overflow-x scroll.
+       ═══════════════════════════════════════════════════════════ -->
+  <script>
+  (function () {
+    "use strict";
+
+    var section  = document.getElementById("timeline");
+    var sticky   = document.getElementById("timeline-sticky");
+    var clip     = document.getElementById("timeline-track-clip");
+    var track    = document.getElementById("timeline-track");
+    if (!section || !sticky || !clip || !track) return;
+
+    var events   = track.querySelectorAll(".timeline__event");
+    var phaseEls = document.querySelectorAll("#timeline-phases .timeline__phase");
+    if (!events.length) return;
+
+    var activePhase = -1;
+
+    /* ── Shared phase setter ── */
+    function setPhase(phase) {
+      if (phase === activePhase) return;
+      activePhase = phase;
+      phaseEls.forEach(function (el) {
+        el.classList.toggle("--active", parseInt(el.getAttribute("data-phase"), 10) === phase);
+      });
+    }
+
+    /* ── Find which event is leftmost in view ── */
+    function nearestPhase(offsetFn) {
+      /* offsetFn(el) returns the current visual left position of el */
+      var best = 0, bestDist = Infinity;
+      events.forEach(function (el, i) {
+        var dist = Math.abs(offsetFn(el));
+        if (dist < bestDist) { bestDist = dist; best = i; }
+      });
+      return parseInt(events[best].getAttribute("data-phase"), 10) || 0;
+    }
+
+    /* ─────────────────────────────────────────────
+       MOBILE (≤ 600px)
+       Native horizontal scroll inside the clip.
+       Section height stays auto; sticky is relative.
+    ───────────────────────────────────────────── */
+    if (window.matchMedia("(max-width: 600px)").matches) {
+      events.forEach(function (el) { el.classList.add("--visible"); });
+
+      clip.addEventListener("scroll", function () {
+        requestAnimationFrame(function () {
+          setPhase(nearestPhase(function (el) {
+            return el.offsetLeft - clip.scrollLeft;
+          }));
+        });
+      }, { passive: true });
+
+      setPhase(nearestPhase(function (el) { return el.offsetLeft; }));
+      return;
+    }
+
+    /* ─────────────────────────────────────────────
+       DESKTOP: scroll-driven horizontal pan
+    ───────────────────────────────────────────── */
+    var trackOverflow = 0;
+    var containerW    = 0;
+    var rafId         = null;
+
+    /* Measure how much the track overflows its container.
+       Use offsetWidth (not scrollWidth) since the track has a fixed min-width
+       and is clipped by its parent — scrollWidth would read the clip width. */
+    function measure() {
+      containerW    = sticky.clientWidth;
+      trackOverflow = Math.max(0, track.offsetWidth - containerW);
+      section.style.height = (trackOverflow + window.innerHeight) + "px";
+    }
+
+    measure();
+
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { measure(); if (!rafId) rafId = requestAnimationFrame(tick); }, 120);
+    });
+
+    function tick() {
+      rafId = null;
+      var rect       = section.getBoundingClientRect();
+      var scrollable = section.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+
+      /* progress: 0 at section top, 1 when section bottom reaches bottom of viewport */
+      var progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+      var tx       = -progress * trackOverflow;
+
+      /* Pan */
+      track.style.transform = "translateX(" + tx + "px)";
+
+      /* Reveal cards that have panned into the visible area */
+      events.forEach(function (el) {
+        /* card's visual left = its static offsetLeft + current translate */
+        if (el.offsetLeft + tx < containerW + 60) {
+          el.classList.add("--visible");
+        }
+      });
+
+      /* Phase: which event is nearest to the left edge of the container */
+      setPhase(nearestPhase(function (el) {
+        return el.offsetLeft + tx; /* visual left; nearest to 0 wins */
+      }));
+    }
+
+    window.addEventListener("scroll", function () {
+      if (!rafId) rafId = requestAnimationFrame(tick);
+    }, { passive: true });
+
+    tick(); /* initial render */
+
   })();
   </script>
 
