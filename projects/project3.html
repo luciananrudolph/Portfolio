@@ -996,12 +996,13 @@
       <div class="axo-wrap" id="axoWrap">
         <img src="../assets/img/p3/exploded_axo.png" alt="Exploded axonometric diagram" class="axo-img" id="axoImg" />
 
-        <button class="axo-pin" style="left:52%;top:6%;"  data-title="Roof Tiles"           data-text="GIMA overproduction"                                     aria-label="Roof Tiles"></button>
-        <button class="axo-pin" style="left:62%;top:20%;" data-title="Roof Beams"            data-text="Reclaimed from demolition site, Lichtenhaag"             aria-label="Roof Beams"></button>
-        <button class="axo-pin" style="left:58%;top:42%;" data-title="Home Bricks"           data-text="BAUFRITZ timber offcuts"                                 aria-label="Home Bricks"></button>
-        <button class="axo-pin" style="left:48%;top:55%;" data-title="Mahogany Parquet"      data-text="Reclaimed from church deconstruction, Füssen"             aria-label="Mahogany Parquet"></button>
-        <button class="axo-pin" style="left:32%;top:45%;" data-title="Wooden Shingle Facade" data-text="Reclaimed from church deconstruction, Füssen"             aria-label="Wooden Shingle Facade"></button>
-        <button class="axo-pin" style="left:44%;top:80%;" data-title="Foundation System"     data-text="Oak logs and concrete slabs from barn demolition, Munich" aria-label="Foundation System"></button>
+        <button class="axo-pin" style="left:60%;top:7%;"  data-title="Roof Tiles"           data-text="GIMA overproduction"                                     data-side="right" aria-label="Roof Tiles"></button>
+        <button class="axo-pin" style="left:60%;top:16%;" data-title="Roof Beams"            data-text="Reclaimed from demolition site, Lichtenhaag"             data-side="right" aria-label="Roof Beams"></button>
+        <button class="axo-pin" style="left:43%;top:39%;" data-title="Home Bricks"           data-text="BAUFRITZ timber offcuts"                                 data-side="left"  aria-label="Home Bricks"></button>
+        <button class="axo-pin" style="left:28%;top:56%;" data-title="Home Bricks"           data-text="BAUFRITZ timber offcuts"                                 data-side="left"  aria-label="Home Bricks"></button>
+        <button class="axo-pin" style="left:45%;top:64%;" data-title="Mahogany Parquet"      data-text="Reclaimed from church deconstruction, Füssen"             data-side="right" data-label-x="60" aria-label="Mahogany Parquet"></button>
+        <button class="axo-pin" style="left:13%;top:62%;" data-title="Wooden Shingle Facade" data-text="Reclaimed from church deconstruction, Füssen"             data-side="left"  aria-label="Wooden Shingle Facade"></button>
+        <button class="axo-pin" style="left:44%;top:86%;" data-title="Foundation System"     data-text="Oak logs and concrete slabs from barn demolition, Munich" data-side="left"  aria-label="Foundation System"></button>
       </div>
 
       <!-- Label sits outside the image, vertically aligned to the active pin via JS -->
@@ -1062,10 +1063,9 @@
       background: rgba(255,255,255,0.95);
     }
 
-    /* Floating label — outside the image, right side, vertically set by JS */
+    /* Floating label — position set entirely by JS */
     .axo-floatlabel {
       position: absolute;
-      left: calc(100% + 14px);
       width: 150px;
       transform: translateY(-50%);
       opacity: 0;
@@ -1101,8 +1101,26 @@
       let activePin = null;
 
       function show(pin) {
-        const topPct = parseFloat(pin.style.top) / 100;
-        label.style.top = (topPct * img.offsetHeight) + 'px';
+        const topPct  = parseFloat(pin.style.top)  / 100;
+        const labelXPct = parseFloat(pin.dataset.labelX || pin.style.left) / 100;
+        const imgW = img.offsetWidth;
+        const imgH = img.offsetHeight;
+        const pinX = labelXPct * imgW;
+        const pinY = topPct  * imgH;
+        const gap  = 50;
+
+        label.style.top = pinY + 'px';
+
+        if (pin.dataset.side === 'left') {
+          label.style.left      = 'auto';
+          label.style.right     = (imgW - pinX + gap) + 'px';
+          label.style.textAlign = 'right';
+        } else {
+          label.style.left      = (pinX + gap) + 'px';
+          label.style.right     = 'auto';
+          label.style.textAlign = 'left';
+        }
+
         flTitle.textContent = pin.dataset.title;
         flText.textContent  = pin.dataset.text;
         label.classList.add('is-visible');
