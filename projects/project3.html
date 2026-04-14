@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Supertecture Project — Luciana Noemi Rudolph</title>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
   <style>
     /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -939,6 +940,76 @@
 
     </div>
   </div>
+
+  <!-- ═══════════════════════════════════════════
+       HOME BRICK SYSTEM — 3D MODEL VIEWER
+       ═══════════════════════════════════════════ -->
+  <div class="model-viewer-section">
+    <div class="model-viewer-caption">
+      <h3 class="model-viewer-caption__title">Home Brick System</h3>
+      <p class="model-viewer-caption__text">Modular construction unit developed from reclaimed industrial timber offcuts.</p>
+    </div>
+    <model-viewer
+      src="../assets/img/p3/home_brick.glb"
+      alt="Home Brick System — modular timber construction unit"
+      camera-controls
+      auto-rotate
+      auto-rotate-delay="0"
+      rotation-per-second="8deg"
+      disable-pan
+      interaction-prompt="none"
+    ></model-viewer>
+  </div>
+
+  <style>
+    .model-viewer-section {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      width: 92vw;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 4rem 0 2rem;
+    }
+    .model-viewer-caption {
+      flex: 0 0 280px;
+      padding-right: 1rem;
+    }
+    .model-viewer-caption__title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #111;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+    .model-viewer-caption__text {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    .model-viewer-section model-viewer {
+      flex: 1;
+      min-width: 0;
+      height: 460px;
+      background: transparent;
+      --poster-color: transparent;
+    }
+    @media (max-width: 640px) {
+      .model-viewer-section {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .model-viewer-caption {
+        flex: none;
+        padding-right: 0;
+      }
+      .model-viewer-section model-viewer {
+        width: 100%;
+        height: 320px;
+      }
+    }
+  </style>
 
   <!-- ═══════════════════════════════════════════
        STICKY-SPLIT SCROLL SECTIONS
