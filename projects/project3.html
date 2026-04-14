@@ -1148,6 +1148,225 @@
     })();
   </script>
 
+  <!-- ═══════════════════════════════════════════
+       MATERIAL COLLAGE — interactive diagram
+       ═══════════════════════════════════════════ -->
+  <div class="matcol-section">
+    <div class="matcol-outer">
+
+      <img src="../assets/img/p3/material_collage.png" alt="Material sources diagram" class="matcol-img" />
+
+      <!-- Category legend — titles always visible, text only on active -->
+      <div class="matcol-legend" id="matcolLegend">
+
+        <div class="matcol-cat" data-cat="1">
+          <div class="matcol-cat__header" style="color:#E3C76A;">
+            <span class="matcol-cat__num">01</span>
+            <span class="matcol-cat__title">Industrial Surplus</span>
+          </div>
+          <ul class="matcol-cat__list">
+            <li><span class="matcol-dot" style="background:#E3C76A;"></span>Overproduction</li>
+            <li><span class="matcol-dot" style="background:#E3C76A;"></span>Rejected products / second-choice material</li>
+            <li><span class="matcol-dot" style="background:#E3C76A;"></span>Non-construction material (e.g. walls from bottles)</li>
+          </ul>
+        </div>
+
+        <div class="matcol-cat" data-cat="2">
+          <div class="matcol-cat__header" style="color:#AFCBB3;">
+            <span class="matcol-cat__num">02</span>
+            <span class="matcol-cat__title">Temporary Structures</span>
+          </div>
+          <ul class="matcol-cat__list">
+            <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Exhibition pieces</li>
+            <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Trade fair construction</li>
+            <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Temporary cultural structures (e.g. theater stage)</li>
+          </ul>
+        </div>
+
+        <div class="matcol-cat" data-cat="3">
+          <div class="matcol-cat__header" style="color:#E6B173;">
+            <span class="matcol-cat__num">03</span>
+            <span class="matcol-cat__title">Upcycling</span>
+          </div>
+          <ul class="matcol-cat__list">
+            <li><span class="matcol-dot" style="background:#E6B173;"></span>Repurposed material from renovation projects</li>
+            <li><span class="matcol-dot" style="background:#E6B173;"></span>Waste collection sites</li>
+            <li><span class="matcol-dot" style="background:#E6B173;"></span>Non-construction material</li>
+          </ul>
+        </div>
+
+        <div class="matcol-cat" data-cat="4">
+          <div class="matcol-cat__header" style="color:#A9C7DC;">
+            <span class="matcol-cat__num">04</span>
+            <span class="matcol-cat__title">Building Material Marketplaces</span>
+          </div>
+          <ul class="matcol-cat__list">
+            <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Concular (certified building components from demolition projects)</li>
+            <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Ebay Marketplace (online marketplace with private sellers)</li>
+            <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Treibgut (local on-site marketplace in Munich)</li>
+          </ul>
+        </div>
+
+        <div class="matcol-cat" data-cat="5">
+          <div class="matcol-cat__header" style="color:#E5B3C7;">
+            <span class="matcol-cat__num">05</span>
+            <span class="matcol-cat__title">Demolition Projects</span>
+          </div>
+          <ul class="matcol-cat__list">
+            <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Office demolition in Kaufbeuren (BBM Mahler)</li>
+            <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Church demolition in Füssen (municipal authority)</li>
+            <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Roof framework demolition by a private individual</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* ─────────────────────────────────────────────
+       MATERIAL COLLAGE
+    ───────────────────────────────────────────── */
+    .matcol-section {
+      width: 100%;
+      padding: 0 0 4rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .matcol-outer {
+      width: min(820px, 92vw);
+    }
+
+    .matcol-img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Legend row */
+    .matcol-legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.75rem;
+    }
+
+    .matcol-cat {
+      flex: 1;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      cursor: pointer;
+    }
+    .matcol-legend.has-active .matcol-cat:not(.is-active) {
+      opacity: 0.2;
+    }
+
+    .matcol-cat__header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Large numbered prefix */
+    .matcol-cat__num {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .matcol-cat__title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: inherit;
+      line-height: 1.3;
+    }
+
+    /* Text list — hidden by default, revealed via max-height */
+    .matcol-cat__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.3s ease;
+    }
+    .matcol-cat.is-active .matcol-cat__list {
+      max-height: 200px;
+      opacity: 1;
+    }
+
+    .matcol-cat__list li {
+      font-size: 0.71rem;
+      color: #555;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Colored bullet dot */
+    .matcol-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+      .matcol-legend {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .matcol-cat__num {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+
+  <script>
+    (function () {
+      const legend = document.getElementById('matcolLegend');
+      const cats   = legend.querySelectorAll('.matcol-cat');
+      let active   = null;
+
+      function activate(catId) {
+        cats.forEach(function (c) { c.classList.toggle('is-active', c.dataset.cat === catId); });
+        legend.classList.add('has-active');
+        active = catId;
+      }
+
+      function deactivate() {
+        cats.forEach(function (c) { c.classList.remove('is-active'); });
+        legend.classList.remove('has-active');
+        active = null;
+      }
+
+      cats.forEach(function (cat) {
+        /* Desktop: hover */
+        cat.addEventListener('pointerenter', function (e) {
+          if (e.pointerType !== 'touch') activate(cat.dataset.cat);
+        });
+        cat.addEventListener('pointerleave', function (e) {
+          if (e.pointerType !== 'touch') deactivate();
+        });
+        /* Mobile: click toggle */
+        cat.addEventListener('click', function (e) {
+          e.stopPropagation();
+          active === cat.dataset.cat ? deactivate() : activate(cat.dataset.cat);
+        });
+      });
+
+      document.addEventListener('click', deactivate);
+    })();
+  </script>
+
   <div id="project-details">
     <section class="project-info">
       <div class="project-info__grid">
