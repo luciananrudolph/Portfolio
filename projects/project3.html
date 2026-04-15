@@ -54,8 +54,8 @@
     .xh__label {
       position: absolute;
       bottom: 36px;
-      font-size: 0.8rem;
-      font-weight: 500;
+      font-size: 1rem;
+      font-weight: 600;
       z-index: 20;
       letter-spacing: 0.01em;
       transition: color 0.5s ease, text-shadow 0.5s ease;
@@ -126,6 +126,13 @@
       right: 40px;
       z-index: 15;
       opacity: 0;
+    }
+    .xh__bigtext__label {
+      display: block;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.6rem;
     }
     .xh__bigtext__body {
       font-size: clamp(1.4rem, 3vw, 2.4rem);
@@ -629,22 +636,17 @@
 
     /* ── E. Track: fixed size canvas for absolute-positioned cards + SVG ── */
     /* Geometry (all in px):
-         HIGH_Y = 227   (y of upper path segment, from track top)
-         LOW_Y  = 337   (y of lower path segment)
-         STEP   = 110   (vertical drop between levels)
-         HIGH events: top = 12  → card bottom ≈ 213, stem to 223, dot centre ≈ 227 ✓
-         LOW  events: top = 332 → dot centre ≈ 336, stem to 346, card bottom ≈ 536
-         Track height = 560px                                                       */
+         LINE_Y = 227   (y of the horizontal path, from track top)
+         All events: top = 12 → card bottom ≈ 213, stem to 223, dot centre ≈ 227 ✓
+         Track height = 300px                                                       */
     .timeline__track {
       position: relative;
-      height: 560px;
-      min-width: 2200px; /* 10 events × 200px pitch + 200px padding */
+      height: 300px;
+      min-width: 2080px; /* last event at 1860px + 180px card + 40px padding */
       will-change: transform;
     }
 
-    /* ── F. SVG zigzag path ── */
-    /* Path: M 0,227 H 650 V 337 H 1050 V 227 H 1650 V 337 H 2200
-       Corners at x = 650, 1050, 1650 (midpoints between events 2↔3, 4↔5, 7↔8) */
+    /* ── F. SVG path ── */
     .timeline__path {
       position: absolute;
       top: 0; left: 0;
@@ -666,11 +668,8 @@
 
     .timeline__event.--visible { opacity: 1; }
 
-    /* HIGH: card sits ABOVE the path line */
+    /* All events: card sits ABOVE the path line */
     .timeline__event.--high { top: 12px; }
-
-    /* LOW: dot sits on the path line, card hangs BELOW */
-    .timeline__event.--low  { top: 332px; }
 
     /* Stem: vertical connector between card and path */
     .timeline__stem {
@@ -754,59 +753,8 @@
       overflow: hidden;
     }
 
-    /* ── H. Mobile: native horizontal scroll, zigzag collapses to straight ── */
+    /* ── H. Mobile ── */
     @media (max-width: 600px) {
-      .timeline { height: auto !important; min-height: 0; }
-
-      .timeline__sticky {
-        position: relative;
-        height: auto;
-        overflow: visible;
-      }
-
-      .timeline__track-clip {
-        overflow-x: auto;
-        overflow-y: visible;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 16px;
-        scrollbar-width: thin;
-        scrollbar-color: #ccc transparent;
-      }
-      .timeline__track-clip::-webkit-scrollbar { height: 2px; }
-      .timeline__track-clip::-webkit-scrollbar-thumb { background: #ccc; }
-
-      /* On mobile, flatten all events to a single HIGH row */
-      .timeline__track {
-        transform: none !important;
-        height: 340px; /* enough for HIGH cards only */
-        min-width: 1800px;
-      }
-
-      /* All events show as HIGH on mobile */
-      .timeline__event.--low {
-        top: 12px;
-      }
-
-      /* Hide the SVG zigzag; show a simple horizontal line instead */
-      .timeline__path { display: none; }
-
-      .timeline__track::before {
-        content: "";
-        position: absolute;
-        top: 218px; /* card(190) + stem(10) + dot-radius(4.5) + top(12) ≈ 216 */
-        left: 0; right: 0;
-        height: 1px;
-        background: #d8d8d8;
-      }
-
-      /* Flip LOW events so dot is at bottom (like HIGH) */
-      .timeline__event.--low {
-        flex-direction: column;
-      }
-      .timeline__event.--low .timeline__dot { order: 3; }
-      .timeline__event.--low .timeline__stem { order: 2; }
-      .timeline__event.--low .timeline__card { order: 1; }
-
       .timeline__phase { font-size: 0.5rem; padding: 7px 3px; }
     }
 
@@ -887,12 +835,13 @@
 
       <!-- Big text block (state 5) -->
       <div class="xh__bigtext" id="xh-bigtext">
+        <span class="xh__bigtext__label">The Recycle Residence</span>
         <div class="xh__bigtext__body" id="xh-bigtext-body"></div>
         <a class="xh__bigtext__cta" href="#project-details">Explore the project</a>
       </div>
 
       <!-- Corner labels -->
-      <span class="xh__label xh__label--left" id="xh-lbl-left">The Recycle Residence</span>
+      <span class="xh__label xh__label--left" id="xh-lbl-left" style="display:none"></span>
       <span class="xh__label xh__label--right" id="xh-lbl-right">Kaufbeuren, Germany</span>
 
     </div>
@@ -1359,7 +1308,7 @@
 
       <!-- Right: stacked images, one visible at a time -->
       <div class="split__images">
-        <div class="split__img --visible" data-split-img="0"><img src="../assets/img/p3/construction.jpg" alt="Construction of the Recycle Residence" /></div>
+        <div class="split__img --visible" data-split-img="0"><img src="../assets/img/p3/site_model.jpg" alt="Site model" /></div>
         <div class="split__img" data-split-img="1"><img src="../assets/img/p3/site_model.jpg" alt="Site model" /></div>
         <div class="split__img" data-split-img="2"><img src="../assets/img/p3/mahogani_engraved.jpg" alt="Mahogany engraved detail" /></div>
         <div class="split__img" data-split-img="3"><img src="../assets/img/p3/design_principles_woodcut.jpg" alt="Design principles woodcut" /></div>
@@ -1753,6 +1702,18 @@
     .matcol-outer {
       max-width: 1280px;
       margin: 0 auto;
+      display: flex;
+      gap: 4rem;
+      align-items: stretch;
+    }
+    .matcol-left {
+      flex: 0 0 66%;
+      display: flex;
+    }
+    .matcol-right {
+      flex: 0 0 34%;
+      display: flex;
+      flex-direction: column;
     }
 
     @media (max-width: 860px) {
@@ -1763,22 +1724,24 @@
 
     .matcol-img {
       display: block;
-      width: 100%;
-      height: auto;
+      width: auto;
+      max-width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: left top;
     }
 
-    /* Legend row */
     .matcol-legend {
       display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 0.75rem 1rem;
-      margin-top: 1.25rem;
-      overflow: hidden;
+      flex-direction: column;
+      gap: 1.2rem;
     }
 
     .matcol-cat {
-      flex: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 1rem;
       opacity: 1;
       transition: opacity 0.3s ease;
       cursor: pointer;
@@ -1787,51 +1750,50 @@
       opacity: 0.2;
     }
 
-    .matcol-cat__header {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      margin-bottom: 0.6rem;
-    }
-
-    /* Large numbered prefix */
     .matcol-cat__num {
-      font-size: 1.5rem;
+      font-size: 2.2rem;
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1;
       flex-shrink: 0;
+      color: inherit;
+    }
+
+    .matcol-cat__body {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
     }
 
     .matcol-cat__title {
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: inherit;
       line-height: 1.3;
+      padding-top: 0.15em;
     }
 
-    /* Text list — hidden by default, revealed via max-height */
+    /* Text list — hidden by default, expands inline below its title */
     .matcol-cat__list {
       list-style: none;
       padding: 0;
-      margin: 0;
-      max-height: 0;
-      overflow: hidden;
+      margin: 0.4rem 0 0 0;
       opacity: 0;
-      transition: max-height 0.35s ease, opacity 0.3s ease;
+      visibility: hidden;
+      transition: opacity 0.2s ease;
     }
     .matcol-cat.is-active .matcol-cat__list {
-      max-height: 200px;
       opacity: 1;
+      visibility: visible;
     }
-
     .matcol-cat__list li {
-      font-size: 0.71rem;
+      font-size: 0.75rem;
       color: #555;
-      line-height: 1.6;
+      line-height: 1.7;
       display: flex;
+      align-items: flex-start;
       align-items: center;
       gap: 0.45rem;
     }
@@ -1843,6 +1805,7 @@
       height: 7px;
       border-radius: 50%;
       flex-shrink: 0;
+      margin-top: 0.45em;
     }
 
     @media (max-width: 640px) {
@@ -1852,42 +1815,6 @@
     }
   </style>
 
-  <script>
-    (function () {
-      const legend = document.getElementById('matcolLegend');
-      const cats   = legend.querySelectorAll('.matcol-cat');
-      let active   = null;
-
-      function activate(catId) {
-        cats.forEach(function (c) { c.classList.toggle('is-active', c.dataset.cat === catId); });
-        legend.classList.add('has-active');
-        active = catId;
-      }
-
-      function deactivate() {
-        cats.forEach(function (c) { c.classList.remove('is-active'); });
-        legend.classList.remove('has-active');
-        active = null;
-      }
-
-      cats.forEach(function (cat) {
-        /* Desktop: hover */
-        cat.addEventListener('pointerenter', function (e) {
-          if (e.pointerType !== 'touch') activate(cat.dataset.cat);
-        });
-        cat.addEventListener('pointerleave', function (e) {
-          if (e.pointerType !== 'touch') deactivate();
-        });
-        /* Mobile: click toggle */
-        cat.addEventListener('click', function (e) {
-          e.stopPropagation();
-          active === cat.dataset.cat ? deactivate() : activate(cat.dataset.cat);
-        });
-      });
-
-      document.addEventListener('click', deactivate);
-    })();
-  </script>
 
   <div id="project-details">
     <section class="project-info">
@@ -1956,81 +1883,117 @@
   <div class="matcol-section">
     <div class="matcol-outer">
 
-      <img src="../assets/img/p3/material_collage.png" alt="Material sources diagram" class="matcol-img" />
+      <div class="matcol-left">
+        <img src="../assets/img/p3/material_collage.png" alt="Material sources diagram" class="matcol-img" />
+      </div>
 
+      <div class="matcol-right">
       <!-- Category legend — titles always visible, text only on active -->
       <div class="matcol-legend" id="matcolLegend">
 
-        <div class="matcol-cat" data-cat="1">
-          <div class="matcol-cat__header" style="color:#E3C76A;">
-            <span class="matcol-cat__num">01</span>
+        <div class="matcol-cat" data-cat="1" style="color:#E3C76A;">
+          <span class="matcol-cat__num">01</span>
+          <div class="matcol-cat__body">
             <span class="matcol-cat__title">Industrial Surplus</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#E3C76A;"></span>Overproduction</li>
+              <li><span class="matcol-dot" style="background:#E3C76A;"></span>Rejected products / second-choice material</li>
+              <li><span class="matcol-dot" style="background:#E3C76A;"></span>Non-construction material (e.g. walls from bottles)</li>
+            </ul>
           </div>
-          <ul class="matcol-cat__list">
-            <li><span class="matcol-dot" style="background:#E3C76A;"></span>Overproduction</li>
-            <li><span class="matcol-dot" style="background:#E3C76A;"></span>Rejected products / second-choice material</li>
-            <li><span class="matcol-dot" style="background:#E3C76A;"></span>Non-construction material (e.g. walls from bottles)</li>
-          </ul>
         </div>
 
-        <div class="matcol-cat" data-cat="2">
-          <div class="matcol-cat__header" style="color:#AFCBB3;">
-            <span class="matcol-cat__num">02</span>
+        <div class="matcol-cat" data-cat="2" style="color:#AFCBB3;">
+          <span class="matcol-cat__num">02</span>
+          <div class="matcol-cat__body">
             <span class="matcol-cat__title">Temporary Structures</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Exhibition pieces</li>
+              <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Trade fair construction</li>
+              <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Temporary cultural structures (e.g. theater stage)</li>
+            </ul>
           </div>
-          <ul class="matcol-cat__list">
-            <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Exhibition pieces</li>
-            <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Trade fair construction</li>
-            <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Temporary cultural structures (e.g. theater stage)</li>
-          </ul>
         </div>
 
-        <div class="matcol-cat" data-cat="3">
-          <div class="matcol-cat__header" style="color:#E6B173;">
-            <span class="matcol-cat__num">03</span>
+        <div class="matcol-cat" data-cat="3" style="color:#E6B173;">
+          <span class="matcol-cat__num">03</span>
+          <div class="matcol-cat__body">
             <span class="matcol-cat__title">Upcycling</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#E6B173;"></span>Repurposed material from renovation projects</li>
+              <li><span class="matcol-dot" style="background:#E6B173;"></span>Waste collection sites</li>
+              <li><span class="matcol-dot" style="background:#E6B173;"></span>Non-construction material</li>
+            </ul>
           </div>
-          <ul class="matcol-cat__list">
-            <li><span class="matcol-dot" style="background:#E6B173;"></span>Repurposed material from renovation projects</li>
-            <li><span class="matcol-dot" style="background:#E6B173;"></span>Waste collection sites</li>
-            <li><span class="matcol-dot" style="background:#E6B173;"></span>Non-construction material</li>
-          </ul>
         </div>
 
-        <div class="matcol-cat" data-cat="4">
-          <div class="matcol-cat__header" style="color:#A9C7DC;">
-            <span class="matcol-cat__num">04</span>
+        <div class="matcol-cat" data-cat="4" style="color:#A9C7DC;">
+          <span class="matcol-cat__num">04</span>
+          <div class="matcol-cat__body">
             <span class="matcol-cat__title">Building Material Marketplaces</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Concular (certified building components from demolition projects)</li>
+              <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Ebay Marketplace (online marketplace with private sellers)</li>
+              <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Treibgut (local on-site marketplace in Munich)</li>
+            </ul>
           </div>
-          <ul class="matcol-cat__list">
-            <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Concular (certified building components from demolition projects)</li>
-            <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Ebay Marketplace (online marketplace with private sellers)</li>
-            <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Treibgut (local on-site marketplace in Munich)</li>
-          </ul>
         </div>
 
-        <div class="matcol-cat" data-cat="5">
-          <div class="matcol-cat__header" style="color:#E5B3C7;">
-            <span class="matcol-cat__num">05</span>
+        <div class="matcol-cat" data-cat="5" style="color:#E5B3C7;">
+          <span class="matcol-cat__num">05</span>
+          <div class="matcol-cat__body">
             <span class="matcol-cat__title">Demolition Projects</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Office demolition in Kaufbeuren (BBM Mahler)</li>
+              <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Church demolition in Füssen (municipal authority)</li>
+              <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Roof framework demolition by a private individual</li>
+            </ul>
           </div>
-          <ul class="matcol-cat__list">
-            <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Office demolition in Kaufbeuren (BBM Mahler)</li>
-            <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Church demolition in Füssen (municipal authority)</li>
-            <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Roof framework demolition by a private individual</li>
-          </ul>
         </div>
 
       </div>
+      </div><!-- /.matcol-right -->
+
     </div>
   </div>
 
-  <div class="pdf-section">
-    <embed src="../assets/img/p3/timeline.pdf" type="application/pdf" height="600px" />
-  </div>
+  <script>
+    (function () {
+      const legend = document.getElementById('matcolLegend');
+      const cats   = legend.querySelectorAll('.matcol-cat');
+      let active   = null;
+
+      function activate(catId) {
+        cats.forEach(function (c) { c.classList.toggle('is-active', c.dataset.cat === catId); });
+        legend.classList.add('has-active');
+        active = catId;
+      }
+
+      function deactivate() {
+        cats.forEach(function (c) { c.classList.remove('is-active'); });
+        legend.classList.remove('has-active');
+        active = null;
+      }
+
+      cats.forEach(function (cat) {
+        cat.addEventListener('pointerenter', function (e) {
+          if (e.pointerType !== 'touch') activate(cat.dataset.cat);
+        });
+        cat.addEventListener('pointerleave', function (e) {
+          if (e.pointerType !== 'touch') deactivate();
+        });
+        cat.addEventListener('click', function (e) {
+          e.stopPropagation();
+          active === cat.dataset.cat ? deactivate() : activate(cat.dataset.cat);
+        });
+      });
+
+      document.addEventListener('click', deactivate);
+    })();
+  </script>
 
   <!-- ═══════════════════════════════════════════════════════════
-       TIMELINE — zigzag path, scroll-driven horizontal pan
+       TIMELINE — scroll-driven horizontal pan
 
        Path geometry (px, relative to track top):
          HIGH_Y = 227  LOW_Y = 337  step corners at x = 650, 1050, 1650
@@ -2064,27 +2027,14 @@
     <div class="timeline__track-clip" id="timeline-track-clip">
       <div class="timeline__track" id="timeline-track">
 
-        <!-- ── SVG zigzag path ──
-             Straight segments connected by 90° turns.
-             Dots mark event nodes; corner circles mark the bend points. -->
+        <!-- ── SVG straight path ── -->
         <svg class="timeline__path" xmlns="http://www.w3.org/2000/svg"
-             viewBox="0 0 2200 560" preserveAspectRatio="none" aria-hidden="true">
-
-          <!-- Main path: HIGH(y=227) → step down at x=650 → LOW(y=337) →
-               step up at x=1050 → HIGH → step down at x=1650 → LOW -->
-          <path d="M 0,227 H 650 V 337 H 1050 V 227 H 1650 V 337 H 2200"
+             viewBox="0 0 2200 300" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 0,227 H 2200"
                 stroke="#d0d0d0" stroke-width="1" fill="none" />
-
-          <!-- Corner bend markers (small circles at each 90° turn) -->
-          <circle cx="650"  cy="227" r="3" fill="#c8c8c8" />
-          <circle cx="650"  cy="337" r="3" fill="#c8c8c8" />
-          <circle cx="1050" cy="337" r="3" fill="#c8c8c8" />
-          <circle cx="1050" cy="227" r="3" fill="#c8c8c8" />
-          <circle cx="1650" cy="227" r="3" fill="#c8c8c8" />
-          <circle cx="1650" cy="337" r="3" fill="#c8c8c8" />
         </svg>
 
-        <!-- ══ HIGH events (card above path, left=60..460 and 1060..1460) ══ -->
+        <!-- ══ Events (card above path) ══ -->
 
         <!-- E0 · Jan 2024 · phase 0 · HIGH · left=60 -->
         <article class="timeline__event --high" data-phase="0" style="left:60px">
@@ -2134,12 +2084,8 @@
           <div class="timeline__dot"></div>
         </article>
 
-        <!-- ══ LOW events (card below path, left=660..860) ══ -->
-
-        <!-- E3 · Jun 2024 · phase 1 · LOW · left=660 -->
-        <article class="timeline__event --low" data-phase="1" style="left:660px">
-          <div class="timeline__dot"></div>
-          <div class="timeline__stem"></div>
+        <!-- E3 · Jun 2024 · phase 1 · left=660 -->
+        <article class="timeline__event --high" data-phase="1" style="left:660px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/design_principles_woodcut1.jpg" alt="Wood workshop visit" loading="lazy" />
@@ -2150,12 +2096,12 @@
               <p class="timeline__desc">On-site evaluation of reclaimed timber informs module dimensions and joinery logic.</p>
             </div>
           </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
         </article>
 
-        <!-- E4 · Jul 2024 · phase 2 · LOW · left=860 -->
-        <article class="timeline__event --low" data-phase="2" style="left:860px">
-          <div class="timeline__dot"></div>
-          <div class="timeline__stem"></div>
+        <!-- E4 · Jul 2024 · phase 2 · left=860 -->
+        <article class="timeline__event --high" data-phase="2" style="left:860px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/design_principles_woodcut2.jpg" alt="Bachelor thesis submitted" loading="lazy" />
@@ -2166,9 +2112,9 @@
               <p class="timeline__desc">"Recycle Residence" submitted to TUM, consolidating design, material research, and structural system.</p>
             </div>
           </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
         </article>
-
-        <!-- ══ HIGH events (card above path, left=1060..1460) ══ -->
 
         <!-- E5 · Sep 2024 · phase 2 · HIGH · left=1060 -->
         <article class="timeline__event --high" data-phase="2" style="left:1060px">
@@ -2218,12 +2164,8 @@
           <div class="timeline__dot"></div>
         </article>
 
-        <!-- ══ LOW events (card below path, left=1660..1860) ══ -->
-
-        <!-- E8 · Jan 2025 · phase 4 · LOW · left=1660 -->
-        <article class="timeline__event --low" data-phase="4" style="left:1660px">
-          <div class="timeline__dot"></div>
-          <div class="timeline__stem"></div>
+        <!-- E8 · Jan 2025 · phase 4 · left=1660 -->
+        <article class="timeline__event --high" data-phase="4" style="left:1660px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/site_model.jpg" alt="Lecture series launch" loading="lazy" />
@@ -2234,12 +2176,12 @@
               <p class="timeline__desc">Public lecture series on circular construction launched, building community and recruiting volunteer helpers.</p>
             </div>
           </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
         </article>
 
-        <!-- E9 · Apr 2025 · phase 5 · LOW · left=1860 -->
-        <article class="timeline__event --low" data-phase="5" style="left:1860px">
-          <div class="timeline__dot"></div>
-          <div class="timeline__stem"></div>
+        <!-- E9 · Apr 2025 · phase 5 · left=1860 -->
+        <article class="timeline__event --high" data-phase="5" style="left:1860px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/mahogani_engraved.jpg" alt="Construction begins" loading="lazy" />
@@ -2250,6 +2192,8 @@
               <p class="timeline__desc">Ground broken in Irsee. Volunteer teams begin assembling Home Bricks modules on site.</p>
             </div>
           </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
         </article>
 
       </div><!-- /.timeline__track -->
@@ -2300,6 +2244,7 @@
     var sideLink  = document.getElementById("xh-sidebar-link");
     var bigtext   = document.getElementById("xh-bigtext");
     var bigtextBody = document.getElementById("xh-bigtext-body");
+
     var lblLeft   = document.getElementById("xh-lbl-left");
     var lblRight  = document.getElementById("xh-lbl-right");
     var headerEl  = document.querySelector(".top");
@@ -2472,12 +2417,7 @@
 
       lblRight.style.opacity = progress < 0.78 ? 1 : 1 - eo(sub(progress, 0.78, 0.85));
 
-      if (progress > 0.75) {
-        var t = eo(sub(progress, 0.75, 0.85));
-        lblLeft.style.bottom = lerp(36, VH * 0.5, t) + "px";
-      } else {
-        lblLeft.style.bottom = "36px";
-      }
+
     }
 
     function onScroll() {
@@ -2643,27 +2583,7 @@
     }
 
     /* ─────────────────────────────────────────────
-       MOBILE (≤ 600px)
-       Native horizontal scroll inside the clip.
-       Section height stays auto; sticky is relative.
-    ───────────────────────────────────────────── */
-    if (window.matchMedia("(max-width: 600px)").matches) {
-      events.forEach(function (el) { el.classList.add("--visible"); });
-
-      clip.addEventListener("scroll", function () {
-        requestAnimationFrame(function () {
-          setPhase(nearestPhase(function (el) {
-            return el.offsetLeft - clip.scrollLeft;
-          }));
-        });
-      }, { passive: true });
-
-      setPhase(nearestPhase(function (el) { return el.offsetLeft; }));
-      return;
-    }
-
-    /* ─────────────────────────────────────────────
-       DESKTOP: scroll-driven horizontal pan
+       Scroll-driven horizontal pan (all screen sizes)
     ───────────────────────────────────────────── */
     var trackOverflow = 0;
     var containerW    = 0;
@@ -2675,7 +2595,7 @@
     function measure() {
       containerW    = sticky.clientWidth;
       trackOverflow = Math.max(0, track.offsetWidth - containerW);
-      section.style.height = (trackOverflow + window.innerHeight) + "px";
+      section.style.height = (Math.round(trackOverflow * 0.65) + window.innerHeight) + "px";
     }
 
     measure();
