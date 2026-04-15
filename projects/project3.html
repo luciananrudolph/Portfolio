@@ -261,6 +261,14 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+    .split__img.--contain {
+      background: #f4f1e6;
+      padding: 0.5rem;
+    }
+    .split__img.--contain img {
+      object-fit: contain;
+      background: #f4f1e6;
       display: block;
       border-radius: 12px;
     }
@@ -444,13 +452,37 @@
       grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
+    .gallery__item {
+      cursor: zoom-in;
+      overflow: hidden;
+      border-radius: 12px;
+    }
     .gallery__img {
       width: 100%;
-      border-radius: 12px;
       display: block;
+      transition: transform 0.3s ease;
     }
-    .gallery__img--full {
-      grid-column: 1 / -1;
+    .gallery__item:hover .gallery__img { transform: scale(1.02); }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      z-index: 99999;
+      cursor: zoom-out;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .lightbox.is-open { display: flex; pointer-events: auto; }
+    .lightbox__img {
+      max-width: 88vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.25);
     }
 
     /* ── Back nav ── */
@@ -569,26 +601,26 @@
       background: #f4f1e6;
     }
 
-    /* ── C. Header (compact so the track has room) ── */
+    /* ── C. Header ── */
     .timeline__header {
       flex-shrink: 0;
-      padding: 20px clamp(20px, 4vw, 60px) 0;
+      padding: 36px clamp(24px, 4vw, 60px) 0;
     }
 
     .timeline__intro { margin-bottom: 0; }
 
     .timeline__intro-label {
       display: block;
-      font-size: 0.62rem;
+      font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #888;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .timeline__intro h2 {
-      font-size: clamp(1.15rem, 2vw, 1.5rem);
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
       font-weight: 700;
       line-height: 1.1;
       color: #111;
@@ -598,15 +630,15 @@
     /* Phase bar — all 6 always visible via flex: 1 */
     .timeline__phases {
       display: flex;
-      margin-top: 12px;
+      margin-top: 20px;
       border-top: 1px solid #d8d8d8;
       border-bottom: 1px solid #d8d8d8;
     }
 
     .timeline__phase {
       flex: 1;
-      padding: 8px 4px;
-      font-size: 0.57rem;
+      padding: 12px 8px;
+      font-size: 0.65rem;
       font-weight: 600;
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -632,17 +664,20 @@
       flex: 1;
       overflow: hidden;
       position: relative;
+      display: flex;
+      align-items: center;
     }
 
     /* ── E. Track: fixed size canvas for absolute-positioned cards + SVG ── */
     /* Geometry (all in px):
-         LINE_Y = 227   (y of the horizontal path, from track top)
-         All events: top = 12 → card bottom ≈ 213, stem to 223, dot centre ≈ 227 ✓
-         Track height = 300px                                                       */
+         LINE_Y = 264   (y of the horizontal path, from track top)
+         All events: top = 12 → card(~208px) bottom ≈ 220, stem(40) to 260, dot centre ≈ 264 ✓
+         Track height = 420px                                                       */
     .timeline__track {
       position: relative;
-      height: 300px;
-      min-width: 2080px; /* last event at 1860px + 180px card + 40px padding */
+      height: 420px;
+      min-width: 3600px; /* 10 events × 360px pitch starting at 60px + 240px card + 60px */
+      flex-shrink: 0;
       will-change: transform;
     }
 
@@ -658,7 +693,7 @@
     /* ── G. Event cards (absolutely positioned) ── */
     .timeline__event {
       position: absolute;
-      width: 180px;
+      width: 240px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -674,7 +709,7 @@
     /* Stem: vertical connector between card and path */
     .timeline__stem {
       width: 1px;
-      height: 10px;
+      height: 40px;
       background: #d8d8d8;
       flex-shrink: 0;
     }
@@ -722,36 +757,41 @@
 
     .timeline__card:hover .timeline__img img { transform: scale(1.05); }
 
-    .timeline__body { padding: 8px 10px 10px; }
+    .timeline__body { padding: 10px 12px 12px; }
 
     .timeline__date {
       display: block;
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: #aaa;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .timeline__title {
-      font-size: 0.76rem;
+      font-size: 0.85rem;
       font-weight: 700;
       line-height: 1.3;
       color: #111;
-      margin: 0 0 3px;
+      margin: 0 0 4px;
     }
 
     .timeline__desc {
-      font-size: 0.68rem;
-      line-height: 1.45;
-      color: #777;
-      margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      display: none; /* hidden in compact card; shown in modal */
     }
+
+    /* "Read more" hint shown in compact card */
+    .timeline__read-more {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #2f4aa1;
+      letter-spacing: 0.02em;
+    }
+
+    .timeline__card { cursor: pointer; }
 
     /* ── H. Mobile ── */
     @media (max-width: 600px) {
@@ -1282,37 +1322,37 @@
         <div class="split__item --active" data-split="0">
           <div class="split__number">01</div>
           <h2 class="split__title">Site &amp; Context</h2>
-          <p class="split__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <p class="split__desc">The project is located in Irsee, Bavaria, and is developed for a specific family within a real residential context. The design responds to existing site conditions, local construction practices, and the availability of reclaimed materials.</p>
         </div>
         <div class="split__item" data-split="1">
           <div class="split__number">02</div>
-          <h2 class="split__title">Masterplan &amp; Layout</h2>
-          <p class="split__desc">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+          <h2 class="split__title">Program &amp; Spatial Organization</h2>
+          <p class="split__desc">The house is designed for a family of four, with a clear and compact layout organised across two levels. The program is divided into living, sleeping, and service areas, allowing for flexible use and future adaptation. The spatial organisation follows the logic of the material system, resulting in a clear and efficient floor plan.</p>
         </div>
         <div class="split__item" data-split="2">
           <div class="split__number">03</div>
-          <h2 class="split__title">Structure &amp; Materials</h2>
-          <p class="split__desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+          <h2 class="split__title">Ground Floor</h2>
+          <p class="split__desc">Two distinct volumes separate heated living spaces from unheated service areas. A compact service core at the rear organizes wet functions, while the living spaces open toward the garden. The unheated volume allows for future conversion into a studio apartment.</p>
         </div>
         <div class="split__item" data-split="3">
           <div class="split__number">04</div>
-          <h2 class="split__title">Interior &amp; Learning Spaces</h2>
-          <p class="split__desc">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos.</p>
+          <h2 class="split__title">First Floor</h2>
+          <p class="split__desc">The first floor continues the volumetric division. Private rooms are located in the left volume, while the right volume accommodates a separate piano studio.</p>
         </div>
         <div class="split__item" data-split="4">
           <div class="split__number">05</div>
-          <h2 class="split__title">Community &amp; Impact</h2>
-          <p class="split__desc">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.</p>
+          <h2 class="split__title">Construction &amp; Section</h2>
+          <p class="split__desc">The construction is based on a modular timber system combined with reclaimed components. Load-bearing walls, floor build-up, and roof structure are assembled using dry connections, enabling simple construction processes and future disassembly. Sections reveal how the system integrates structural logic, material reuse, and spatial organisation.</p>
         </div>
       </nav>
 
       <!-- Right: stacked images, one visible at a time -->
       <div class="split__images">
         <div class="split__img --visible" data-split-img="0"><img src="../assets/img/p3/site_model.jpg" alt="Site model" /></div>
-        <div class="split__img" data-split-img="1"><img src="../assets/img/p3/site_model.jpg" alt="Site model" /></div>
-        <div class="split__img" data-split-img="2"><img src="../assets/img/p3/mahogani_engraved.jpg" alt="Mahogany engraved detail" /></div>
-        <div class="split__img" data-split-img="3"><img src="../assets/img/p3/design_principles_woodcut.jpg" alt="Design principles woodcut" /></div>
-        <div class="split__img" data-split-img="4"><img src="../assets/img/p3/construction.jpg" alt="Construction of the Recycle Residence" /></div>
+        <div class="split__img --contain" data-split-img="1"><img src="../assets/img/p3/concept_floorplans.png" alt="Concept floor plans" /></div>
+        <div class="split__img --contain" data-split-img="2"><img src="../assets/img/p3/floorplan_ground_floor.png" alt="Ground floor plan" /></div>
+        <div class="split__img --contain" data-split-img="3"><img src="../assets/img/p3/floorplan_first_floor.png" alt="First floor plan" /></div>
+        <div class="split__img --contain" data-split-img="4"><img src="../assets/img/p3/sections.png" alt="Building sections" /></div>
       </div>
 
     </div>
@@ -1338,9 +1378,20 @@
         <button class="axo-pin" style="left:44%;top:86%;" data-title="Foundation System"     data-text="Oak logs and concrete slabs from barn demolition, Munich" data-side="left"  aria-label="Foundation System"></button>
       </div>
 
-      <!-- Home Brick wall axonometry — revealed on pin hover -->
+      <!-- Home Brick wall axonometry — floats left on Home Bricks pin hover -->
       <img src="../assets/img/p3/home_brick_wall_axonometry.png"
            alt="Home Brick wall axonometry" class="axo-hb-img is-visible" id="axoHBImg" />
+
+      <!-- Home Brick technical details — floats right on Home Bricks pin hover -->
+      <img src="../assets/img/p3/Home_Brick_Technical_Details.png"
+           alt="Home Brick technical details" class="axo-hb-tech is-visible" id="axoHBTech" />
+
+      <!-- Home Brick description text — bottom right on Home Bricks pin hover -->
+      <div class="axo-hb-text is-visible" id="axoHBText">
+        <p>Developed in collaboration with BAUFRITZ, one of the leading prefabricated timber house companies in Germany, the system is based on the reuse of industrial timber offcuts from their production. Through this partnership, offcuts are collected, cut to module size, and supplied directly from prefabrication processes.</p>
+        <p>The small scale of the modules allows for an efficient use of otherwise discarded material. By standardising the offcuts into a consistent unit, the system transforms irregular leftovers into a coherent construction logic.</p>
+        <p>The components are lightweight and designed for dry assembly. A simple template guides the stacking process, enabling construction without specialised labour or heavy machinery. The elements are transported directly to site and assembled through a plug-in system, allowing for a low-tech and accessible building process.</p>
+      </div>
 
       <!-- Demolition panels — revealed when Roof Beams pin is active -->
       <div class="axo-demo-left" id="axoDemoLeft">
@@ -1426,6 +1477,43 @@
     .axo-hb-img.is-visible {
       opacity: 1;
     }
+
+    /* Home Brick technical details — floats to the right of the axo */
+    .axo-hb-tech {
+      position: absolute;
+      left: calc(100% + 2rem);
+      top: 5%;
+      width: 60%;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
+      object-position: left top;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-hb-tech.is-visible {
+      opacity: 1;
+    }
+
+    /* Home Brick text block — bottom right */
+    .axo-hb-text {
+      position: absolute;
+      left: calc(100% + 2rem);
+      bottom: 0;
+      width: 60%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-hb-text.is-visible { opacity: 1; }
+    .axo-hb-text p {
+      font-size: 0.65rem;
+      color: #555;
+      line-height: 1.65;
+      margin-bottom: 0.6em;
+    }
+    .axo-hb-text p:last-child { margin-bottom: 0; }
 
     /* Demolition panels — shown on Roof Beams pin */
     .axo-demo-left,
@@ -1609,6 +1697,8 @@
       const flTitle = document.getElementById('axoFLTitle');
       const flText  = document.getElementById('axoFLText');
       const hbImg      = document.getElementById('axoHBImg');
+      const hbTech     = document.getElementById('axoHBTech');
+      const hbText     = document.getElementById('axoHBText');
       const gimaPanel  = document.getElementById('axoGimaPanel');
       const demoLeft    = document.getElementById('axoDemoLeft');
       const demoRight   = document.getElementById('axoDemoRight');
@@ -1654,7 +1744,9 @@
         pin.classList.add('is-active');
         activePin = pin;
 
-        hbImg.classList.toggle('is-visible', pin.dataset.title === 'Home Bricks');
+        hbImg.classList.toggle('is-visible',  pin.dataset.title === 'Home Bricks');
+        hbTech.classList.toggle('is-visible', pin.dataset.title === 'Home Bricks');
+        hbText.classList.toggle('is-visible', pin.dataset.title === 'Home Bricks');
         gimaPanel.classList.toggle('is-visible', pin.dataset.title === 'Roof Tiles');
         demoLeft.classList.toggle('is-visible',    pin.dataset.title === 'Roof Beams');
         demoRight.classList.toggle('is-visible',   pin.dataset.title === 'Roof Beams');
@@ -1872,10 +1964,39 @@
 
     <!-- Gallery -->
     <section class="gallery" aria-label="Project gallery">
-      <img class="gallery__img gallery__img--full" src="../assets/img/p3/construction.jpg" alt="Construction of the Recycle Residence" />
-      <img class="gallery__img" src="../assets/img/p3/site_model.jpg" alt="Site model of the Recycle Residence" />
+      <div class="gallery__item">
+        <img class="gallery__img" src="../assets/img/p3/floorplan_ground_floor.png" alt="Ground floor plan" />
+      </div>
+      <div class="gallery__item">
+        <img class="gallery__img" src="../assets/img/p3/floorplan_first_floor.png" alt="First floor plan" />
+      </div>
+      <div class="gallery__item">
+        <img class="gallery__img" src="../assets/img/p3/sections.png" alt="Sections" />
+      </div>
     </section>
   </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="galleryLightbox">
+    <img class="lightbox__img" id="lightboxImg" src="" alt="" />
+  </div>
+  <script>
+    (function () {
+      var lb    = document.getElementById("galleryLightbox");
+      var lbImg = document.getElementById("lightboxImg");
+      document.querySelectorAll(".gallery__item").forEach(function (item) {
+        item.addEventListener("click", function () {
+          lbImg.src = item.querySelector("img").src;
+          lbImg.alt = item.querySelector("img").alt;
+          lb.classList.add("is-open");
+        });
+      });
+      lb.addEventListener("click", function () { lb.classList.remove("is-open"); });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") lb.classList.remove("is-open");
+      });
+    })();
+  </script>
 
   <!-- ═══════════════════════════════════════════
        MATERIAL COLLAGE — interactive diagram
@@ -2029,8 +2150,8 @@
 
         <!-- ── SVG straight path ── -->
         <svg class="timeline__path" xmlns="http://www.w3.org/2000/svg"
-             viewBox="0 0 2200 300" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M 0,227 H 2200"
+             viewBox="0 0 3600 420" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 0,264 H 3600"
                 stroke="#d0d0d0" stroke-width="1" fill="none" />
         </svg>
 
@@ -2053,7 +2174,7 @@
         </article>
 
         <!-- E1 · Feb 2024 · phase 0 · HIGH · left=260 -->
-        <article class="timeline__event --high" data-phase="0" style="left:260px">
+        <article class="timeline__event --high" data-phase="0" style="left:420px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/site_model.jpg" alt="Collaboration begins at TUM" loading="lazy" />
@@ -2069,7 +2190,7 @@
         </article>
 
         <!-- E2 · Apr 2024 · phase 1 · HIGH · left=460 -->
-        <article class="timeline__event --high" data-phase="1" style="left:460px">
+        <article class="timeline__event --high" data-phase="1" style="left:780px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/mahogani_engraved.jpg" alt="Visiting GIMA, closing partnerships" loading="lazy" />
@@ -2085,7 +2206,7 @@
         </article>
 
         <!-- E3 · Jun 2024 · phase 1 · left=660 -->
-        <article class="timeline__event --high" data-phase="1" style="left:660px">
+        <article class="timeline__event --high" data-phase="1" style="left:1140px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/design_principles_woodcut1.jpg" alt="Wood workshop visit" loading="lazy" />
@@ -2101,7 +2222,7 @@
         </article>
 
         <!-- E4 · Jul 2024 · phase 2 · left=860 -->
-        <article class="timeline__event --high" data-phase="2" style="left:860px">
+        <article class="timeline__event --high" data-phase="2" style="left:1500px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/design_principles_woodcut2.jpg" alt="Bachelor thesis submitted" loading="lazy" />
@@ -2117,7 +2238,7 @@
         </article>
 
         <!-- E5 · Sep 2024 · phase 2 · HIGH · left=1060 -->
-        <article class="timeline__event --high" data-phase="2" style="left:1060px">
+        <article class="timeline__event --high" data-phase="2" style="left:1860px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/design_principles_woodcut3.jpg" alt="ARTE filming begins" loading="lazy" />
@@ -2133,7 +2254,7 @@
         </article>
 
         <!-- E6 · Oct 2024 · phase 3 · HIGH · left=1260 -->
-        <article class="timeline__event --high" data-phase="3" style="left:1260px">
+        <article class="timeline__event --high" data-phase="3" style="left:2220px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/design_principles_woodcut.jpg" alt="Transformathon 1st place" loading="lazy" />
@@ -2148,8 +2269,8 @@
           <div class="timeline__dot"></div>
         </article>
 
-        <!-- E7 · Dec 2024 · phase 3 · HIGH · left=1460 -->
-        <article class="timeline__event --high" data-phase="3" style="left:1460px">
+        <!-- E7 · Dec 2024 · phase 3 · HIGH · left=2020 -->
+        <article class="timeline__event --high" data-phase="3" style="left:2580px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/construction.jpg" alt="Building permit submitted" loading="lazy" />
@@ -2165,7 +2286,7 @@
         </article>
 
         <!-- E8 · Jan 2025 · phase 4 · left=1660 -->
-        <article class="timeline__event --high" data-phase="4" style="left:1660px">
+        <article class="timeline__event --high" data-phase="4" style="left:2940px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/site_model.jpg" alt="Lecture series launch" loading="lazy" />
@@ -2181,7 +2302,7 @@
         </article>
 
         <!-- E9 · Apr 2025 · phase 5 · left=1860 -->
-        <article class="timeline__event --high" data-phase="5" style="left:1860px">
+        <article class="timeline__event --high" data-phase="5" style="left:3300px">
           <div class="timeline__card">
             <figure class="timeline__img">
               <img src="../assets/img/p3/mahogani_engraved.jpg" alt="Construction begins" loading="lazy" />
@@ -2571,17 +2692,6 @@
       });
     }
 
-    /* ── Find which event is leftmost in view ── */
-    function nearestPhase(offsetFn) {
-      /* offsetFn(el) returns the current visual left position of el */
-      var best = 0, bestDist = Infinity;
-      events.forEach(function (el, i) {
-        var dist = Math.abs(offsetFn(el));
-        if (dist < bestDist) { bestDist = dist; best = i; }
-      });
-      return parseInt(events[best].getAttribute("data-phase"), 10) || 0;
-    }
-
     /* ─────────────────────────────────────────────
        Scroll-driven horizontal pan (all screen sizes)
     ───────────────────────────────────────────── */
@@ -2595,7 +2705,7 @@
     function measure() {
       containerW    = sticky.clientWidth;
       trackOverflow = Math.max(0, track.offsetWidth - containerW);
-      section.style.height = (Math.round(trackOverflow * 0.65) + window.innerHeight) + "px";
+      section.style.height = (Math.round(trackOverflow * 0.7) + window.innerHeight) + "px";
     }
 
     measure();
@@ -2627,10 +2737,8 @@
         }
       });
 
-      /* Phase: which event is nearest to the left edge of the container */
-      setPhase(nearestPhase(function (el) {
-        return el.offsetLeft + tx; /* visual left; nearest to 0 wins */
-      }));
+      /* Phase advances consecutively with scroll progress (6 equal segments) */
+      setPhase(Math.min(5, Math.floor(progress * 6)));
     }
 
     window.addEventListener("scroll", function () {
@@ -2639,6 +2747,158 @@
 
     tick(); /* initial render */
 
+  })();
+  </script>
+
+  <!-- ── Timeline card modal ── -->
+  <div class="tl-modal" id="tlModal" role="dialog" aria-modal="true" aria-label="Event detail">
+    <div class="tl-modal__card">
+      <button class="tl-modal__close" id="tlModalClose" aria-label="Close">&#x2715;</button>
+      <figure class="tl-modal__img">
+        <img id="tlModalImg" src="" alt="" />
+      </figure>
+      <div class="tl-modal__body">
+        <time class="tl-modal__date" id="tlModalDate"></time>
+        <h3 class="tl-modal__title" id="tlModalTitle"></h3>
+        <p class="tl-modal__desc" id="tlModalDesc"></p>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .tl-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    .tl-modal.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .tl-modal__card {
+      position: relative;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      width: min(480px, 90vw);
+      max-height: 85vh;
+      overflow-y: auto;
+      transform: scale(0.94) translateY(8px);
+      transition: transform 0.22s ease;
+    }
+    .tl-modal.is-open .tl-modal__card {
+      transform: scale(1) translateY(0);
+    }
+    .tl-modal__close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      z-index: 2;
+      background: rgba(0,0,0,0.35);
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 0.75rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .tl-modal__close:hover { background: rgba(0,0,0,0.6); }
+    .tl-modal__img {
+      margin: 0;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+    .tl-modal__img img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .tl-modal__body { padding: 22px 26px 28px; }
+    .tl-modal__date {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+    .tl-modal__title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #111;
+      margin: 0 0 12px;
+    }
+    .tl-modal__desc {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #555;
+      margin: 0;
+    }
+  </style>
+
+  <script>
+  (function () {
+    var modal      = document.getElementById("tlModal");
+    var modalClose = document.getElementById("tlModalClose");
+    var modalImg   = document.getElementById("tlModalImg");
+    var modalDate  = document.getElementById("tlModalDate");
+    var modalTitle = document.getElementById("tlModalTitle");
+    var modalDesc  = document.getElementById("tlModalDesc");
+    if (!modal) return;
+
+    /* Inject "Read more" into every card and add click handler */
+    document.querySelectorAll(".timeline__card").forEach(function (card) {
+      var body = card.querySelector(".timeline__body");
+      if (body) {
+        var rm = document.createElement("span");
+        rm.className = "timeline__read-more";
+        rm.textContent = "Read more";
+        body.appendChild(rm);
+      }
+
+      card.addEventListener("click", function () {
+        var img   = card.querySelector(".timeline__img img");
+        var date  = card.querySelector(".timeline__date");
+        var title = card.querySelector(".timeline__title");
+        var desc  = card.querySelector(".timeline__desc");
+
+        modalImg.src          = img   ? img.src         : "";
+        modalImg.alt          = img   ? img.alt         : "";
+        modalDate.textContent = date  ? date.textContent  : "";
+        modalTitle.textContent = title ? title.textContent : "";
+        modalDesc.textContent = desc  ? desc.textContent  : "";
+
+        modal.classList.add("is-open");
+        document.body.style.overflow = "hidden";
+      });
+    });
+
+    function close() {
+      modal.classList.remove("is-open");
+      document.body.style.overflow = "";
+    }
+
+    modalClose.addEventListener("click", close);
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) close();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+    });
   })();
   </script>
 
