@@ -1094,7 +1094,12 @@
       height: 560px;
       background: transparent;
       --poster-color: transparent;
+      --progress-bar-height: 0px;
       transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .mv-model::part(default-progress-bar),
+    .mv-model::part(default-progress-mask) {
+      display: none;
     }
     .mv-model--grow      { transform: scale(1.12); }
     .mv-model--grow-more { transform: scale(1.28); }
@@ -1388,6 +1393,39 @@
       <img src="../assets/img/p3/home_brick_wall_axonometry.png"
            alt="Home Brick wall axonometry" class="axo-hb-img is-visible" id="axoHBImg" />
 
+      <!-- Demolition panels — revealed when Roof Beams pin is active -->
+      <div class="axo-demo-left" id="axoDemoLeft">
+        <img src="../assets/img/p3/roof_demolition_1.jpg" alt="Roof demolition 1" />
+        <img src="../assets/img/p3/roof_demolition_2.jpg" alt="Roof demolition 2" />
+      </div>
+      <div class="axo-demo-right" id="axoDemoRight">
+        <img src="../assets/img/p3/roof_demolition_3.jpg" alt="Roof demolition 3" />
+        <img src="../assets/img/p3/roof_demolition_4.jpg" alt="Roof demolition 4" />
+      </div>
+
+      <!-- Church panels — revealed when Mahogany Parquet or Wooden Shingle Facade pin is active -->
+      <div class="axo-church-left" id="axoChurchLeft">
+        <img src="../assets/img/p3/church_demolition_interior.png" alt="Church demolition interior" />
+        <img src="../assets/img/p3/church_demolition_volunteer_group.png" alt="Church demolition volunteer group" />
+      </div>
+      <div class="axo-church-right" id="axoChurchRight">
+        <img src="../assets/img/p3/mahogani_engraved.jpg" alt="Mahogany engraved" />
+      </div>
+
+      <!-- Foundation panels — revealed when Foundation System pin is active -->
+      <div class="axo-found-left" id="axoFoundLeft">
+        <img src="../assets/img/p3/foundation_oak_logs.jpg" alt="Foundation oak logs" />
+      </div>
+      <div class="axo-found-right" id="axoFoundRight">
+        <img src="../assets/img/p3/foundation_concrete.jpg" alt="Foundation concrete" />
+      </div>
+
+      <!-- GIMA panel — revealed when Roof Tiles pin is active -->
+      <div class="axo-gima-panel" id="axoGimaPanel">
+        <img src="../assets/img/p3/Gima_logo.png" alt="GIMA" class="axo-gima-logo" />
+        <img src="../assets/img/p3/Gima_tiles.jpg" alt="GIMA roof tiles" class="axo-gima-img" />
+      </div>
+
       <!-- Label sits outside the image, vertically aligned to the active pin via JS -->
       <div class="axo-floatlabel" id="axoFloatLabel">
         <span class="axo-fl-title" id="axoFLTitle"></span>
@@ -1438,6 +1476,111 @@
     }
     .axo-hb-img.is-visible {
       opacity: 1;
+    }
+
+    /* Demolition panels — shown on Roof Beams pin */
+    .axo-demo-left,
+    .axo-demo-right {
+      position: absolute;
+      top: 2%;
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-demo-left  { right: calc(100% + 2rem); }
+    .axo-demo-right { left: calc(100% + 2rem); }
+    .axo-demo-left.is-visible,
+    .axo-demo-right.is-visible { opacity: 1; }
+    .axo-demo-left img,
+    .axo-demo-right img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Church panels — shown on Mahogany Parquet / Wooden Shingle Facade pins */
+    .axo-church-left,
+    .axo-church-right {
+      position: absolute;
+      top: 2%;
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-church-left  { right: calc(100% + 2rem); }
+    .axo-church-right { left: calc(100% + 2rem); width: 62%; }
+    .axo-church-left.is-visible,
+    .axo-church-right.is-visible { opacity: 1; }
+    .axo-church-left img,
+    .axo-church-right img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Foundation panels — shown on Foundation System pin */
+    .axo-found-left,
+    .axo-found-right {
+      position: absolute;
+      top: 2%;
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-found-left  { right: calc(100% + 2rem); }
+    .axo-found-right { left: calc(100% + 2rem); }
+    .axo-found-left.is-visible,
+    .axo-found-right.is-visible { opacity: 1; }
+    .axo-found-left img,
+    .axo-found-right img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* GIMA panel — left of the axo, shown on Roof Tiles pin */
+    .axo-gima-panel {
+      position: absolute;
+      right: calc(100% + 2rem);
+      top: 2%;
+      width: 58%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-gima-panel.is-visible {
+      opacity: 1;
+    }
+    /* Tint the logo to match the cursor blue (#2f4aa1) */
+    .axo-gima-logo {
+      width: 55%;
+      height: auto;
+      filter: invert(22%) sepia(60%) saturate(700%) hue-rotate(210deg) brightness(0.85);
+    }
+    .axo-gima-img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 2px;
     }
 
     .axo-wrap {
@@ -1517,11 +1660,24 @@
       const flTitle = document.getElementById('axoFLTitle');
       const flText  = document.getElementById('axoFLText');
       const hbImg      = document.getElementById('axoHBImg');
+      const gimaPanel  = document.getElementById('axoGimaPanel');
+      const demoLeft    = document.getElementById('axoDemoLeft');
+      const demoRight   = document.getElementById('axoDemoRight');
+      const churchLeft  = document.getElementById('axoChurchLeft');
+      const churchRight = document.getElementById('axoChurchRight');
+      const foundLeft   = document.getElementById('axoFoundLeft');
+      const foundRight  = document.getElementById('axoFoundRight');
       const defaultPin = document.getElementById('axoDefaultPin');
       const pins       = document.querySelectorAll('#axoWrap .axo-pin');
       let activePin    = null;
+      let hideTimer    = null;
+
+      function cancelHide() {
+        if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+      }
 
       function show(pin) {
+        cancelHide();
         const topPct  = parseFloat(pin.style.top)  / 100;
         const labelXPct = parseFloat(pin.dataset.labelX || pin.style.left) / 100;
         const imgW = img.offsetWidth;
@@ -1550,6 +1706,14 @@
         activePin = pin;
 
         hbImg.classList.toggle('is-visible', pin.dataset.title === 'Home Bricks');
+        gimaPanel.classList.toggle('is-visible', pin.dataset.title === 'Roof Tiles');
+        demoLeft.classList.toggle('is-visible',    pin.dataset.title === 'Roof Beams');
+        demoRight.classList.toggle('is-visible',   pin.dataset.title === 'Roof Beams');
+        const isChurch = pin.dataset.title === 'Mahogany Parquet' || pin.dataset.title === 'Wooden Shingle Facade';
+        churchLeft.classList.toggle('is-visible',  isChurch);
+        churchRight.classList.toggle('is-visible', isChurch);
+        foundLeft.classList.toggle('is-visible',   pin.dataset.title === 'Foundation System');
+        foundRight.classList.toggle('is-visible',  pin.dataset.title === 'Foundation System');
       }
 
       function hide() {
@@ -1560,14 +1724,16 @@
 
       pins.forEach(function (pin) {
         pin.addEventListener('mouseenter', function () { show(pin); });
-        pin.addEventListener('mouseleave', function () { hide(); });
+        pin.addEventListener('mouseleave', function () {
+          hideTimer = setTimeout(hide, 3000);
+        });
         pin.addEventListener('click', function (e) {
           e.stopPropagation();
           activePin === pin ? hide() : show(pin);
         });
       });
 
-      document.addEventListener('click', function () { hide(); });
+      document.addEventListener('click', function () { cancelHide(); hide(); });
 
       window.addEventListener('load', function () { show(defaultPin); });
     })();
