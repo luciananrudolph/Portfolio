@@ -888,7 +888,7 @@ body.home .block--intro__slide.--active { opacity: 1; }
 body.home .block--intro__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.45) 100%);
   z-index: 1;
 }
 body.home .block--intro__content {

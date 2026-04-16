@@ -226,7 +226,8 @@
     .pdf-section__wrap {
       position: relative;
     }
-    .pdf-section embed {
+    .pdf-section embed,
+    .pdf-section img {
       display: block;
       width: 100%;
       border: none;
@@ -320,9 +321,9 @@
     <div class="projects-dropdown">
       <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false" data-i18n="nav_projects">Projects</button>
       <ul class="projects-dropdown__menu">
-        <li><a class="projects-dropdown__link" href="project1.html">Djilakh Education Campus</a></li>
+        <li><a class="projects-dropdown__link" href="project1.html">The Supertecture Project</a></li>
         <li><a class="projects-dropdown__link" href="project2.html">IPAI Communication Center</a></li>
-        <li><a class="projects-dropdown__link" href="project3.html">The Supertecture Project</a></li>
+        <li><a class="projects-dropdown__link" href="project3.html">Djilakh Education Campus</a></li>
         <li><a class="projects-dropdown__link" href="project4.html">Inside Out</a></li>
       </ul>
     </div>
@@ -364,12 +365,12 @@
 
       <!-- Image A: exterior (small → large → thumbnail) -->
       <div class="xh__img" id="img-a">
-        <img src="../assets/img/p4/model_interior_front.jpg" alt="Interior front view of the Inside Out model" />
+        <img src="../assets/img/p4/model_interior_front.jpeg" alt="Interior front view of the Inside Out model" />
       </div>
 
       <!-- Image B: terrace (appears state 3 → hero state 5) -->
       <div class="xh__img" id="img-b">
-        <img src="../assets/img/p4/site_model.jpg" alt="Site model of the Inside Out project" />
+        <img src="../assets/img/p4/site_model.jpeg" alt="Site model of the Inside Out project" />
       </div>
 
       <!-- Sidebar text (states 3 & 4) -->
@@ -450,30 +451,27 @@
 
     <!-- Gallery -->
     <section class="gallery" aria-label="Project gallery">
-      <img class="gallery__img gallery__img--full" src="../assets/img/p4/site_model.jpg" alt="Site model of the Inside Out project" />
-      <img class="gallery__img" src="../assets/img/p4/model_interior_front.jpg" alt="Interior front view of the model" />
-      <img class="gallery__img" src="../assets/img/p4/model_interior_detail.jpg" alt="Interior detail of the model" />
+      <img class="gallery__img gallery__img--full" src="../assets/img/p4/site_model.jpeg" alt="Site model of the Inside Out project" />
+      <img class="gallery__img" src="../assets/img/p4/model_interior_front.jpeg" alt="Interior front view of the model" />
+      <img class="gallery__img" src="../assets/img/p4/model_interior_detail.jpeg" alt="Interior detail of the model" />
       <img class="gallery__img" src="../assets/img/p4/model_interior_top.jpg" alt="Top view of the model interior" />
-      <img class="gallery__img" src="../assets/img/p4/model_hands.jpg" alt="Model held in hands" />
+      <img class="gallery__img" src="../assets/img/p4/model_hands.jpeg" alt="Model held in hands" />
     </section>
   </div>
 
   <div class="pdf-section">
     <div class="pdf-section__wrap">
-      <embed src="../assets/img/p4/floor_plan.pdf#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" height="700px" />
-      <div class="pdf-section__overlay"></div>
+      <img src="../assets/img/p4/floor_plans.jpg" alt="Floor plans" />
     </div>
   </div>
   <div class="pdf-section">
     <div class="pdf-section__wrap">
-      <embed src="../assets/img/p4/section.pdf#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" height="500px" />
-      <div class="pdf-section__overlay"></div>
+      <img src="../assets/img/p4/section.jpg" alt="Section" />
     </div>
   </div>
   <div class="pdf-section">
     <div class="pdf-section__wrap">
-      <embed src="../assets/img/p4/sketch1.pdf#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" height="700px" />
-      <div class="pdf-section__overlay"></div>
+      <img src="../assets/img/p4/sketch1.jpeg" alt="Sketch" />
     </div>
   </div>
 
@@ -481,12 +479,12 @@
   <!-- NAV: Previous / Next Project Links            -->
   <!-- ============================================= -->
   <nav class="project-nav" aria-label="Project navigation">
-    <a class="project-nav__link project-nav__link--prev" href="project3.html" aria-label="Previous project: The Supertecture Project">
+    <a class="project-nav__link project-nav__link--prev" href="project3.html" aria-label="Previous project: Djilakh Education Campus">
       <span class="project-nav__arrow" aria-hidden="true">←</span>
-      <img class="project-nav__thumb" src="../assets/img/p3.jpg" alt="" loading="lazy" decoding="async" />
+      <img class="project-nav__thumb" src="../assets/img/home+about/p1.jpg" alt="" loading="lazy" decoding="async" />
       <span class="project-nav__text">
         <span class="project-nav__label">Previous project</span>
-        <span class="project-nav__title">The Supertecture Project</span>
+        <span class="project-nav__title">Djilakh Education Campus</span>
       </span>
     </a>
     <a class="project-nav__link project-nav__link--next" href="../pages/about.html" aria-label="Get to know me!">

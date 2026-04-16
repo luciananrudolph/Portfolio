@@ -302,7 +302,7 @@
     /* ── Showcase: full-screen image + sidebar text (like the scroll narrative) ── */
     .showcase {
       position: relative;
-      height: 300vh; /* 3 panels × 100vh */
+      height: 200vh; /* 2 panels × 100vh */
     }
 
     .showcase__stage {
@@ -562,9 +562,9 @@
     <div class="projects-dropdown">
       <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false" data-i18n="nav_projects">Projects</button>
       <ul class="projects-dropdown__menu">
-        <li><a class="projects-dropdown__link" href="project1.html">Djilakh Education Campus</a></li>
+        <li><a class="projects-dropdown__link" href="project1.html">The Supertecture Project</a></li>
         <li><a class="projects-dropdown__link" href="project2.html">IPAI Communication Center</a></li>
-        <li><a class="projects-dropdown__link" href="project3.html">The Supertecture Project</a></li>
+        <li><a class="projects-dropdown__link" href="project3.html">Djilakh Education Campus</a></li>
         <li><a class="projects-dropdown__link" href="project4.html">Inside Out</a></li>
       </ul>
     </div>
@@ -634,27 +634,26 @@
   <div class="showcase" id="showcase">
     <div class="showcase__stage">
 
-      <!-- Image 1 -->
-      <div class="showcase__img showcase__img--placeholder --visible" id="sc-img-0"
-           style="left:10vw; top:12vh; width:55vw; height:70vh;"></div>
-      <!-- Image 2 -->
-      <div class="showcase__img showcase__img--placeholder" id="sc-img-1"
-           style="left:8vw; top:10vh; width:58vw; height:74vh;"></div>
-      <!-- Image 3 -->
-      <div class="showcase__img showcase__img--placeholder" id="sc-img-2"
-           style="left:12vw; top:14vh; width:52vw; height:66vh;"></div>
+      <!-- Floor Plan -->
+      <div class="showcase__img --visible" id="sc-img-0"
+           style="left:10vw; top:12vh; width:55vw; height:70vh;">
+        <img src="../assets/img/p1/floor_plan.jpg" alt="Floor plan"
+             style="width:100%; height:100%; object-fit:contain; display:block;" />
+      </div>
+      <!-- Section -->
+      <div class="showcase__img" id="sc-img-1"
+           style="left:8vw; top:10vh; width:58vw; height:74vh;">
+        <img src="../assets/img/p1/section.jpg" alt="Section"
+             style="width:100%; height:100%; object-fit:contain; display:block;" />
+      </div>
 
       <!-- Text panels -->
       <div class="showcase__text --visible" id="sc-text-0">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+        <p>Floor plan showing the radial organisation of classrooms around two complementary courtyards, with the existing trees forming a shaded learning centre.</p>
         <a href="#project-details">View project details</a>
       </div>
       <div class="showcase__text" id="sc-text-1">
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
-        <a href="#project-details">View project details</a>
-      </div>
-      <div class="showcase__text" id="sc-text-2">
-        <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+        <p>Cross-section through the building showing the double roof system, ventilated air gap, and thermal mass strategy that creates comfortable, naturally cooled classrooms.</p>
         <a href="#project-details">View project details</a>
       </div>
 
@@ -662,7 +661,6 @@
       <div class="showcase__dots">
         <div class="showcase__dot --active" id="sc-dot-0"></div>
         <div class="showcase__dot" id="sc-dot-1"></div>
-        <div class="showcase__dot" id="sc-dot-2"></div>
       </div>
 
     </div>
@@ -711,11 +709,11 @@
 
       <!-- Right: stacked images, one visible at a time -->
       <div class="split__images">
-        <div class="split__img --visible" data-split-img="0"><img src="../assets/img/p1/design_principle_1.png" alt="Radial Geometry"></div>
-        <div class="split__img" data-split-img="1"><img src="../assets/img/p1/design_principle_2.png" alt="Framework for expansion"></div>
-        <div class="split__img" data-split-img="2"><img src="../assets/img/p1/design_principle_3.png" alt="Wall typologies"></div>
-        <div class="split__img" data-split-img="3"><img src="../assets/img/p1/design_principle_4.png" alt="Structural roof logic"></div>
-        <div class="split__img" data-split-img="4"><img src="../assets/img/p1/design_principle_5.png" alt="Roof as cooling machine"></div>
+        <div class="split__img --visible" data-split-img="0"><img src="../assets/img/p1/design_principle_1.jpg" alt="Radial Geometry"></div>
+        <div class="split__img" data-split-img="1"><img src="../assets/img/p1/design_principle_2.jpg" alt="Framework for expansion"></div>
+        <div class="split__img" data-split-img="2"><img src="../assets/img/p1/design_principle_3.jpg" alt="Wall typologies"></div>
+        <div class="split__img" data-split-img="3"><img src="../assets/img/p1/design_principle_4.jpg" alt="Structural roof logic"></div>
+        <div class="split__img" data-split-img="4"><img src="../assets/img/p1/design_principle_5.jpg" alt="Roof as cooling machine"></div>
       </div>
 
     </div>
@@ -788,20 +786,20 @@
   <!-- NAV: Previous / Next Project Links            -->
   <!-- ============================================= -->
   <nav class="project-nav" aria-label="Project navigation">
-    <a class="project-nav__link project-nav__link--prev" href="../pages/about.html" aria-label="About">
+    <a class="project-nav__link project-nav__link--prev" href="project2.html" aria-label="Previous project: IPAI Communication Center">
       <span class="project-nav__arrow" aria-hidden="true">←</span>
-      <img class="project-nav__thumb" src="../assets/img/home+about/profile.jpg" alt="" loading="lazy" decoding="async" />
+      <img class="project-nav__thumb" src="../assets/img/home+about/p2.jpg" alt="" loading="lazy" decoding="async" />
       <span class="project-nav__text">
-        <span class="project-nav__label" data-i18n="prev_project">Previous</span>
-        <span class="project-nav__title">Get to know me!</span>
-      </span>
-    </a>
-    <a class="project-nav__link project-nav__link--next" href="project2.html" aria-label="Next project: IPAI Communication Center">
-      <span class="project-nav__text">
-        <span class="project-nav__label" data-i18n="next_project">Next project</span>
+        <span class="project-nav__label" data-i18n="prev_project">Previous project</span>
         <span class="project-nav__title">IPAI Communication Center</span>
       </span>
-      <img class="project-nav__thumb" src="../assets/img/p2.jpg" alt="" loading="lazy" decoding="async" />
+    </a>
+    <a class="project-nav__link project-nav__link--next" href="project4.html" aria-label="Next project: Inside Out">
+      <span class="project-nav__text">
+        <span class="project-nav__label" data-i18n="next_project">Next project</span>
+        <span class="project-nav__title">Inside Out</span>
+      </span>
+      <img class="project-nav__thumb" src="../assets/img/home+about/p4.jpg" alt="" loading="lazy" decoding="async" />
       <span class="project-nav__arrow" aria-hidden="true">→</span>
     </a>
   </nav>
@@ -1043,7 +1041,7 @@
     var showcase = document.getElementById("showcase");
     if (!showcase) return;
 
-    var count = 3;
+    var count = 2;
     var current = 0;
 
     function update() {

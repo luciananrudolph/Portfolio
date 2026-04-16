@@ -232,12 +232,11 @@ function initPreloader() {
     return false;
   }
 
-  /* Skip when navigating back from a subpage */
+  /* Skip only when using the browser back/forward button */
   var navEntry = performance.getEntriesByType("navigation")[0];
   var cameFromSubpage =
-    document.referrer.includes(location.origin) &&
     navEntry &&
-    navEntry.type === "navigate";
+    navEntry.type === "back_forward";
 
   if (cameFromSubpage) {
     preloader.remove();

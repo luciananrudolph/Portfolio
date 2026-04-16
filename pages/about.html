@@ -257,6 +257,20 @@
       aspect-ratio: 3 / 4;
       background: #d9d9d9;
       border-radius: 8px;
+      overflow: hidden;
+    }
+    .outside__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(1) brightness(1.1);
+      opacity: 0.5;
+      transition: opacity 0.4s ease, filter 0.4s ease;
+    }
+    .outside__thumb:hover img {
+      opacity: 1;
+      filter: grayscale(0) brightness(1);
     }
     .outside__title {
       font-size: 11px;
@@ -518,9 +532,9 @@
     <div class="projects-dropdown">
       <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false" data-i18n="nav_projects">Projects</button>
       <ul class="projects-dropdown__menu">
-        <li><a class="projects-dropdown__link" href="../projects/project1.html">Djilakh Education Campus</a></li>
+        <li><a class="projects-dropdown__link" href="../projects/project1.html">The Supertecture Project</a></li>
         <li><a class="projects-dropdown__link" href="../projects/project2.html">IPAI Communication Center</a></li>
-        <li><a class="projects-dropdown__link" href="../projects/project3.html">The Supertecture Project</a></li>
+        <li><a class="projects-dropdown__link" href="../projects/project3.html">Djilakh Education Campus</a></li>
         <li><a class="projects-dropdown__link" href="../projects/project4.html">Inside Out</a></li>
       </ul>
     </div>
@@ -719,31 +733,31 @@
       <div class="outside__grid">
 
         <button class="outside__card" type="button" aria-expanded="false" data-outside-card>
-          <div class="outside__thumb"></div>
+          <div class="outside__thumb"><img src="../assets/img/home+about/the_outdoor_mind.jpg" alt="The Outdoor Mind" /></div>
           <span class="outside__title" data-i18n="outside_1_title">The Outdoor Mind</span>
           <p class="outside__desc" data-i18n="outside_1_desc">I feel most grounded when I'm outside – hiking, surfing, cycling, skating. Being in motion and in nature resets my perspective and sharpens how I experience space and atmosphere.</p>
         </button>
 
         <button class="outside__card" type="button" aria-expanded="false" data-outside-card>
-          <div class="outside__thumb"></div>
+          <div class="outside__thumb"><img src="../assets/img/home+about/the_maker.jpg" alt="The Maker" /></div>
           <span class="outside__title" data-i18n="outside_2_title">The Maker</span>
           <p class="outside__desc" data-i18n="outside_2_desc">I enjoy building wooden furniture and working with clay. There's something deeply satisfying about shaping material with your hands and understanding how things come together physically.</p>
         </button>
 
         <button class="outside__card" type="button" aria-expanded="false" data-outside-card>
-          <div class="outside__thumb"></div>
+          <div class="outside__thumb"><img src="../assets/img/home+about/the_curious_eye.jpg" alt="The Curious Eye" /></div>
           <span class="outside__title" data-i18n="outside_3_title">The Curious Eye</span>
           <p class="outside__desc" data-i18n="outside_3_desc">Photography and travel allow me to slow down and pay attention. I'm drawn to light, texture, small details, and the subtle character of different places.</p>
         </button>
 
         <button class="outside__card" type="button" aria-expanded="false" data-outside-card>
-          <div class="outside__thumb"></div>
+          <div class="outside__thumb"><img src="../assets/img/home+about/the_explorer.jpg" alt="The Explorer" /></div>
           <span class="outside__title" data-i18n="outside_4_title">The Explorer</span>
           <p class="outside__desc" data-i18n="outside_4_desc">Traveling and discovering different cultures keeps me curious. Experiencing new ways of living broadens how I understand context, scale, and human interaction.</p>
         </button>
 
         <button class="outside__card" type="button" aria-expanded="false" data-outside-card>
-          <div class="outside__thumb"></div>
+          <div class="outside__thumb"><img src="../assets/img/home+about/the_team_player.jpg" alt="The Team Player" /></div>
           <span class="outside__title" data-i18n="outside_5_title">The Team Player</span>
           <p class="outside__desc" data-i18n="outside_5_desc">Whether in sports or collaborative projects, I thrive in team environments. I value shared momentum, trust, and learning from others.</p>
         </button>

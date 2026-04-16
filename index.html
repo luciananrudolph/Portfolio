@@ -13,10 +13,41 @@
        Other pages already get position:fixed from styles.css. */
     .top { position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
 
+    .block--intro__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 18px;
+      padding: 12px 16px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+    .block--intro__arrow--prev { left: 16px; }
+    .block--intro__arrow--next { right: 16px; }
+    .block--intro:hover .block--intro__arrow { opacity: 0.45; }
+    .block--intro__arrow:hover { opacity: 1 !important; }
+
   </style>
 </head>
 
 <body class="home loading">
+
+  <!-- ── PRELOADER (homepage only) ── -->
+  <div id="preloader" class="preloader">
+    <div id="preloader-bg" class="preloader__bg"></div>
+    <img id="preloader-poster" class="preloader__poster --preloading"
+         src="assets/img/home+about/showreel-poster.jpg" alt="" />
+    <div class="preloader__counter">
+      <span id="preloader-number" class="preloader__number">0</span>
+    </div>
+  </div>
 
   <!-- ── HEADER ── -->
   <header class="top --inverted">
@@ -31,9 +62,9 @@
     <div class="projects-dropdown">
       <button class="projects-dropdown__trigger" type="button" aria-haspopup="true" aria-expanded="false" data-i18n="nav_projects">Projects</button>
       <ul class="projects-dropdown__menu">
-        <li><a class="projects-dropdown__link" href="projects/project1.html">Djilakh Education Campus</a></li>
+        <li><a class="projects-dropdown__link" href="projects/project1.html">The Supertecture Project</a></li>
         <li><a class="projects-dropdown__link" href="projects/project2.html">IPAI Communication Center</a></li>
-        <li><a class="projects-dropdown__link" href="projects/project3.html">The Supertecture Project</a></li>
+        <li><a class="projects-dropdown__link" href="projects/project3.html">Djilakh Education Campus</a></li>
         <li><a class="projects-dropdown__link" href="projects/project4.html">Inside Out</a></li>
       </ul>
     </div>
@@ -77,23 +108,32 @@
        ══════════════════════════════════════════ -->
   <section class="block block--intro">
     <img class="block--intro__image block--intro__slide --active"
-         src="assets/img/home+about/p1.jpg"
-         srcset="assets/img/p1-800.jpg 800w,
-                 assets/img/p1-1600.jpg 1600w,
-                 assets/img/p1-2400.jpg 2400w"
-         sizes="100vw"
-         fetchpriority="high"
-         alt="Djilakh Education Campus — exterior view" />
-    <img class="block--intro__image block--intro__slide"
          src="assets/img/home+about/p2.jpg"
-         srcset="assets/img/p2-800.jpg 800w,
-                 assets/img/p2-1600.jpg 1600w,
-                 assets/img/p2-2400.jpg 2400w"
-         sizes="100vw"
+         fetchpriority="high"
          alt="IPAI Communication Center — facade study" />
     <img class="block--intro__image block--intro__slide"
-         src="assets/img/p1/entrance.jpg"
-         alt="Senegal school entrance with children playing" />
+         src="assets/img/home+about/p1.jpg"
+         alt="Djilakh Education Campus — exterior view" />
+    <img class="block--intro__image block--intro__slide"
+         src="assets/img/home+about/p3.jpg"
+         alt="The Supertecture Project" />
+    <img class="block--intro__image block--intro__slide"
+         src="assets/img/home+about/p4.jpg"
+         alt="Inside Out" />
+    <img class="block--intro__image block--intro__slide"
+         src="assets/img/home+about/p5.jpg"
+         alt="Project 5" />
+    <img class="block--intro__image block--intro__slide"
+         src="assets/img/home+about/p6.jpg"
+         alt="Project 6" />
+    <img class="block--intro__image block--intro__slide"
+         src="assets/img/home+about/p7.jpg"
+         alt="Project 7" />
+    <img class="block--intro__image block--intro__slide"
+         src="assets/img/home+about/p8.jpg"
+         alt="Project 8" />
+    <button class="block--intro__arrow block--intro__arrow--prev" aria-label="Previous image">&#8592;</button>
+    <button class="block--intro__arrow block--intro__arrow--next" aria-label="Next image">&#8594;</button>
     <div class="block--intro__overlay"></div>
     <div class="block--intro__content">
       <h1 class="block--intro__title">Luciana Noemi Rudolph</h1>
@@ -126,8 +166,8 @@
         <ul class="gallery__grid">
           <li class="gallery__item">
             <a class="gallery__link" href="projects/project1.html">
-              <img class="gallery__image" src="assets/img/home+about/p1.jpg" alt="Djilakh Education Campus" />
-              <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
+              <img class="gallery__image" src="assets/img/home+about/p3.jpg" alt="The Supertecture Project" />
+              <span class="gallery__overlay"><span class="gallery__title">The Supertecture Project</span></span>
             </a>
           </li>
           <li class="gallery__item">
@@ -138,8 +178,8 @@
           </li>
           <li class="gallery__item">
             <a class="gallery__link" href="projects/project3.html">
-              <img class="gallery__image" src="assets/img/home+about/p3.jpg" alt="The Supertecture Project" />
-              <span class="gallery__overlay"><span class="gallery__title">The Supertecture Project</span></span>
+              <img class="gallery__image" src="assets/img/home+about/p1.jpg" alt="Djilakh Education Campus" />
+              <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
@@ -149,7 +189,7 @@
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html">
+            <a class="gallery__link" href="projects/project3.html">
               <img class="gallery__image" src="assets/img/p1/entrance.jpg" alt="Senegal school entrance" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
@@ -161,19 +201,19 @@
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html">
+            <a class="gallery__link" href="projects/project3.html">
               <img class="gallery__image" src="assets/img/p1/courtyard.jpg" alt="Senegal school courtyard" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
           </li>
           <li class="gallery__item">
             <a class="gallery__link" href="projects/project2.html">
-              <img class="gallery__image" src="assets/img/p2/lookout.png" alt="IPAI lookout" />
+              <img class="gallery__image" src="assets/img/p2/lookout.jpg" alt="IPAI lookout" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html">
+            <a class="gallery__link" href="projects/project3.html">
               <img class="gallery__image" src="assets/img/p1/interior.jpg" alt="Senegal classroom interior" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
@@ -185,7 +225,7 @@
             </a>
           </li>
           <li class="gallery__item">
-            <a class="gallery__link" href="projects/project1.html">
+            <a class="gallery__link" href="projects/project3.html">
               <img class="gallery__image" src="assets/img/p1/classroom.jpg" alt="Senegal classroom" />
               <span class="gallery__overlay"><span class="gallery__title">Djilakh Education Campus</span></span>
             </a>
@@ -206,6 +246,7 @@
 
   <!-- ── GSAP + ScrollTrigger + Lenis ── -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Flip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
@@ -532,11 +573,24 @@
     var slides = document.querySelectorAll(".block--intro__slide");
     if (slides.length < 2) return;
     var current = 0;
-    setInterval(function () {
+
+    function goTo(idx) {
       slides[current].classList.remove("--active");
-      current = (current + 1) % slides.length;
+      current = (idx + slides.length) % slides.length;
       slides[current].classList.add("--active");
-    }, 2500);
+    }
+
+    var timer = setInterval(function () { goTo(current + 1); }, 2500);
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(function () { goTo(current + 1); }, 2500);
+    }
+
+    var prev = document.querySelector(".block--intro__arrow--prev");
+    var next = document.querySelector(".block--intro__arrow--next");
+    if (prev) prev.addEventListener("click", function () { goTo(current - 1); resetTimer(); });
+    if (next) next.addEventListener("click", function () { goTo(current + 1); resetTimer(); });
   })();
   </script>
 
