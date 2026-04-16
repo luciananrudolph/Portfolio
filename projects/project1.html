@@ -1,11 +1,11 @@
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Djilakh Education Campus — Luciana Noemi Rudolph</title>
+  <title>The Supertecture Project — Luciana Noemi Rudolph</title>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
   <style>
     /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,8 +54,8 @@
     .xh__label {
       position: absolute;
       bottom: 36px;
-      font-size: 0.8rem;
-      font-weight: 500;
+      font-size: 1rem;
+      font-weight: 600;
       z-index: 20;
       letter-spacing: 0.01em;
       transition: color 0.5s ease, text-shadow 0.5s ease;
@@ -127,6 +127,13 @@
       z-index: 15;
       opacity: 0;
     }
+    .xh__bigtext__label {
+      display: block;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.6rem;
+    }
     .xh__bigtext__body {
       font-size: clamp(1.4rem, 3vw, 2.4rem);
       font-weight: 600;
@@ -153,17 +160,11 @@
       background: #333;
     }
 
-    /* ── Split section orange wrapper ── */
-    .split-wrap {
-      background: #c4754b;
-      padding: 60px 40px;
-    }
-
     /* ── Sticky-Split Scroll Sections ── */
     .split {
       position: relative;
-      /* 5 sections × 100vh each */
-      height: 500vh;
+      /* 5 sections × 70vh each */
+      height: 350vh;
       max-width: 1280px;
       margin: 0 auto;
       padding: 0 40px;
@@ -191,12 +192,12 @@
       border-left: 2px solid transparent;
       padding-left: 24px;
       transition: border-color 0.4s ease, opacity 0.4s ease;
-      opacity: 0.35;
+      opacity: 0.25;
       cursor: default;
     }
 
     .split__item.--active {
-      border-left-color: #fff;
+      border-left-color: #111;
       opacity: 1;
     }
 
@@ -205,7 +206,7 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
+      color: #999;
       margin-bottom: 6px;
     }
 
@@ -213,32 +214,14 @@
       font-size: clamp(1rem, 1.6vw, 1.3rem);
       font-weight: 700;
       line-height: 1.2;
-      color: #fff;
+      color: #111;
       margin: 0;
-    }
-
-    .split__subtitle {
-      font-size: 0.85rem;
-      font-weight: 700;
-      line-height: 1.4;
-      color: #fff;
-      margin: 0;
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.4s ease;
-    }
-
-    .split__item.--active .split__subtitle {
-      max-height: 80px;
-      opacity: 1;
-      margin-top: 10px;
     }
 
     .split__desc {
       font-size: 0.85rem;
       line-height: 1.6;
-      color: rgba(255,255,255,0.85);
+      color: #555;
       margin: 0;
       max-height: 0;
       overflow: hidden;
@@ -247,9 +230,9 @@
     }
 
     .split__item.--active .split__desc {
-      max-height: 400px;
+      max-height: 200px;
       opacity: 1;
-      margin-top: 6px;
+      margin-top: 10px;
     }
 
     /* Right: stacked images, one visible at a time */
@@ -271,16 +254,23 @@
       transition: opacity 0.5s ease;
     }
 
+    .split__img.--visible {
+      opacity: 1;
+    }
     .split__img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+    .split__img.--contain {
+      background: #f4f1e6;
+      padding: 0.5rem;
+    }
+    .split__img.--contain img {
+      object-fit: contain;
+      background: #f4f1e6;
       display: block;
       border-radius: 12px;
-    }
-
-    .split__img.--visible {
-      opacity: 1;
     }
 
     @media (max-width: 768px) {
@@ -299,12 +289,11 @@
       }
     }
 
-    /* ── Showcase: full-screen image + sidebar text (like the scroll narrative) ── */
+    /* ── Showcase: full-screen image + sidebar text ── */
     .showcase {
       position: relative;
-      height: 300vh; /* 3 panels × 100vh */
+      height: 300vh;
     }
-
     .showcase__stage {
       position: sticky;
       top: 0;
@@ -312,18 +301,21 @@
       overflow: hidden;
       background: #f4f1e6;
     }
-
-    /* Stacked images */
     .showcase__img {
       position: absolute;
       border-radius: 24px;
       overflow: hidden;
       z-index: 5;
-      opacity: 0;
-      transition: opacity 0.6s ease;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18vw;
+      aspect-ratio: 627 / 867;
+      opacity: 0.25;
+      transition: opacity 0.5s ease;
     }
     .showcase__img.--visible {
       opacity: 1;
+      z-index: 6;
     }
     .showcase__img img {
       width: 100%;
@@ -331,12 +323,6 @@
       object-fit: cover;
       display: block;
     }
-    /* Placeholder when no img tag */
-    .showcase__img--placeholder {
-      background: #d0cdc5;
-    }
-
-    /* Sidebar text */
     .showcase__text {
       position: absolute;
       right: 6vw;
@@ -362,8 +348,6 @@
       text-decoration: underline;
       text-underline-offset: 3px;
     }
-
-    /* Counter dots */
     .showcase__dots {
       position: absolute;
       right: 2vw;
@@ -415,13 +399,13 @@
 
     /* ── Project info section (below scroll narrative) ── */
     .project-info {
-      max-width: 1100px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 100px 40px 80px;
     }
     .project-info__grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 0.35fr 1fr;
       gap: 60px 80px;
     }
     .project-info__meta {
@@ -468,16 +452,71 @@
       grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
+    .gallery__item {
+      cursor: zoom-in;
+      overflow: hidden;
+      border-radius: 12px;
+    }
     .gallery__img {
       width: 100%;
-      border-radius: 12px;
       display: block;
+      transition: transform 0.3s ease;
     }
-    .gallery__img--full {
-      grid-column: 1 / -1;
+    .gallery__item:hover .gallery__img { transform: scale(1.02); }
+    .gallery__item--full { grid-column: 1 / -1; }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      z-index: 99999;
+      cursor: zoom-out;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .lightbox.is-open { display: flex; pointer-events: auto; }
+    .lightbox__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: #111;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      z-index: 1;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .lightbox__arrow:hover { opacity: 1; }
+    .lightbox__arrow--prev { left: 1.5rem; }
+    .lightbox__arrow--next { right: 1.5rem; }
+    .lightbox__img {
+      max-width: 88vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.25);
     }
 
     /* ── Back nav ── */
+    /* ── PDF embeds ── */
+    .pdf-section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+    .pdf-section embed {
+      display: block;
+      width: 100%;
+      border-radius: 12px;
+      border: none;
+    }
+
     .back-link {
       display: inline-flex;
       align-items: center;
@@ -545,6 +584,243 @@
       .xh__img { opacity: 1 !important; transform: none !important; }
       .xh__sidebar, .xh__bigtext { opacity: 1 !important; }
     }
+
+
+    /* =============================================================
+       TIMELINE — vertical scroll drives horizontal pan
+       Path zigzags between HIGH (y=227) and LOW (y=337) levels
+       with 90° rectangular turns at x=650, 1050, 1650.
+       Sections:
+         A. Scroll canvas (section, height set by JS)
+         B. Sticky viewport
+         C. Header: intro + phase bar
+         D. Track clip + track
+         E. SVG zigzag path
+         F. Event cards (absolutely positioned)
+         G. Mobile fallback
+         H. Reduced motion
+       ============================================================= */
+
+    /* ── A. Scroll canvas ── */
+    .timeline {
+      position: relative;
+      min-height: 100vh;
+      background: #f4f1e6;
+    }
+
+    /* ── B. Sticky viewport ── */
+    .timeline__sticky {
+      position: sticky;
+      top: 0;
+      height: 100svh; /* svh = excludes mobile browser chrome */
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #f4f1e6;
+    }
+
+    /* ── C. Header ── */
+    .timeline__header {
+      flex-shrink: 0;
+      padding: 36px clamp(24px, 4vw, 60px) 0;
+    }
+
+    .timeline__intro { margin-bottom: 0; }
+
+    .timeline__intro-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .timeline__intro h2 {
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: #111;
+      margin: 0;
+    }
+
+    /* Phase bar — all 6 always visible via flex: 1 */
+    .timeline__phases {
+      display: flex;
+      margin-top: 20px;
+      border-top: 1px solid #d8d8d8;
+      border-bottom: 1px solid #d8d8d8;
+    }
+
+    .timeline__phase {
+      flex: 1;
+      padding: 12px 8px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #bbb;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.3s ease, border-color 0.3s ease;
+      user-select: none;
+    }
+
+    .timeline__phase.--active {
+      color: #111;
+      border-bottom-color: #111;
+    }
+
+    /* ── D. Track clip ── */
+    /* Clips the oversized track; JS pans via translateX */
+    .timeline__track-clip {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ── E. Track: fixed size canvas for absolute-positioned cards + SVG ── */
+    /* Geometry (all in px):
+         LINE_Y = 264   (y of the horizontal path, from track top)
+         All events: top = 12 → card(~208px) bottom ≈ 220, stem(40) to 260, dot centre ≈ 264 ✓
+         Track height = 420px                                                       */
+    .timeline__track {
+      position: relative;
+      height: 420px;
+      min-width: 3600px; /* 10 events × 360px pitch starting at 60px + 240px card + 60px */
+      flex-shrink: 0;
+      will-change: transform;
+    }
+
+    /* ── F. SVG path ── */
+    .timeline__path {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    /* ── G. Event cards (absolutely positioned) ── */
+    .timeline__event {
+      position: absolute;
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+
+    .timeline__event.--visible { opacity: 1; }
+
+    /* All events: card sits ABOVE the path line */
+    .timeline__event.--high { top: 12px; }
+
+    /* Stem: vertical connector between card and path */
+    .timeline__stem {
+      width: 1px;
+      height: 40px;
+      background: #d8d8d8;
+      flex-shrink: 0;
+    }
+
+    /* Dot: sits on the SVG path at the junction */
+    .timeline__dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ccc;
+      border: 2px solid #f4f1e6;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+      transition: background 0.3s ease;
+    }
+
+    .timeline__event.--visible .timeline__dot { background: #2f4aa1; }
+
+    /* Card shell */
+    .timeline__card {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #e4e4e4;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: box-shadow 0.25s ease;
+    }
+
+    .timeline__card:hover { box-shadow: 0 4px 18px rgba(0, 0, 0, 0.09); }
+
+    /* 16:9 image keeps cards short */
+    .timeline__img {
+      margin: 0;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+
+    .timeline__img img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .timeline__card:hover .timeline__img img { transform: scale(1.05); }
+
+    .timeline__body { padding: 10px 12px 12px; }
+
+    .timeline__date {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+
+    .timeline__title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #111;
+      margin: 0 0 4px;
+    }
+
+    .timeline__desc {
+      display: none; /* hidden in compact card; shown in modal */
+    }
+
+    /* "Read more" hint shown in compact card */
+    .timeline__read-more {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #2f4aa1;
+      letter-spacing: 0.02em;
+    }
+
+    .timeline__card { cursor: pointer; }
+
+    /* ── H. Mobile ── */
+    @media (max-width: 600px) {
+      .timeline__phase { font-size: 0.5rem; padding: 7px 3px; }
+    }
+
+    /* ── I. Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .timeline__event { opacity: 1 !important; transition: none !important; }
+      .timeline__img img { transition: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -595,35 +871,36 @@
   <!-- ═══════════════════════════════════════════
        SCROLL NARRATIVE — 5-State
        ═══════════════════════════════════════════ -->
-  <section class="xh" id="xh" aria-label="Senegal Secondary School project">
+  <section class="xh" id="xh" aria-label="The Recycle Residence">
     <div class="xh__stage" id="xh-stage">
 
       <!-- Background (terracotta → cream) -->
       <div class="xh__bg" id="xh-bg"></div>
 
       <!-- Headline -->
-      <h1 class="xh__headline" id="xh-headline" data-i18n="p1_headline">Djilakh Education Campus</h1>
+      <h1 class="xh__headline" id="xh-headline">The Supertecture Project</h1>
 
       <!-- Image A: entrance exterior -->
       <div class="xh__img" id="img-a">
-        <img src="../assets/img/p1/entrance.jpg" alt="Exterior view of the Senegal Secondary School entrance with children playing" />
+        <img src="../assets/img/p3/construction.jpg" alt="Construction of the Recycle Residence" />
       </div>
 
       <!-- Sidebar text -->
       <div class="xh__sidebar" id="xh-sidebar">
         <p id="xh-sidebar-text"></p>
-        <a href="#project-details" id="xh-sidebar-link" data-i18n="view_details">View project details</a>
+        <a href="#project-details" id="xh-sidebar-link">View project details</a>
       </div>
 
       <!-- Big text block (state 5) -->
       <div class="xh__bigtext" id="xh-bigtext">
+        <span class="xh__bigtext__label">The Recycle Residence</span>
         <div class="xh__bigtext__body" id="xh-bigtext-body"></div>
-        <a class="xh__bigtext__cta" href="#project-details" data-i18n="explore_project">Explore the project</a>
+        <a class="xh__bigtext__cta" href="#project-details">Explore the project</a>
       </div>
 
       <!-- Corner labels -->
-      <span class="xh__label xh__label--left" id="xh-lbl-left" data-i18n="p1_lbl_left">Senegal Secondary School</span>
-      <span class="xh__label xh__label--right" id="xh-lbl-right" data-i18n="p1_lbl_right">Djilakh, Thiès Region</span>
+      <span class="xh__label xh__label--left" id="xh-lbl-left" style="display:none"></span>
+      <span class="xh__label xh__label--right" id="xh-lbl-right">Kaufbeuren, Germany</span>
 
     </div>
   </section>
@@ -635,26 +912,29 @@
     <div class="showcase__stage">
 
       <!-- Image 1 -->
-      <div class="showcase__img showcase__img--placeholder --visible" id="sc-img-0"
-           style="left:10vw; top:12vh; width:55vw; height:70vh;"></div>
+      <div class="showcase__img --visible" id="sc-img-0" style="left:5vw;">
+        <img src="../assets/img/p3/design_principles_woodcut1.jpg" alt="Design principles woodcut 1" />
+      </div>
       <!-- Image 2 -->
-      <div class="showcase__img showcase__img--placeholder" id="sc-img-1"
-           style="left:8vw; top:10vh; width:58vw; height:74vh;"></div>
+      <div class="showcase__img" id="sc-img-1" style="left:26vw;">
+        <img src="../assets/img/p3/design_principles_woodcut2.jpg" alt="Design principles woodcut 2" />
+      </div>
       <!-- Image 3 -->
-      <div class="showcase__img showcase__img--placeholder" id="sc-img-2"
-           style="left:12vw; top:14vh; width:52vw; height:66vh;"></div>
+      <div class="showcase__img" id="sc-img-2" style="left:47vw;">
+        <img src="../assets/img/p3/design_principles_woodcut3.jpg" alt="Design principles woodcut 3" />
+      </div>
 
       <!-- Text panels -->
       <div class="showcase__text --visible" id="sc-text-0">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+        <p>Resources are used intentionally and sparingly, while the floor plan remains clear and well-organized. This deliberate reduction follows the principle of "Less is more." The intentional simplicity of the forms shifts the focus to the materials themselves, emphasizing their inherent value and aesthetic qualities.</p>
         <a href="#project-details">View project details</a>
       </div>
       <div class="showcase__text" id="sc-text-1">
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+        <p>The design emphasizes clean, simplified forms while avoiding unnecessary complexity in construction. This approach reduces material and labor requirements, enabling the participation of volunteer helpers. "Building Simply" represents a resource-efficient architecture that stands out for its accessibility and clarity.</p>
         <a href="#project-details">View project details</a>
       </div>
       <div class="showcase__text" id="sc-text-2">
-        <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+        <p>Material choices in the design are closely tied to their availability within the circular economy. The design adapts flexibly to the properties of the materials, thoughtfully integrating the unique characteristics of reused elements into both the design and the construction process.</p>
         <a href="#project-details">View project details</a>
       </div>
 
@@ -669,9 +949,389 @@
   </div>
 
   <!-- ═══════════════════════════════════════════
+       HOME BRICK SYSTEM — 3D MODEL VIEWER
+       ═══════════════════════════════════════════ -->
+  <!--
+    mv-section is a sticky scroll narrative:
+      • Phase 0 (before entry)  – left text only, model at normal speed
+      • Phase 1 (25 % through)  – left text visible, model spins fast
+      • Phase 2 (55 % through)  – model slows, grows slightly
+      • Phase 3 (80 % through)  – right text slides in, caption fades in
+  -->
+  <div class="mv-outer" id="mvOuter">
+    <div class="mv-sticky" id="mvSticky">
+
+      <!-- Left text -->
+      <p class="mv-bg-text mv-bg-text--left" id="mvLeft" aria-hidden="true">FROM<br>TIMBER<br>OFFCUTS</p>
+
+      <!-- Right text (hidden until phase 3) -->
+      <p class="mv-bg-text mv-bg-text--right mv-right--hidden" id="mvRight" aria-hidden="true">TO<br>STRUCTURAL<br>SYSTEM</p>
+
+      <!--
+        Orbit ring split into back (z:0, behind model) + front (z:2, in front).
+        Both SVGs share the same 600×130 viewBox so the arcs join seamlessly.
+        Arc goes 300° counter-clockwise from right (568,55):
+          Back  half: right → top → left  (180°, through the "far" side)
+          Front half: left  → bottom → end (120°, through the "near" side)
+        Arrowhead + label live on the front layer so they're always readable.
+      -->
+
+      <!-- BACK half — behind the model -->
+      <div class="mv-hint mv-hint--back" id="mvHintBack" aria-hidden="true">
+        <svg class="mv-hint__svg" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M 568,55 A 268,42 0 0,0 32,55"
+            fill="none" stroke="#b03a10" stroke-width="2"
+            stroke-linecap="round" opacity="0.35"
+            class="mv-hint__arc"/>
+        </svg>
+      </div>
+
+      <!-- FRONT half — in front of the model -->
+      <div class="mv-hint mv-hint--front" id="mvHintFront" aria-hidden="true">
+        <svg class="mv-hint__svg" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="mvArrowHead" markerWidth="8" markerHeight="8"
+              refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#b03a10"/>
+            </marker>
+          </defs>
+          <path
+            d="M 32,55 A 268,42 0 0,0 434,91"
+            fill="none" stroke="#b03a10" stroke-width="2.5"
+            stroke-linecap="round"
+            marker-end="url(#mvArrowHead)"
+            class="mv-hint__arc"/>
+          <text class="mv-hint__label" x="300" y="122" text-anchor="middle">
+            Drag to rotate
+          </text>
+        </svg>
+      </div>
+
+      <!-- 3D model -->
+      <model-viewer
+        class="mv-model"
+        id="mvModel"
+        src="../assets/img/p3/home_brick.glb"
+        alt="Home Brick System — modular timber construction unit"
+        camera-controls
+        auto-rotate
+        auto-rotate-delay="0"
+        rotation-per-second="18deg"
+        disable-pan
+        disable-zoom
+        interaction-prompt="none"
+      ></model-viewer>
+
+      <!-- "Did you know?" title — appears with orbit ring (phase 1), stays -->
+      <h4 class="mv-fact-title" id="mvFactTitle" aria-hidden="false">Did you know?</h4>
+
+      <!-- Rest of captions — appear at phase 3 -->
+      <div class="mv-caption" id="mvCaption">
+        <!-- Bottom-left: aligned with "FROM TIMBER OFFCUTS" left edge -->
+        <p class="mv-caption__main">A modular unit<br>developed from<br>reclaimed materials.</p>
+        <!-- Top-right: fact body -->
+        <div class="mv-caption__fact">
+          <p class="mv-caption__fact-text">Up to <span class="mv-caption__stat">20–30%</span> of timber<br>in prefabrication processes<br>become offcuts.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <style>
+    /* ── Scroll container — tall enough to drive the animation ── */
+    .mv-outer {
+      position: relative;
+      height: 280vh;
+      width: 100%;
+    }
+
+    /* ── Sticky viewport ── */
+    .mv-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Background graphic text ── */
+    .mv-bg-text {
+      position: absolute;
+      font-size: clamp(3.5rem, 7vw, 7.5rem);
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: #b03a10;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+    .mv-bg-text--left {
+      left: 3%;
+      top: 10%;
+      text-align: left;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .mv-bg-text--right {
+      right: 3%;
+      bottom: 10%;
+      text-align: right;
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .mv-right--hidden {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+
+    /* ── 3D model ── */
+    .mv-model {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 780px;
+      height: 560px;
+      background: transparent;
+      --poster-color: transparent;
+      --progress-bar-height: 0px;
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .mv-model::part(default-progress-bar),
+    .mv-model::part(default-progress-mask) {
+      display: none;
+    }
+    .mv-model--grow      { transform: scale(1.12); }
+    .mv-model--grow-more { transform: scale(1.28); }
+
+    /* ── Caption overlay — fills the sticky frame ── */
+    .mv-caption {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.6s ease 0.2s;
+    }
+    .mv-caption.is-visible { opacity: 1; }
+
+    /* Bottom-left: aligned with "FROM TIMBER OFFCUTS" left edge (left: 3%) */
+    .mv-caption__main {
+      position: absolute;
+      bottom: 7%;
+      left: 3%;
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #111;
+    }
+
+    /* "Did you know?" title — phase 1, stays */
+    .mv-fact-title {
+      position: absolute;
+      top: 10%;
+      right: 3%;
+      z-index: 3;
+      font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #111;
+      line-height: 1;
+      text-align: right;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .mv-fact-title.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Top-right: fact body (phase 3) */
+    .mv-caption__fact {
+      position: absolute;
+      top: 10%;
+      right: 3%;
+      text-align: right;
+      max-width: 380px;
+      /* push body text below the title — title is roughly 1 line at ~2.8rem */
+      padding-top: clamp(2.5rem, 4vw, 3.8rem);
+    }
+    .mv-caption__fact-text {
+      font-size: clamp(1.2rem, 2vw, 1.7rem);
+      font-weight: 500;
+      color: #333;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+    .mv-caption__stat {
+      color: #b03a10;
+      font-weight: 800;
+    }
+
+    @media (max-width: 640px) {
+      .mv-caption__main  { font-size: 1rem; bottom: 10%; }
+      .mv-caption__fact  { top: 4%; right: 3%; max-width: 180px; }
+      .mv-caption__fact-title { font-size: 1rem; }
+      .mv-caption__fact-text  { font-size: 0.8rem; }
+    }
+
+    /* ── Orbit hint ring ── */
+    .mv-hint {
+      position: absolute;
+      width: min(700px, 92vw);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .mv-hint--back  { z-index: 0; }   /* behind model-viewer (z-index: 1) */
+    .mv-hint--front { z-index: 2; }   /* in front of model-viewer */
+    .mv-hint.is-visible { opacity: 1; }
+    .mv-hint__svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .mv-hint__arc {
+      animation: mvArcPulse 2s ease-in-out infinite;
+      animation-play-state: paused;
+    }
+    .mv-hint.is-visible .mv-hint__arc {
+      animation-play-state: running;
+    }
+    @keyframes mvArcPulse {
+      0%, 100% { opacity: 0.7; }
+      50%       { opacity: 1;   }
+    }
+    .mv-hint__label {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      fill: #b03a10;
+    }
+
+    @media (max-width: 640px) {
+      .mv-bg-text { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+      .mv-model   { height: 380px; }
+      .mv-outer   { height: 320vh; }
+      .mv-hint    { width: min(380px, 88vw); }
+    }
+  </style>
+
+  <script>
+  (function () {
+    var outer      = document.getElementById("mvOuter");
+    var model      = document.getElementById("mvModel");
+    var right      = document.getElementById("mvRight");
+    var caption    = document.getElementById("mvCaption");
+    var hintBack   = document.getElementById("mvHintBack");
+    var hintFront  = document.getElementById("mvHintFront");
+    var factTitle  = document.getElementById("mvFactTitle");
+    if (!outer || !model) return;
+
+    var phase           = -1;
+    var rafPending      = false;
+    var autoTimer       = null;
+    var phase1EnteredAt = 0;
+    var hintHideTimer   = null;
+
+    function showHint() {
+      if (hintBack)  hintBack.classList.add("is-visible");
+      if (hintFront) hintFront.classList.add("is-visible");
+    }
+    function hideHint() {
+      if (hintBack)  hintBack.classList.remove("is-visible");
+      if (hintFront) hintFront.classList.remove("is-visible");
+    }
+    function scheduleHintHide() {
+      var elapsed = Date.now() - phase1EnteredAt;
+      var remaining = Math.max(0, 2000 - elapsed);
+      clearTimeout(hintHideTimer);
+      hintHideTimer = setTimeout(hideHint, remaining);
+    }
+
+    function scrollToPhase(target) {
+      var scrollable = outer.offsetHeight - window.innerHeight;
+      window.scrollTo({ top: outer.offsetTop + target * scrollable, behavior: "smooth" });
+    }
+
+    function setPhase(p) {
+      if (p === phase) return;
+      phase = p;
+
+      model.setAttribute("rotation-per-second", p >= 1 && p < 2 ? "80deg" : "18deg");
+      model.classList.toggle("mv-model--grow",      p >= 2 && p < 3);
+      model.classList.toggle("mv-model--grow-more", p >= 3);
+      /* hint visibility managed separately by scheduleHintHide() */
+      if (factTitle) factTitle.classList.toggle("is-visible", p >= 1);
+      right.classList.toggle("mv-right--hidden",  p < 3);
+      caption.classList.toggle("is-visible",      p >= 3);
+
+      /* entering phase 1 — auto-advance to phase 3 after 4 s if user hasn't scrolled */
+      if (p === 1) {
+        phase1EnteredAt = Date.now();
+        showHint();
+        autoTimer = setTimeout(function () { scrollToPhase(0.82); }, 4000);
+      } else if (p === 0) {
+        /* scrolled back up — hide hint immediately */
+        clearTimeout(hintHideTimer);
+        hideHint();
+        clearTimeout(autoTimer);
+        autoTimer = null;
+      } else {
+        /* p >= 2: leaving phase 1 forward — respect 2s minimum */
+        scheduleHintHide();
+        clearTimeout(autoTimer);
+        autoTimer = null;
+      }
+    }
+
+    function tick() {
+      rafPending = false;
+      var rect       = outer.getBoundingClientRect();
+      var scrollable = outer.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      var progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+
+      if      (progress < 0.25) setPhase(0);
+      else if (progress < 0.55) setPhase(1);
+      else if (progress < 0.80) setPhase(2);
+      else                       setPhase(3);
+    }
+
+    function onScroll() {
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(tick);
+      }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    /* fire once layout is complete */
+    if (document.readyState === "complete") {
+      tick();
+    } else {
+      window.addEventListener("load", tick);
+    }
+  })();
+  </script>
+
+  <!-- ═══════════════════════════════════════════
        STICKY-SPLIT SCROLL SECTIONS
        ═══════════════════════════════════════════ -->
-  <div class="split-wrap">
   <div class="split" id="split">
     <div class="split__stage">
 
@@ -679,98 +1339,675 @@
       <nav class="split__nav">
         <div class="split__item --active" data-split="0">
           <div class="split__number">01</div>
-          <h2 class="split__title" data-i18n="p1_split_01">Radial Geometry</h2>
-          <p class="split__subtitle" data-i18n="p1_split_01_sub">Open centers shape learning and community.</p>
-          <p class="split__desc" data-i18n="p1_split_01_desc">Radial geometry organizes the school around two complementary courtyards: The first courtyard wraps around existing trees, using their shade as a calm learning heart and climatic anchor while defining a clear entry. The second courtyard forms a generous open space for play, gathering, and gardening. A deliberately open edge extends the campus toward the existing primary school.</p>
+          <h2 class="split__title">Site &amp; Context</h2>
+          <p class="split__desc">The project is located in Irsee, Bavaria, and is developed for a specific family within a real residential context. The design responds to existing site conditions, local construction practices, and the availability of reclaimed materials.</p>
         </div>
         <div class="split__item" data-split="1">
           <div class="split__number">02</div>
-          <h2 class="split__title" data-i18n="p1_split_02">Framework for expansion</h2>
-          <p class="split__subtitle" data-i18n="p1_split_02_sub">The radial system enables phased expansion.</p>
-          <p class="split__desc" data-i18n="p1_split_02_desc">Phase 1 establishes the first center with four classrooms, a teachers' room, a community space, and separate sanitary units. A sheltered garden roof can already be built to define a protected expansion zone, reducing heat stress while collecting rainwater for reuse. Phase 2 adds four additional classrooms within this structure, while Phase 3 enables further extensions toward the primary school.</p>
+          <h2 class="split__title">Program &amp; Spatial Organization</h2>
+          <p class="split__desc">The house is designed for a family of four, with a clear and compact layout organised across two levels. The program is divided into living, sleeping, and service areas, allowing for flexible use and future adaptation. The spatial organisation follows the logic of the material system, resulting in a clear and efficient floor plan.</p>
         </div>
         <div class="split__item" data-split="2">
           <div class="split__number">03</div>
-          <h2 class="split__title" data-i18n="p1_split_03">Wall typologies</h2>
-          <p class="split__subtitle" data-i18n="p1_split_03_sub">Three wall types define climate, use, and flexibility.</p>
-          <p class="split__desc" data-i18n="p1_split_03_desc">The 30 cm radial outer wall is load-bearing, enclosing and stabilising the building through its curved geometry. The 30 cm courtyard wall is more permeable, with large openings fitted with textile screens for ventilation. Inside, 15 cm non-load-bearing walls allow classrooms to be flexibly divided. All walls are built from 15 × 15 × 30 cm rammed-earth bricks with optional reinforcement, enabling local, modular on-site assembly.</p>
+          <h2 class="split__title">Ground Floor</h2>
+          <p class="split__desc">Two distinct volumes separate heated living spaces from unheated service areas. A compact service core at the rear organizes wet functions, while the living spaces open toward the garden. The unheated volume allows for future conversion into a studio apartment.</p>
         </div>
         <div class="split__item" data-split="3">
           <div class="split__number">04</div>
-          <h2 class="split__title" data-i18n="p1_split_04">Structural roof logic</h2>
-          <p class="split__subtitle" data-i18n="p1_split_04_sub">The roof stabilizes and ties the building together.</p>
-          <p class="split__desc" data-i18n="p1_split_04_desc">A bamboo ceiling plane cantilevers over the circulation area and protects the construction with a ventilated air gap allowing continuous air circulation through the roof build-up. Below sits a secondary roof layer made from bamboo, clay, and other locally available materials, which remains permanently shaded. Its thermal mass adds weight and compression while stabilizing the upper roof against tensile forces.</p>
+          <h2 class="split__title">First Floor</h2>
+          <p class="split__desc">The first floor continues the volumetric division. Private rooms are located in the left volume, while the right volume accommodates a separate piano studio.</p>
         </div>
         <div class="split__item" data-split="4">
           <div class="split__number">05</div>
-          <h2 class="split__title" data-i18n="p1_split_05">Roof as cooling machine</h2>
-          <p class="split__subtitle" data-i18n="p1_split_05_sub">A double roof creates comfortable learning spaces.</p>
-          <p class="split__desc" data-i18n="p1_split_05_desc">The upper roof layer shades the building and protects walls, circulation, and openings from rain. A ventilated air gap allows hot air to escape and enables continuous airflow through the section. The lower roof layer acts as permanently shaded thermal mass which delays heat transfer into the classrooms. Together with the 30 cm outer walls and cross-ventilation through opposite openings, the system creates stable, shaded, and naturally ventilated learning spaces.</p>
+          <h2 class="split__title">Construction &amp; Section</h2>
+          <p class="split__desc">The construction is based on a modular timber system combined with reclaimed components. Load-bearing walls, floor build-up, and roof structure are assembled using dry connections, enabling simple construction processes and future disassembly. Sections reveal how the system integrates structural logic, material reuse, and spatial organisation.</p>
         </div>
       </nav>
 
       <!-- Right: stacked images, one visible at a time -->
       <div class="split__images">
-        <div class="split__img --visible" data-split-img="0"><img src="../assets/img/p1/design_principle_1.png" alt="Radial Geometry"></div>
-        <div class="split__img" data-split-img="1"><img src="../assets/img/p1/design_principle_2.png" alt="Framework for expansion"></div>
-        <div class="split__img" data-split-img="2"><img src="../assets/img/p1/design_principle_3.png" alt="Wall typologies"></div>
-        <div class="split__img" data-split-img="3"><img src="../assets/img/p1/design_principle_4.png" alt="Structural roof logic"></div>
-        <div class="split__img" data-split-img="4"><img src="../assets/img/p1/design_principle_5.png" alt="Roof as cooling machine"></div>
+        <div class="split__img --visible" data-split-img="0"><img src="../assets/img/p3/site_model.jpg" alt="Site model" /></div>
+        <div class="split__img --contain" data-split-img="1"><img src="../assets/img/p3/concept_floorplans.png" alt="Concept floor plans" /></div>
+        <div class="split__img --contain" data-split-img="2"><img src="../assets/img/p3/floorplan_ground_floor.png" alt="Ground floor plan" /></div>
+        <div class="split__img --contain" data-split-img="3"><img src="../assets/img/p3/floorplan_first_floor.png" alt="First floor plan" /></div>
+        <div class="split__img --contain" data-split-img="4"><img src="../assets/img/p3/sections.png" alt="Building sections" /></div>
       </div>
 
     </div>
   </div>
-  </div>
+
+  <div class="diagrams-row">
 
   <!-- ═══════════════════════════════════════════
-       PROJECT DETAILS
+       EXPLODED AXONOMETRIC — interactive diagram
        ═══════════════════════════════════════════ -->
+  <div class="axo-section">
+    <div class="axo-outer" id="axoOuter">
+
+      <div class="axo-wrap" id="axoWrap">
+        <img src="../assets/img/p3/exploded_axo.png" alt="Exploded axonometric diagram" class="axo-img" id="axoImg" />
+
+        <button class="axo-pin" style="left:60%;top:7%;"  data-title="Roof Tiles"           data-text="GIMA overproduction"                                     data-side="right" aria-label="Roof Tiles"></button>
+        <button class="axo-pin" style="left:60%;top:16%;" data-title="Roof Beams"            data-text="Reclaimed from demolition site, Lichtenhaag"             data-side="right" aria-label="Roof Beams"></button>
+        <button class="axo-pin is-active" id="axoDefaultPin" style="left:43%;top:39%;" data-title="Home Bricks" data-text="BAUFRITZ timber offcuts" data-side="left" aria-label="Home Bricks"></button>
+        <button class="axo-pin" style="left:28%;top:56%;" data-title="Home Bricks"           data-text="BAUFRITZ timber offcuts"                                 data-side="left"  aria-label="Home Bricks"></button>
+        <button class="axo-pin" style="left:45%;top:64%;" data-title="Mahogany Parquet"      data-text="Reclaimed from church deconstruction, Füssen"             data-side="right" data-label-x="60" aria-label="Mahogany Parquet"></button>
+        <button class="axo-pin" style="left:13%;top:62%;" data-title="Wooden Shingle Facade" data-text="Reclaimed from church deconstruction, Füssen"             data-side="left"  aria-label="Wooden Shingle Facade"></button>
+        <button class="axo-pin" style="left:44%;top:86%;" data-title="Foundation System"     data-text="Oak logs and concrete slabs from barn demolition, Munich" data-side="left"  aria-label="Foundation System"></button>
+      </div>
+
+      <!-- Home Brick wall axonometry — floats left on Home Bricks pin hover -->
+      <img src="../assets/img/p3/home_brick_wall_axonometry.png"
+           alt="Home Brick wall axonometry" class="axo-hb-img is-visible" id="axoHBImg" />
+
+      <!-- Home Brick technical details — floats right on Home Bricks pin hover -->
+      <img src="../assets/img/p3/Home_Brick_Technical_Details.png"
+           alt="Home Brick technical details" class="axo-hb-tech is-visible" id="axoHBTech" />
+
+      <!-- Home Brick description text — bottom right on Home Bricks pin hover -->
+      <div class="axo-hb-text is-visible" id="axoHBText">
+        <p>Developed in collaboration with BAUFRITZ, one of the leading prefabricated timber house companies in Germany, the system is based on the reuse of industrial timber offcuts from their production. Through this partnership, offcuts are collected, cut to module size, and supplied directly from prefabrication processes.</p>
+        <div class="axo-hb-more" id="axoHBMore">
+          <p>The small scale of the modules allows for an efficient use of otherwise discarded material. By standardising the offcuts into a consistent unit, the system transforms irregular leftovers into a coherent construction logic.</p>
+          <p>The components are lightweight and designed for dry assembly. A simple template guides the stacking process, enabling construction without specialised labour or heavy machinery. The elements are transported directly to site and assembled through a plug-in system, allowing for a low-tech and accessible building process.</p>
+        </div>
+        <button class="axo-hb-readmore" id="axoHBReadMore">Read more</button>
+      </div>
+
+      <!-- Demolition panels — revealed when Roof Beams pin is active -->
+      <div class="axo-demo-left" id="axoDemoLeft">
+        <img src="../assets/img/p3/roof_demolition_1.jpg" alt="Roof demolition 1" />
+        <img src="../assets/img/p3/roof_demolition_2.jpg" alt="Roof demolition 2" />
+      </div>
+      <div class="axo-demo-right" id="axoDemoRight">
+        <img src="../assets/img/p3/roof_demolition_3.jpg" alt="Roof demolition 3" />
+        <img src="../assets/img/p3/roof_demolition_4.jpg" alt="Roof demolition 4" />
+      </div>
+
+      <!-- Church panels — revealed when Mahogany Parquet or Wooden Shingle Facade pin is active -->
+      <div class="axo-church-left" id="axoChurchLeft">
+        <img src="../assets/img/p3/church_demolition_interior.png" alt="Church demolition interior" />
+        <img src="../assets/img/p3/church_demolition_volunteer_group.png" alt="Church demolition volunteer group" />
+      </div>
+      <div class="axo-church-right" id="axoChurchRight">
+        <img src="../assets/img/p3/mahogani_engraved.jpg" alt="Mahogany engraved" />
+      </div>
+
+      <!-- Foundation panels — revealed when Foundation System pin is active -->
+      <div class="axo-found-left" id="axoFoundLeft">
+        <img src="../assets/img/p3/foundation_oak_logs.jpg" alt="Foundation oak logs" />
+      </div>
+      <div class="axo-found-right" id="axoFoundRight">
+        <img src="../assets/img/p3/foundation_concrete.jpg" alt="Foundation concrete" />
+      </div>
+
+      <!-- GIMA panel — revealed when Roof Tiles pin is active -->
+      <div class="axo-gima-panel" id="axoGimaPanel">
+        <img src="../assets/img/p3/Gima_logo.png" alt="GIMA" class="axo-gima-logo" />
+        <img src="../assets/img/p3/Gima_tiles.jpg" alt="GIMA roof tiles" class="axo-gima-img" />
+      </div>
+
+      <!-- Label sits outside the image, vertically aligned to the active pin via JS -->
+      <div class="axo-floatlabel" id="axoFloatLabel">
+        <span class="axo-fl-title" id="axoFLTitle"></span>
+        <span class="axo-fl-text"  id="axoFLText"></span>
+      </div>
+
+    </div>
+  </div>
+
+  <style>
+    /* ── Side-by-side diagram row ── */
+    .diagrams-row {
+      display: flex;
+      gap: 3rem;
+      align-items: flex-start;
+      width: 92vw;
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 0 0 4rem;
+    }
+
+    .axo-section {
+      flex: 1;
+      min-width: 0;
+      padding: 0;
+    }
+
+    .axo-outer {
+      position: relative;
+      width: fit-content;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Home Brick hover image — floats to the left of the axo */
+    .axo-hb-img {
+      position: absolute;
+      right: calc(100% + 2rem);
+      top: 5%;
+      width: 60%;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
+      object-position: right top;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-hb-img.is-visible {
+      opacity: 1;
+    }
+
+    /* Home Brick technical details — floats to the right of the axo */
+    .axo-hb-tech {
+      position: absolute;
+      left: calc(100% + 2rem);
+      top: 5%;
+      width: 60%;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
+      object-position: left top;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-hb-tech.is-visible {
+      opacity: 1;
+    }
+
+    /* Home Brick text block — bottom right */
+    .axo-hb-text {
+      position: absolute;
+      left: calc(100% + 2rem);
+      bottom: 0;
+      width: 60%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-hb-text.is-visible { opacity: 1; }
+    .axo-hb-text p {
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.7;
+      margin-bottom: 0.6em;
+    }
+    .axo-hb-text p:last-child { margin-bottom: 0; }
+    .axo-hb-more {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .axo-hb-more.is-open {
+      max-height: 400px;
+      opacity: 1;
+    }
+    .axo-hb-readmore {
+      margin-top: 0.5rem;
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.95rem;
+      color: #3a6ea5;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+    }
+    .axo-hb-readmore:hover { text-decoration: underline; }
+
+    /* Demolition panels — shown on Roof Beams pin */
+    .axo-demo-left,
+    .axo-demo-right {
+      position: absolute;
+      top: 2%;
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-demo-left  { right: calc(100% + 2rem); }
+    .axo-demo-right { left: calc(100% + 2rem); }
+    .axo-demo-left.is-visible,
+    .axo-demo-right.is-visible { opacity: 1; }
+    .axo-demo-left img,
+    .axo-demo-right img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Church panels — shown on Mahogany Parquet / Wooden Shingle Facade pins */
+    .axo-church-left,
+    .axo-church-right {
+      position: absolute;
+      top: 2%;
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-church-left  { right: calc(100% + 2rem); }
+    .axo-church-right { left: calc(100% + 2rem); width: 62%; }
+    .axo-church-left.is-visible,
+    .axo-church-right.is-visible { opacity: 1; }
+    .axo-church-left img,
+    .axo-church-right img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Foundation panels — shown on Foundation System pin */
+    .axo-found-left,
+    .axo-found-right {
+      position: absolute;
+      top: 2%;
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-found-left  { right: calc(100% + 2rem); }
+    .axo-found-right { left: calc(100% + 2rem); }
+    .axo-found-left.is-visible,
+    .axo-found-right.is-visible { opacity: 1; }
+    .axo-found-left img,
+    .axo-found-right img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* GIMA panel — left of the axo, shown on Roof Tiles pin */
+    .axo-gima-panel {
+      position: absolute;
+      right: calc(100% + 2rem);
+      top: 2%;
+      width: 58%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .axo-gima-panel.is-visible {
+      opacity: 1;
+    }
+    /* Tint the logo to match the cursor blue (#2f4aa1) */
+    .axo-gima-logo {
+      width: 55%;
+      height: auto;
+      filter: invert(22%) sepia(60%) saturate(700%) hue-rotate(210deg) brightness(0.85);
+    }
+    .axo-gima-img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 2px;
+    }
+
+    .axo-wrap {
+      position: relative;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    .axo-img {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: 88vh;
+    }
+
+    /* "+" pins */
+    .axo-pin {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+      border: 1.5px solid #3a6ea5;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 300;
+      color: #3a6ea5;
+      line-height: 1;
+      padding: 0;
+      transition: background 0.15s;
+    }
+    .axo-pin::before { content: "+"; }
+    .axo-pin:hover,
+    .axo-pin.is-active {
+      background: #3a6ea5;
+      border-color: #3a6ea5;
+      color: #fff;
+    }
+
+    /* Floating label — position set entirely by JS */
+    .axo-floatlabel {
+      position: absolute;
+      width: 150px;
+      transform: translateY(-50%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.12s;
+    }
+    .axo-floatlabel.is-visible { opacity: 1; }
+
+    .axo-fl-title {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #111;
+      line-height: 1;
+    }
+    .axo-fl-text {
+      display: block;
+      font-size: 0.72rem;
+      color: #555;
+      line-height: 1;
+      margin-top: 3px;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const img     = document.getElementById('axoImg');
+      const label   = document.getElementById('axoFloatLabel');
+      const flTitle = document.getElementById('axoFLTitle');
+      const flText  = document.getElementById('axoFLText');
+      const hbImg      = document.getElementById('axoHBImg');
+      const hbTech     = document.getElementById('axoHBTech');
+      const hbText     = document.getElementById('axoHBText');
+      const gimaPanel  = document.getElementById('axoGimaPanel');
+      const demoLeft    = document.getElementById('axoDemoLeft');
+      const demoRight   = document.getElementById('axoDemoRight');
+      const churchLeft  = document.getElementById('axoChurchLeft');
+      const churchRight = document.getElementById('axoChurchRight');
+      const foundLeft   = document.getElementById('axoFoundLeft');
+      const foundRight  = document.getElementById('axoFoundRight');
+      const defaultPin = document.getElementById('axoDefaultPin');
+      const pins       = document.querySelectorAll('#axoWrap .axo-pin');
+      let activePin    = null;
+      let hideTimer    = null;
+
+      function cancelHide() {
+        if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+      }
+
+      function show(pin) {
+        cancelHide();
+        const topPct  = parseFloat(pin.style.top)  / 100;
+        const labelXPct = parseFloat(pin.dataset.labelX || pin.style.left) / 100;
+        const imgW = img.offsetWidth;
+        const imgH = img.offsetHeight;
+        const pinX = labelXPct * imgW;
+        const pinY = topPct  * imgH;
+        const gap  = 50;
+
+        label.style.top = pinY + 'px';
+
+        if (pin.dataset.side === 'left') {
+          label.style.left      = 'auto';
+          label.style.right     = (imgW - pinX + gap) + 'px';
+          label.style.textAlign = 'right';
+        } else {
+          label.style.left      = (pinX + gap) + 'px';
+          label.style.right     = 'auto';
+          label.style.textAlign = 'left';
+        }
+
+        flTitle.textContent = pin.dataset.title;
+        flText.textContent  = pin.dataset.text;
+        label.classList.add('is-visible');
+        if (activePin && activePin !== pin) activePin.classList.remove('is-active');
+        pin.classList.add('is-active');
+        activePin = pin;
+
+        hbImg.classList.toggle('is-visible',  pin.dataset.title === 'Home Bricks');
+        hbTech.classList.toggle('is-visible', pin.dataset.title === 'Home Bricks');
+        hbText.classList.toggle('is-visible', pin.dataset.title === 'Home Bricks');
+        gimaPanel.classList.toggle('is-visible', pin.dataset.title === 'Roof Tiles');
+        demoLeft.classList.toggle('is-visible',    pin.dataset.title === 'Roof Beams');
+        demoRight.classList.toggle('is-visible',   pin.dataset.title === 'Roof Beams');
+        const isChurch = pin.dataset.title === 'Mahogany Parquet' || pin.dataset.title === 'Wooden Shingle Facade';
+        churchLeft.classList.toggle('is-visible',  isChurch);
+        churchRight.classList.toggle('is-visible', isChurch);
+        foundLeft.classList.toggle('is-visible',   pin.dataset.title === 'Foundation System');
+        foundRight.classList.toggle('is-visible',  pin.dataset.title === 'Foundation System');
+      }
+
+      function hide() {
+        if (activePin) activePin.classList.remove('is-active');
+        activePin = null;
+        show(defaultPin); /* always restore to default state */
+      }
+
+      pins.forEach(function (pin) {
+        pin.addEventListener('mouseenter', function () { show(pin); });
+        pin.addEventListener('mouseleave', function () {
+          hideTimer = setTimeout(hide, 3000);
+        });
+        pin.addEventListener('click', function (e) {
+          e.stopPropagation();
+          activePin === pin ? hide() : show(pin);
+        });
+      });
+
+      document.addEventListener('click', function () { cancelHide(); hide(); });
+
+      window.addEventListener('load', function () { show(defaultPin); });
+
+      /* Read more toggle */
+      var hbMore     = document.getElementById('axoHBMore');
+      var hbReadMore = document.getElementById('axoHBReadMore');
+      hbReadMore.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = hbMore.classList.toggle('is-open');
+        hbReadMore.textContent = open ? 'Read less' : 'Read more';
+      });
+    })();
+  </script>
+
+  </div><!-- /.diagrams-row -->
+
+  <style>
+    /* ─────────────────────────────────────────────
+       MATERIAL COLLAGE
+    ───────────────────────────────────────────── */
+    .matcol-section {
+      width: 100%;
+      padding: 5rem clamp(2rem, 8vw, 8rem);
+    }
+
+    .matcol-outer {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      gap: 4rem;
+      align-items: stretch;
+    }
+    .matcol-left {
+      flex: 0 0 66%;
+      display: flex;
+    }
+    .matcol-right {
+      flex: 0 0 34%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (max-width: 860px) {
+      .diagrams-row {
+        flex-direction: column;
+      }
+    }
+
+    .matcol-img {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: left top;
+    }
+
+    .matcol-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .matcol-cat {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 1rem;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      cursor: pointer;
+    }
+    .matcol-legend.has-active .matcol-cat:not(.is-active) {
+      opacity: 0.2;
+    }
+
+    .matcol-cat__num {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      flex-shrink: 0;
+      color: inherit;
+    }
+
+    .matcol-cat__body {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .matcol-cat__title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: inherit;
+      line-height: 1.3;
+      padding-top: 0.15em;
+    }
+
+    /* Text list — hidden by default, expands inline below its title */
+    .matcol-cat__list {
+      list-style: none;
+      padding: 0;
+      margin: 0.4rem 0 0 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease;
+    }
+    .matcol-cat.is-active .matcol-cat__list {
+      opacity: 1;
+      visibility: visible;
+    }
+    .matcol-cat__list li {
+      font-size: 0.75rem;
+      color: #555;
+      line-height: 1.7;
+      display: flex;
+      align-items: flex-start;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Colored bullet dot */
+    .matcol-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.45em;
+    }
+
+    @media (max-width: 640px) {
+      .matcol-cat__num {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+
+
   <div id="project-details">
     <section class="project-info">
       <div class="project-info__grid">
         <div class="project-info__meta">
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label" data-i18n="label_project">Project</span>
-            <span class="project-info__meta-value" data-i18n="p1_meta_project">Senegal Secondary School — Building Opportunity in Djilakh</span>
+            <span class="project-info__meta-label">Project</span>
+            <span class="project-info__meta-value">Recycle Residence — Designing with Reused Materials</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label" data-i18n="label_location">Location</span>
-            <span class="project-info__meta-value" data-i18n="p1_meta_location">Djilakh, Thiès Region (Sindia Commune), Senegal</span>
+            <span class="project-info__meta-label">Location</span>
+            <span class="project-info__meta-value">Irsee, Bavaria, Germany</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label" data-i18n="label_competition">Competition</span>
-            <span class="project-info__meta-value" data-i18n="p1_meta_competition">Archstorming × Let's Build My School (LBMS)</span>
+            <span class="project-info__meta-label">Collaboration</span>
+            <span class="project-info__meta-value">Supertecture (non-profit, volunteer-based construction initiative)</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label" data-i18n="label_program">Program</span>
-            <span class="project-info__meta-value" data-i18n="p1_meta_program">4 classrooms, admin wing, multipurpose hall, storage, restrooms — approx. 160 students</span>
+            <span class="project-info__meta-label">Program</span>
+            <span class="project-info__meta-value">Single-family house for a real family of four</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label" data-i18n="label_budget">Budget</span>
-            <span class="project-info__meta-value" data-i18n="p1_meta_budget">€48,000 – €60,000</span>
+            <span class="project-info__meta-label">Status</span>
+            <span class="project-info__meta-value">Design proposal — further planning currently on hold</span>
           </div>
           <div class="project-info__meta-item">
-            <span class="project-info__meta-label" data-i18n="label_construction">Construction</span>
-            <span class="project-info__meta-value" data-i18n="p1_meta_construction">Compressed earth blocks, bamboo structure, corrugated metal roofing</span>
+            <span class="project-info__meta-label">Construction</span>
+            <span class="project-info__meta-value">Reclaimed timber from industrial surplus (modular "Home Bricks" system), reused parquet from church deconstruction, and additional reclaimed materials</span>
           </div>
         </div>
 
         <div class="project-info__description">
-          <h3 data-i18n="design_concept">Design Concept</h3>
-          <p data-i18n="p1_concept_1">
-            The design is structured around six existing trees, which define the centre of the site. A first courtyard is formed around them, using their shade as a climatic anchor and a central space for learning and gathering. Classrooms are arranged radially around this courtyard, establishing a clear organisation and direct connections between spaces.
+          <h3>Design Concept</h3>
+          <p>
+            Developed as an independent Bachelor's thesis, the project moves beyond a purely academic design exercise. Instead of responding to a fictional brief, it is conceived as a real-world project for a specific family, integrating design, material sourcing, and organizational processes into a single architectural framework.
           </p>
-          <p data-i18n="p1_concept_2">
-            A second courtyard complements this system. In contrast to the enclosed character of the first, it remains more open and supports play, gathering, and outdoor learning. A shared community space connects both courtyards and acts as a central interface between education and social activity.
+          <p>
+            The proposal is embedded within the non-profit initiative Supertecture, combining volunteer-based construction with circular building strategies. This context expands the role of the architect from designer to coordinator — involving collaboration with companies, sourcing reclaimed materials, and organizing construction processes beyond the conventional scope of architectural design.
           </p>
-          <p data-i18n="p1_concept_3">
-            The project is conceived as an incremental system. Parts of the site are predefined but initially remain in use for planting and temporary activities. Over time, these areas can be converted into additional classrooms, allowing the school to expand step by step according to available resources and changing needs.
+          <p>
+            At its core, the project explores a radical approach to material reuse. Based on the principle of "form follows availability," the design is developed entirely from materials already in circulation. Industrial timber offcuts, reclaimed parquet from a church deconstruction, and surplus construction elements define both the spatial organization and the construction logic.
           </p>
-          <p data-i18n="p1_concept_4">
-            The construction follows a simple and robust logic. Load-bearing earthen walls provide thermal mass and protect against heat while remaining easy to construct using local labour. The roof combines a lightweight bamboo structure with a protective outer layer. Its load is transferred through the walls, stabilising the system and allowing for large overhangs that create shaded circulation spaces.
+          <p>
+            This approach is materialized through the development of a modular building system — the "Home Bricks." These elements transform small-scale timber waste into load-bearing components, enabling a flexible and scalable construction method that can be assembled with limited resources and without specialized labor.
           </p>
-          <p data-i18n="p1_concept_5">
-            Rather than relying on complex systems, the project proposes a building method that can be constructed, adapted, and maintained locally, ensuring long-term usability and resilience.
+          <p>
+            The architecture is deliberately reduced in form and complexity. A clear spatial organization allows the material system to remain legible, while enabling efficient construction and the participation of non-professional builders. The building is slightly elevated, minimizing ground intervention and simplifying assembly.
+          </p>
+          <p>
+            Rather than optimizing a predefined system, the project tests the boundaries of what is possible within circular construction. It proposes an architecture that is not defined by ideal conditions, but by the realities of available resources, social context, and collective building processes.
           </p>
         </div>
       </div>
@@ -778,30 +2015,402 @@
 
     <!-- Gallery -->
     <section class="gallery" aria-label="Project gallery">
-      <img class="gallery__img gallery__img--full" src="../assets/img/p1/courtyard.jpg" alt="Courtyard view with colorful openings and children playing" />
-      <img class="gallery__img" src="../assets/img/p1/interior.jpg" alt="Aerial view of the campus with circular pavilions and courtyards" />
-      <img class="gallery__img" src="../assets/img/p1/classroom.jpg" alt="Classroom interior with students at desks and teacher at the chalkboard" />
+      <div class="gallery__item">
+        <img class="gallery__img" src="../assets/img/p3/floorplan_ground_floor.png" alt="Ground floor plan" />
+      </div>
+      <div class="gallery__item">
+        <img class="gallery__img" src="../assets/img/p3/floorplan_first_floor.png" alt="First floor plan" />
+      </div>
+      <div class="gallery__item gallery__item--full">
+        <img class="gallery__img" src="../assets/img/p3/sections.png" alt="Sections" />
+      </div>
     </section>
   </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="galleryLightbox">
+    <button class="lightbox__arrow lightbox__arrow--prev" id="lbPrev">&#8592;</button>
+    <img class="lightbox__img" id="lightboxImg" src="" alt="" />
+    <button class="lightbox__arrow lightbox__arrow--next" id="lbNext">&#8594;</button>
+  </div>
+  <script>
+    (function () {
+      var lb    = document.getElementById("galleryLightbox");
+      var lbImg = document.getElementById("lightboxImg");
+      var prev  = document.getElementById("lbPrev");
+      var next  = document.getElementById("lbNext");
+      var items = Array.from(document.querySelectorAll(".gallery__item img"));
+      var current = 0;
+
+      function open(index) {
+        current = (index + items.length) % items.length;
+        lbImg.src = items[current].src;
+        lbImg.alt = items[current].alt;
+        lb.classList.add("is-open");
+      }
+
+      items.forEach(function (img, i) {
+        img.parentElement.addEventListener("click", function () { open(i); });
+      });
+
+      prev.addEventListener("click", function (e) { e.stopPropagation(); open(current - 1); });
+      next.addEventListener("click", function (e) { e.stopPropagation(); open(current + 1); });
+
+      lb.addEventListener("click", function () { lb.classList.remove("is-open"); });
+
+      document.addEventListener("keydown", function (e) {
+        if (!lb.classList.contains("is-open")) return;
+        if (e.key === "Escape")     lb.classList.remove("is-open");
+        if (e.key === "ArrowLeft")  open(current - 1);
+        if (e.key === "ArrowRight") open(current + 1);
+      });
+    })();
+  </script>
+
+  <!-- ═══════════════════════════════════════════
+       MATERIAL COLLAGE — interactive diagram
+       ═══════════════════════════════════════════ -->
+  <div class="matcol-section">
+    <div class="matcol-outer">
+
+      <div class="matcol-left">
+        <img src="../assets/img/p3/material_collage.png" alt="Material sources diagram" class="matcol-img" />
+      </div>
+
+      <div class="matcol-right">
+      <!-- Category legend — titles always visible, text only on active -->
+      <div class="matcol-legend" id="matcolLegend">
+
+        <div class="matcol-cat" data-cat="1" style="color:#E3C76A;">
+          <span class="matcol-cat__num">01</span>
+          <div class="matcol-cat__body">
+            <span class="matcol-cat__title">Industrial Surplus</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#E3C76A;"></span>Overproduction</li>
+              <li><span class="matcol-dot" style="background:#E3C76A;"></span>Rejected products / second-choice material</li>
+              <li><span class="matcol-dot" style="background:#E3C76A;"></span>Non-construction material (e.g. walls from bottles)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="matcol-cat" data-cat="2" style="color:#AFCBB3;">
+          <span class="matcol-cat__num">02</span>
+          <div class="matcol-cat__body">
+            <span class="matcol-cat__title">Temporary Structures</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Exhibition pieces</li>
+              <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Trade fair construction</li>
+              <li><span class="matcol-dot" style="background:#AFCBB3;"></span>Temporary cultural structures (e.g. theater stage)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="matcol-cat" data-cat="3" style="color:#E6B173;">
+          <span class="matcol-cat__num">03</span>
+          <div class="matcol-cat__body">
+            <span class="matcol-cat__title">Upcycling</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#E6B173;"></span>Repurposed material from renovation projects</li>
+              <li><span class="matcol-dot" style="background:#E6B173;"></span>Waste collection sites</li>
+              <li><span class="matcol-dot" style="background:#E6B173;"></span>Non-construction material</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="matcol-cat" data-cat="4" style="color:#A9C7DC;">
+          <span class="matcol-cat__num">04</span>
+          <div class="matcol-cat__body">
+            <span class="matcol-cat__title">Building Material Marketplaces</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Concular (certified building components from demolition projects)</li>
+              <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Ebay Marketplace (online marketplace with private sellers)</li>
+              <li><span class="matcol-dot" style="background:#A9C7DC;"></span>Treibgut (local on-site marketplace in Munich)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="matcol-cat" data-cat="5" style="color:#E5B3C7;">
+          <span class="matcol-cat__num">05</span>
+          <div class="matcol-cat__body">
+            <span class="matcol-cat__title">Demolition Projects</span>
+            <ul class="matcol-cat__list">
+              <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Office demolition in Kaufbeuren (BBM Mahler)</li>
+              <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Church demolition in Füssen (municipal authority)</li>
+              <li><span class="matcol-dot" style="background:#E5B3C7;"></span>Roof framework demolition by a private individual</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      </div><!-- /.matcol-right -->
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const legend = document.getElementById('matcolLegend');
+      const cats   = legend.querySelectorAll('.matcol-cat');
+      let active   = null;
+
+      function activate(catId) {
+        cats.forEach(function (c) { c.classList.toggle('is-active', c.dataset.cat === catId); });
+        legend.classList.add('has-active');
+        active = catId;
+      }
+
+      function deactivate() {
+        cats.forEach(function (c) { c.classList.remove('is-active'); });
+        legend.classList.remove('has-active');
+        active = null;
+      }
+
+      cats.forEach(function (cat) {
+        cat.addEventListener('pointerenter', function (e) {
+          if (e.pointerType !== 'touch') activate(cat.dataset.cat);
+        });
+        cat.addEventListener('pointerleave', function (e) {
+          if (e.pointerType !== 'touch') deactivate();
+        });
+        cat.addEventListener('click', function (e) {
+          e.stopPropagation();
+          active === cat.dataset.cat ? deactivate() : activate(cat.dataset.cat);
+        });
+      });
+
+      document.addEventListener('click', deactivate);
+    })();
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TIMELINE — scroll-driven horizontal pan
+
+       Path geometry (px, relative to track top):
+         HIGH_Y = 227  LOW_Y = 337  step corners at x = 650, 1050, 1650
+
+       Level layout:
+         HIGH (card above): E0 E1 E2        E5 E6 E7
+         LOW  (card below):          E3 E4           E8 E9
+
+       Event x positions (left edge of 180px card, pitch = 200px):
+         E0=60  E1=260  E2=460  E3=660  E4=860
+         E5=1060 E6=1260 E7=1460 E8=1660 E9=1860
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="timeline" id="timeline" aria-label="Project timeline">
+  <div class="timeline__sticky" id="timeline-sticky">
+
+    <div class="timeline__header">
+      <div class="timeline__intro">
+        <span class="timeline__intro-label">Development Process</span>
+        <h2>Project Timeline</h2>
+      </div>
+      <div class="timeline__phases" id="timeline-phases" role="list" aria-label="Project phases">
+        <div class="timeline__phase --active" data-phase="0" role="listitem">Creating the framework</div>
+        <div class="timeline__phase"          data-phase="1" role="listitem">Founding of the corporation</div>
+        <div class="timeline__phase"          data-phase="2" role="listitem">Design process at TUM</div>
+        <div class="timeline__phase"          data-phase="3" role="listitem">Approval planning</div>
+        <div class="timeline__phase"          data-phase="4" role="listitem">Execution planning</div>
+        <div class="timeline__phase"          data-phase="5" role="listitem">Construction process</div>
+      </div>
+    </div>
+
+    <div class="timeline__track-clip" id="timeline-track-clip">
+      <div class="timeline__track" id="timeline-track">
+
+        <!-- ── SVG straight path ── -->
+        <svg class="timeline__path" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 3600 420" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 0,264 H 3600"
+                stroke="#d0d0d0" stroke-width="1" fill="none" />
+        </svg>
+
+        <!-- ══ Events (card above path) ══ -->
+
+        <!-- E0 · Jan 2024 · phase 0 · HIGH · left=60 -->
+        <article class="timeline__event --high" data-phase="0" style="left:60px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/construction.jpg" alt="Client and project finding" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-01">Jan 2024</time>
+              <h3 class="timeline__title">Client + Project Finding</h3>
+              <p class="timeline__desc">First contact with the client family and identification of the project site in Irsee.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E1 · Feb 2024 · phase 0 · HIGH · left=260 -->
+        <article class="timeline__event --high" data-phase="0" style="left:420px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/site_model.jpg" alt="Collaboration begins at TUM" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-02">Feb 2024</time>
+              <h3 class="timeline__title">Start of Collaboration at TUM</h3>
+              <p class="timeline__desc">Project embedded as a Bachelor's thesis; academic framework established with faculty.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E2 · Apr 2024 · phase 1 · HIGH · left=460 -->
+        <article class="timeline__event --high" data-phase="1" style="left:780px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/mahogani_engraved.jpg" alt="Visiting GIMA, closing partnerships" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-04">Apr 2024</time>
+              <h3 class="timeline__title">Visiting GIMA / Closing Partnerships</h3>
+              <p class="timeline__desc">Industrial agreements secured; surplus timber forms the material basis for the Home Bricks system.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E3 · Jun 2024 · phase 1 · left=660 -->
+        <article class="timeline__event --high" data-phase="1" style="left:1140px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/design_principles_woodcut1.jpg" alt="Wood workshop visit" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-06">Jun 2024</time>
+              <h3 class="timeline__title">Wood Workshop Riedle &amp; Bader</h3>
+              <p class="timeline__desc">On-site evaluation of reclaimed timber informs module dimensions and joinery logic.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E4 · Jul 2024 · phase 2 · left=860 -->
+        <article class="timeline__event --high" data-phase="2" style="left:1500px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/design_principles_woodcut2.jpg" alt="Bachelor thesis submitted" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-07">Jul 2024</time>
+              <h3 class="timeline__title">Submission of Bachelor Thesis</h3>
+              <p class="timeline__desc">"Recycle Residence" submitted to TUM, consolidating design, material research, and structural system.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E5 · Sep 2024 · phase 2 · HIGH · left=1060 -->
+        <article class="timeline__event --high" data-phase="2" style="left:1860px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/design_principles_woodcut3.jpg" alt="ARTE filming begins" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-09">Sep 2024</time>
+              <h3 class="timeline__title">ARTE Filming Begins</h3>
+              <p class="timeline__desc">ARTE documents Supertecture, featuring the Recycle Residence as a circular construction case study.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E6 · Oct 2024 · phase 3 · HIGH · left=1260 -->
+        <article class="timeline__event --high" data-phase="3" style="left:2220px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/design_principles_woodcut.jpg" alt="Transformathon 1st place" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-10">Oct 2024</time>
+              <h3 class="timeline__title">Transformathon — 1st Place</h3>
+              <p class="timeline__desc">First place at the Transformathon, opening visibility and further funding conversations.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E7 · Dec 2024 · phase 3 · HIGH · left=2020 -->
+        <article class="timeline__event --high" data-phase="3" style="left:2580px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/construction.jpg" alt="Building permit submitted" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2024-12">Dec 2024</time>
+              <h3 class="timeline__title">Building Permit Submitted</h3>
+              <p class="timeline__desc">Approval drawings submitted with structural, fire, and energy compliance documentation.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E8 · Jan 2025 · phase 4 · left=1660 -->
+        <article class="timeline__event --high" data-phase="4" style="left:2940px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/site_model.jpg" alt="Lecture series launch" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2025-01">Jan 2025</time>
+              <h3 class="timeline__title">Lecture Series Launch</h3>
+              <p class="timeline__desc">Public lecture series on circular construction launched, building community and recruiting volunteer helpers.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+        <!-- E9 · Apr 2025 · phase 5 · left=1860 -->
+        <article class="timeline__event --high" data-phase="5" style="left:3300px">
+          <div class="timeline__card">
+            <figure class="timeline__img">
+              <img src="../assets/img/p3/mahogani_engraved.jpg" alt="Construction begins" loading="lazy" />
+            </figure>
+            <div class="timeline__body">
+              <time class="timeline__date" datetime="2025-04">Apr 2025</time>
+              <h3 class="timeline__title">Beginning of Construction</h3>
+              <p class="timeline__desc">Ground broken in Irsee. Volunteer teams begin assembling Home Bricks modules on site.</p>
+            </div>
+          </div>
+          <div class="timeline__stem"></div>
+          <div class="timeline__dot"></div>
+        </article>
+
+      </div><!-- /.timeline__track -->
+    </div><!-- /.timeline__track-clip -->
+
+  </div><!-- /.timeline__sticky -->
+  </section>
+
 
   <!-- ============================================= -->
   <!-- NAV: Previous / Next Project Links            -->
   <!-- ============================================= -->
   <nav class="project-nav" aria-label="Project navigation">
-    <a class="project-nav__link project-nav__link--prev" href="../pages/about.html" aria-label="About">
+    <a class="project-nav__link project-nav__link--prev" href="../pages/about.html" aria-label="Get to know me!">
       <span class="project-nav__arrow" aria-hidden="true">←</span>
       <img class="project-nav__thumb" src="../assets/img/home+about/profile.jpg" alt="" loading="lazy" decoding="async" />
       <span class="project-nav__text">
-        <span class="project-nav__label" data-i18n="prev_project">Previous</span>
+        <span class="project-nav__label">Previous</span>
         <span class="project-nav__title">Get to know me!</span>
       </span>
     </a>
     <a class="project-nav__link project-nav__link--next" href="project2.html" aria-label="Next project: IPAI Communication Center">
       <span class="project-nav__text">
-        <span class="project-nav__label" data-i18n="next_project">Next project</span>
+        <span class="project-nav__label">Next project</span>
         <span class="project-nav__title">IPAI Communication Center</span>
       </span>
-      <img class="project-nav__thumb" src="../assets/img/p2.jpg" alt="" loading="lazy" decoding="async" />
+      <img class="project-nav__thumb" src="../assets/img/home+about/p2.jpg" alt="" loading="lazy" decoding="async" />
       <span class="project-nav__arrow" aria-hidden="true">→</span>
     </a>
   </nav>
@@ -825,12 +2434,13 @@
     var sideLink  = document.getElementById("xh-sidebar-link");
     var bigtext   = document.getElementById("xh-bigtext");
     var bigtextBody = document.getElementById("xh-bigtext-body");
+
     var lblLeft   = document.getElementById("xh-lbl-left");
     var lblRight  = document.getElementById("xh-lbl-right");
     var headerEl  = document.querySelector(".top");
 
     /* ── Big text for progressive reveal ── */
-    var BIG_TEXT = "What if a school could grow with its community? A structure designed to evolve through time, material, and changing needs.";
+    var BIG_TEXT = "What if a house could be built from what is going to waste? The project develops a modular building system that transforms industrial timber offcuts into structural components.";
     var words = BIG_TEXT.split(" ");
     bigtextBody.innerHTML = words.map(function (w) {
       return '<span style="color:rgba(0,0,0,0.18)">' + w + " </span>";
@@ -839,8 +2449,8 @@
 
     /* ── Sidebar copy ── */
     var SIDEBAR_COPY = {
-      3: { text: "A secondary school designed for Djilakh, Senegal — responding to limited infrastructure, harsh climate conditions, and the need for long-term adaptability.", link: "View project details" },
-      4: { text: "The project combines local materials, passive strategies, and incremental construction to create a resilient learning environment.", link: "View project details" },
+      3: { text: "Circular pavilions arranged around shared courtyards, preserving six existing trees and creating shaded gathering spaces for 160 students.", link: "View project details" },
+      4: { text: "Compressed earth blocks, bamboo structure, and colorful translucent panels — built by local workers, designed for passive cooling.", link: "View project details" },
     };
 
     /* ── Measurements ── */
@@ -918,13 +2528,7 @@
       lblRight.style.textShadow = lblShadow;
 
       if (headerEl) {
-        var splitWrapEl = document.querySelector(".split-wrap");
-        var onSplitOrange = false;
-        if (splitWrapEl) {
-          var swRect = splitWrapEl.getBoundingClientRect();
-          onSplitOrange = swRect.top < 60 && swRect.bottom > 0;
-        }
-        if (bgT < 0.5 || onSplitOrange) headerEl.classList.add("--inverted");
+        if (bgT < 0.5) headerEl.classList.add("--inverted");
         else headerEl.classList.remove("--inverted");
       }
 
@@ -1003,12 +2607,7 @@
 
       lblRight.style.opacity = progress < 0.78 ? 1 : 1 - eo(sub(progress, 0.78, 0.85));
 
-      if (progress > 0.75) {
-        var t = eo(sub(progress, 0.75, 0.85));
-        lblLeft.style.bottom = lerp(36, VH * 0.5, t) + "px";
-      } else {
-        lblLeft.style.bottom = "36px";
-      }
+
     }
 
     function onScroll() {
@@ -1018,26 +2617,10 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     tick();
 
-    /* Listen for language changes */
-    window.addEventListener("langchange", function (e) {
-      var d = e.detail.dict;
-      var fb = I18N.en;
-      var BIG = d.p1_bigtext || fb.p1_bigtext;
-      words = BIG.split(" ");
-      bigtextBody.innerHTML = words.map(function (w) {
-        return '<span style="color:rgba(0,0,0,0.18)">' + w + " </span>";
-      }).join("");
-      wordSpans = bigtextBody.querySelectorAll("span");
-
-      SIDEBAR_COPY[3] = { text: d.p1_sidebar_3 || fb.p1_sidebar_3, link: d.view_details || fb.view_details };
-      SIDEBAR_COPY[4] = { text: d.p1_sidebar_4 || fb.p1_sidebar_4, link: d.view_details || fb.view_details };
-      tick();
-    });
-
   })();
   </script>
 
-  <!-- Showcase: scroll-driven image/text swap -->
+  <!-- Showcase: scroll-driven image swap -->
   <script>
   (function () {
     var showcase = document.getElementById("showcase");
@@ -1077,7 +2660,9 @@
     for (var i = 0; i < count; i++) {
       (function (i) {
         document.getElementById("sc-img-" + i).style.cursor = "pointer";
-        document.getElementById("sc-img-" + i).addEventListener("click", function () { goTo(i); });
+        document.getElementById("sc-img-" + i).addEventListener("click", function () {
+          goTo(i);
+        });
       })(i);
     }
 
@@ -1137,36 +2722,252 @@
   })();
   </script>
 
-  <!-- Header white when over orange split-wrap (covers scroll outside hero range) -->
+  <!-- ═══════════════════════════════════════════════════════════
+       TIMELINE SCRIPT — vertical scroll → horizontal pan
+       How it works:
+         The .timeline section is given a tall height by JS so
+         that normal page scrolling provides distance. While the
+         section is in view, .timeline__sticky pins to the top
+         (position: sticky; height: 100vh). Each scroll tick maps
+         the section's scroll progress to a translateX on the track.
+
+       Responsibilities:
+         1. Measure track overflow and set section height.
+         2. On scroll: pan track, reveal cards, update phase bar.
+         3. Mobile (≤600px): skip JS pan, use native overflow-x scroll.
+       ═══════════════════════════════════════════════════════════ -->
   <script>
   (function () {
-    var header    = document.querySelector(".top");
-    var splitWrap = document.querySelector(".split-wrap");
-    if (!header || !splitWrap) return;
+    "use strict";
 
-    function check() {
-      var r = splitWrap.getBoundingClientRect();
-      if (r.top < 60 && r.bottom > 0) {
-        header.classList.add("--inverted");
-      } else {
-        // Only remove if the hero isn't already driving --inverted
-        // (hero handler adds it when bgT < 0.5; if we're past the hero it won't)
-        var heroSection = document.querySelector(".xh");
-        if (heroSection) {
-          var hr = heroSection.getBoundingClientRect();
-          if (hr.bottom > 60) return; // hero still visible, let it control the class
+    var section  = document.getElementById("timeline");
+    var sticky   = document.getElementById("timeline-sticky");
+    var clip     = document.getElementById("timeline-track-clip");
+    var track    = document.getElementById("timeline-track");
+    if (!section || !sticky || !clip || !track) return;
+
+    var events   = track.querySelectorAll(".timeline__event");
+    var phaseEls = document.querySelectorAll("#timeline-phases .timeline__phase");
+    if (!events.length) return;
+
+    var activePhase = -1;
+
+    /* ── Shared phase setter ── */
+    function setPhase(phase) {
+      if (phase === activePhase) return;
+      activePhase = phase;
+      phaseEls.forEach(function (el) {
+        el.classList.toggle("--active", parseInt(el.getAttribute("data-phase"), 10) === phase);
+      });
+    }
+
+    /* ─────────────────────────────────────────────
+       Scroll-driven horizontal pan (all screen sizes)
+    ───────────────────────────────────────────── */
+    var trackOverflow = 0;
+    var containerW    = 0;
+    var rafId         = null;
+
+    /* Measure how much the track overflows its container.
+       Use offsetWidth (not scrollWidth) since the track has a fixed min-width
+       and is clipped by its parent — scrollWidth would read the clip width. */
+    function measure() {
+      containerW    = sticky.clientWidth;
+      trackOverflow = Math.max(0, track.offsetWidth - containerW);
+      section.style.height = (Math.round(trackOverflow * 0.7) + window.innerHeight) + "px";
+    }
+
+    measure();
+
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { measure(); if (!rafId) rafId = requestAnimationFrame(tick); }, 120);
+    });
+
+    function tick() {
+      rafId = null;
+      var rect       = section.getBoundingClientRect();
+      var scrollable = section.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+
+      /* progress: 0 at section top, 1 when section bottom reaches bottom of viewport */
+      var progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+      var tx       = -progress * trackOverflow;
+
+      /* Pan */
+      track.style.transform = "translateX(" + tx + "px)";
+
+      /* Reveal cards that have panned into the visible area */
+      events.forEach(function (el) {
+        /* card's visual left = its static offsetLeft + current translate */
+        if (el.offsetLeft + tx < containerW + 60) {
+          el.classList.add("--visible");
         }
-        header.classList.remove("--inverted");
-      }
+      });
+
+      /* Phase advances consecutively with scroll progress (6 equal segments) */
+      setPhase(Math.min(5, Math.floor(progress * 6)));
     }
 
     window.addEventListener("scroll", function () {
-      requestAnimationFrame(check);
+      if (!rafId) rafId = requestAnimationFrame(tick);
     }, { passive: true });
-    check();
+
+    tick(); /* initial render */
+
   })();
   </script>
 
+  <!-- ── Timeline card expander ── -->
+  <div class="tl-overlay" id="tlOverlay"></div>
+  <div class="tl-expanded" id="tlExpanded">
+    <button class="tl-expanded__close" id="tlExpandedClose" aria-label="Close">&#x2715;</button>
+    <figure class="tl-expanded__img">
+      <img id="tlExpandedImg" src="" alt="" />
+    </figure>
+    <div class="tl-expanded__body">
+      <time class="tl-expanded__date" id="tlExpandedDate"></time>
+      <h3 class="tl-expanded__title" id="tlExpandedTitle"></h3>
+      <p class="tl-expanded__desc" id="tlExpandedDesc"></p>
+    </div>
+  </div>
+
+  <style>
+    .tl-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 499;
+      background: rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+    .tl-overlay.is-active { opacity: 1; pointer-events: auto; }
+
+    .tl-expanded {
+      position: fixed;
+      z-index: 500;
+      background: #fff;
+      border: 1px solid #e4e4e4;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.16);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .tl-expanded.is-active { opacity: 1; pointer-events: auto; }
+
+    .tl-expanded__close {
+      position: absolute;
+      top: 10px; right: 10px;
+      z-index: 2;
+      background: rgba(0,0,0,0.28);
+      border: none;
+      border-radius: 50%;
+      width: 26px; height: 26px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 0.7rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.18s ease 0.2s, background 0.15s ease;
+    }
+    .tl-expanded.is-active .tl-expanded__close { opacity: 1; }
+    .tl-expanded__close:hover { background: rgba(0,0,0,0.55); }
+
+    .tl-expanded__img {
+      margin: 0;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+    .tl-expanded__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tl-expanded__body { padding: 18px 20px 22px; }
+    .tl-expanded__date {
+      display: block;
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #aaa; margin-bottom: 5px;
+    }
+    .tl-expanded__title {
+      font-size: 1.05rem; font-weight: 700;
+      line-height: 1.25; color: #111; margin: 0 0 10px;
+    }
+    .tl-expanded__desc { font-size: 0.85rem; line-height: 1.65; color: #555; margin: 0; }
+  </style>
+
+  <script>
+  (function () {
+    var overlay  = document.getElementById("tlOverlay");
+    var exp      = document.getElementById("tlExpanded");
+    var expClose = document.getElementById("tlExpandedClose");
+    var expImg   = document.getElementById("tlExpandedImg");
+    var expDate  = document.getElementById("tlExpandedDate");
+    var expTitle = document.getElementById("tlExpandedTitle");
+    var expDesc  = document.getElementById("tlExpandedDesc");
+    if (!exp) return;
+
+    /* Inject "Read more" into every compact card */
+    document.querySelectorAll(".timeline__card").forEach(function (card) {
+      var body = card.querySelector(".timeline__body");
+      if (body) {
+        var rm = document.createElement("span");
+        rm.className = "timeline__read-more";
+        rm.textContent = "Read more";
+        body.appendChild(rm);
+      }
+
+      card.addEventListener("click", function () {
+        var rect  = card.getBoundingClientRect();
+        var img   = card.querySelector(".timeline__img img");
+        var date  = card.querySelector(".timeline__date");
+        var title = card.querySelector(".timeline__title");
+        var desc  = card.querySelector(".timeline__desc");
+
+        expImg.src           = img   ? img.src          : "";
+        expImg.alt           = img   ? img.alt          : "";
+        expDate.textContent  = date  ? date.textContent  : "";
+        expTitle.textContent = title ? title.textContent : "";
+        expDesc.textContent  = desc  ? desc.textContent  : "";
+
+        var targetW = Math.min(420, window.innerWidth * 0.88);
+        var targetL = (window.innerWidth  - targetW) / 2;
+        var targetT = Math.max(40, (window.innerHeight - 440) / 2);
+
+        /* Snap to card position first — no animation */
+        exp.style.transition   = "none";
+        exp.style.left         = rect.left  + "px";
+        exp.style.top          = rect.top   + "px";
+        exp.style.width        = rect.width + "px";
+        exp.style.borderRadius = "10px";
+        exp.classList.add("is-active");
+        overlay.classList.add("is-active");
+
+        /* Force reflow then animate to expanded size/position */
+        void exp.offsetHeight;
+        exp.style.transition   = "left 0.32s cubic-bezier(0.22,1,0.36,1), top 0.32s cubic-bezier(0.22,1,0.36,1), width 0.32s cubic-bezier(0.22,1,0.36,1), border-radius 0.32s ease";
+        exp.style.left         = targetL + "px";
+        exp.style.top          = targetT + "px";
+        exp.style.width        = targetW + "px";
+        exp.style.borderRadius = "16px";
+      });
+    });
+
+    function close() {
+      exp.classList.remove("is-active");
+      overlay.classList.remove("is-active");
+    }
+
+    expClose.addEventListener("click", close);
+    overlay.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+    });
+  })();
+  </script>
+
+  <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/main.js"></script>
 </body>
 </html>
