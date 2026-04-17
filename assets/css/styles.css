@@ -409,85 +409,6 @@ body {
 
 
 /* =============================================================
-   5. COMPONENTS – PROJECT CARDS
-   Each card: big number → thumbnail → meta caption.
-   Thumbnail starts B/W and turns colour on hover.
-   ============================================================= */
-
-.card {
-  text-decoration: none;
-  color: inherit;
-  display: grid;
-  grid-template-rows: auto auto auto;
-  justify-items: center;
-  gap: 10px;
-}
-
-.card:focus-visible {
-  outline: 2px solid var(--color-blue);
-  outline-offset: 4px;
-  border-radius: 6px;
-}
-
-/* Large blue project number */
-.num {
-  font-weight: 900;
-  color: var(--color-blue);
-  font-size: clamp(54px, 6vw, 96px);
-  line-height: 0.9;
-}
-
-/* Grey placeholder square for thumbnails */
-.thumb {
-  width: 190px;
-  aspect-ratio: 1 / 1;
-  background: var(--color-grey-thumb);
-  overflow: hidden;
-  position: relative;
-}
-
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* B/W → colour transition on hover */
-  filter: grayscale(1);
-  transition: filter 220ms ease;
-}
-
-.card:hover .thumb img,
-.card:focus-visible .thumb img {
-  filter: grayscale(0);
-}
-
-/* Caption below thumbnail (hidden by default; appears on hover) */
-.meta {
-  text-align: center;
-  max-width: 190px;
-  opacity: 0;
-  transition: opacity 180ms ease;
-}
-
-.card:hover .meta,
-.card:focus-visible .meta {
-  opacity: 0.9;
-}
-
-.title {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.subtitle {
-  margin: 4px 0 0;
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-
-/* =============================================================
    6. COMPONENTS – PROJECT-PAGE SECTIONS (hero, content)
    Full-width hero image with text overlay, then a content
    section on a light-grey background.
@@ -571,24 +492,6 @@ body {
   );
   z-index: 1;
 }
-
-/* Bouncing scroll-down indicator */
-.scroll-arrow {
-  position: absolute;
-  top: 72.5vh;
-  left: 50%;
-  z-index: 2;
-  animation: float 1s ease-in-out infinite alternate both;
-}
-
-.scroll-arrow svg {
-  transform: rotate(90deg);
-  stroke: var(--color-dark);
-  width: 2rem;
-  margin-left: -1rem;
-  height: auto;
-}
-
 
 /* =============================================================
    8. COMPONENTS – PREV / NEXT PROJECT NAVIGATION
@@ -843,7 +746,6 @@ body {
      .block__wrapper   the pinned 100vh stage
      .content          centred title/description/buttons
      .gallery          12-image grid moved by GSAP
-     .block--outro     small contact CTA at the end
    These styles used to live inline in index.html — moved
    here so HTML/CSS/JS stay properly separated.
    ============================================================= */
@@ -1073,6 +975,12 @@ body.home .gallery__overlay {
   z-index: 2;
 }
 body.home .gallery__link:hover .gallery__overlay { opacity: 1; }
+
+/* Touch devices: always show darkened image + title overlay */
+@media (hover: none) {
+  body.home .gallery__link .gallery__image  { filter: grayscale(100%) brightness(0.55); }
+  body.home .gallery__link .gallery__overlay { opacity: 1; }
+}
 body.home .gallery__title {
   color: #fff;
   font-size: clamp(10rem, 1.2vw, 16rem);
@@ -1081,34 +989,6 @@ body.home .gallery__title {
   line-height: 1.3;
   text-transform: uppercase;
 }
-
-/* ── OUTRO BLOCK ── */
-body.home .block--outro {
-  height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-white, #fff);
-}
-body.home .block--outro__inner { text-align: center; }
-body.home .block--outro__inner p {
-  font-size: 14rem;
-  color: #999;
-  margin-bottom: 20rem;
-  letter-spacing: 0.04em;
-}
-body.home .block--outro__inner a {
-  font-size: 13rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #111;
-  text-decoration: none;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 4rem;
-  transition: border-color 0.25s ease;
-}
-body.home .block--outro__inner a:hover { border-color: #111; }
 
 body.home .site-footer { height: 0; }
 
@@ -1201,9 +1081,6 @@ body.home .site-footer { height: 0; }
   .projects {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .thumb { width: 220px; }
-  .meta  { max-width: 220px; }
 
   .top {
     padding-left: 24px;
@@ -1357,13 +1234,16 @@ body.home .site-footer { height: 0; }
   }
 }
 
+@media (max-width: 768px) {
+  .section__content {
+    padding: 60px 24px;
+  }
+}
+
 @media (max-width: 520px) {
   .projects {
     grid-template-columns: 1fr;
   }
-
-  .thumb { width: min(320px, 86vw); }
-  .meta  { max-width: min(320px, 86vw); }
 
   .section__content {
     padding: 48px 20px;

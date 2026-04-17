@@ -277,6 +277,10 @@
     .slideshow__arrow svg { width: 16px; height: 16px; stroke: #111; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .slideshow__container:hover .slideshow__arrow { opacity: 1; }
     .slideshow__arrow:hover { background: rgba(255,255,255,0.95); }
+    /* Touch: arrows always visible */
+    @media (hover: none) {
+      .slideshow__arrow { opacity: 1; }
+    }
 
     /* ── Day / Night split image ── */
     .day-night-row {
@@ -295,6 +299,7 @@
       border-radius: 16px;
       overflow: hidden;
       cursor: none;
+      touch-action: none; /* allow JS to handle touch drag */
     }
     .day-night__day {
       display: block;
@@ -962,6 +967,14 @@
         const rect = wrap.getBoundingClientRect();
         update(((e.clientX - rect.left) / rect.width) * 100);
       });
+
+      /* Touch support: drag finger to compare */
+      wrap.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+        const rect  = wrap.getBoundingClientRect();
+        const touch = e.touches[0];
+        update(((touch.clientX - rect.left) / rect.width) * 100);
+      }, { passive: false });
     });
   </script>
 

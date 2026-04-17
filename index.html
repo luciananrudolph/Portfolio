@@ -34,6 +34,11 @@
     .block--intro:hover .block--intro__arrow { opacity: 0.45; }
     .block--intro__arrow:hover { opacity: 1 !important; }
 
+    /* Touch: arrows always visible (no hover available) */
+    @media (hover: none) {
+      .block--intro__arrow { opacity: 0.6; }
+    }
+
   </style>
 </head>
 
@@ -196,7 +201,7 @@
           </li>
           <li class="gallery__item">
             <a class="gallery__link" href="projects/project2.html">
-              <img class="gallery__image" src="assets/img/p2/terrace.png" alt="IPAI terrace" />
+              <img class="gallery__image" src="assets/img/p2/plaza_exterior_render_day.jpeg" alt="IPAI plaza exterior" />
               <span class="gallery__overlay"><span class="gallery__title">IPAI Communication Center</span></span>
             </a>
           </li>
