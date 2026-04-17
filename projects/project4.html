@@ -110,10 +110,11 @@
       margin-bottom: 14px;
       color: #111;
     }
-    .xh__sidebar a {
+    .xh__sidebar span#xh-sidebar-link {
       font-size: 0.85rem;
       color: #111;
-      text-decoration: underline;
+      cursor: default;
+      user-select: none;
       text-underline-offset: 3px;
     }
 
@@ -145,11 +146,9 @@
       border-radius: 100px;
       font-size: 0.85rem;
       font-weight: 500;
-      text-decoration: none;
       letter-spacing: 0.01em;
-    }
-    .xh__bigtext__cta:hover {
-      background: #333;
+      cursor: default;
+      user-select: none;
     }
 
     /* ── Project info section (below scroll narrative) ── */
@@ -313,7 +312,7 @@
   <!-- ============================================= -->
   <header class="top --inverted">
     <a class="top__logo" href="../index.html" aria-label="Home">
-      <img src="../assets/img/logo-blue.png" alt="LAR logo" />
+      <img src="../assets/img/home+about/logo-blue.png" alt="LAR logo" />
     </a>
 
     <a class="name" href="../index.html" aria-label="Home">LUCIANA NOEMI RUDOLPH</a>
@@ -376,13 +375,13 @@
       <!-- Sidebar text (states 3 & 4) -->
       <div class="xh__sidebar" id="xh-sidebar">
         <p id="xh-sidebar-text"></p>
-        <a href="#project-details" id="xh-sidebar-link">View project details</a>
+        <span id="xh-sidebar-link">Scroll to explore</span>
       </div>
 
       <!-- Big text block (state 5) -->
       <div class="xh__bigtext" id="xh-bigtext">
         <div class="xh__bigtext__body" id="xh-bigtext-body"></div>
-        <a class="xh__bigtext__cta" href="#project-details">Explore the project</a>
+        <span class="xh__bigtext__cta">Scroll to explore the project</span>
       </div>
 
       <!-- Corner labels -->
@@ -531,8 +530,8 @@
 
     /* ── Sidebar copy ── */
     var SIDEBAR_COPY = {
-      3: { text: "A cylindrical communication center at the heart of a 30-hectare AI campus — the public face of the Innovation Park Artificial Intelligence in Heilbronn.", link: "View project details" },
-      4: { text: "Reflective facades, elevated terraces with integrated planting, and a 1.2-kilometre active ring — designed for wellbeing in a tech-driven environment.", link: "View project details" },
+      3: { text: "A cylindrical communication center at the heart of a 30-hectare AI campus — the public face of the Innovation Park Artificial Intelligence in Heilbronn.", link: "Scroll to explore" },
+      4: { text: "Reflective facades, elevated terraces with integrated planting, and a 1.2-kilometre active ring — designed for wellbeing in a tech-driven environment.", link: "Scroll to explore" },
     };
 
     /* ── Measurements ── */

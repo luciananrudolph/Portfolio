@@ -111,10 +111,11 @@
       margin-bottom: 14px;
       color: #111;
     }
-    .xh__sidebar a {
+    .xh__sidebar span#xh-sidebar-link {
       font-size: 0.85rem;
       color: #111;
-      text-decoration: underline;
+      cursor: default;
+      user-select: none;
       text-underline-offset: 3px;
     }
 
@@ -153,11 +154,9 @@
       border-radius: 100px;
       font-size: 0.85rem;
       font-weight: 500;
-      text-decoration: none;
       letter-spacing: 0.01em;
-    }
-    .xh__bigtext__cta:hover {
-      background: #333;
+      cursor: default;
+      user-select: none;
     }
 
     /* ── Sticky-Split Scroll Sections ── */
@@ -830,7 +829,7 @@
   <!-- ============================================= -->
   <header class="top --inverted">
     <a class="top__logo" href="../index.html" aria-label="Home">
-      <img src="../assets/img/logo-blue.png" alt="LAR logo" />
+      <img src="../assets/img/home+about/logo-blue.png" alt="LAR logo" />
     </a>
 
     <a class="name" href="../index.html" aria-label="Home">LUCIANA NOEMI RUDOLPH</a>
@@ -888,14 +887,14 @@
       <!-- Sidebar text -->
       <div class="xh__sidebar" id="xh-sidebar">
         <p id="xh-sidebar-text"></p>
-        <a href="#project-details" id="xh-sidebar-link">View project details</a>
+        <span id="xh-sidebar-link">Scroll to explore</span>
       </div>
 
       <!-- Big text block (state 5) -->
       <div class="xh__bigtext" id="xh-bigtext">
         <span class="xh__bigtext__label">The Recycle Residence</span>
         <div class="xh__bigtext__body" id="xh-bigtext-body"></div>
-        <a class="xh__bigtext__cta" href="#project-details">Explore the project</a>
+        <span class="xh__bigtext__cta">Scroll to explore the project</span>
       </div>
 
       <!-- Corner labels -->
@@ -927,15 +926,15 @@
       <!-- Text panels -->
       <div class="showcase__text --visible" id="sc-text-0">
         <p>Resources are used intentionally and sparingly, while the floor plan remains clear and well-organized. This deliberate reduction follows the principle of "Less is more." The intentional simplicity of the forms shifts the focus to the materials themselves, emphasizing their inherent value and aesthetic qualities.</p>
-        <a href="#project-details">View project details</a>
+        <span style="font-size:0.85rem;color:#111;cursor:default;user-select:none;">Scroll to explore</span>
       </div>
       <div class="showcase__text" id="sc-text-1">
         <p>The design emphasizes clean, simplified forms while avoiding unnecessary complexity in construction. This approach reduces material and labor requirements, enabling the participation of volunteer helpers. "Building Simply" represents a resource-efficient architecture that stands out for its accessibility and clarity.</p>
-        <a href="#project-details">View project details</a>
+        <span style="font-size:0.85rem;color:#111;cursor:default;user-select:none;">Scroll to explore</span>
       </div>
       <div class="showcase__text" id="sc-text-2">
         <p>Material choices in the design are closely tied to their availability within the circular economy. The design adapts flexibly to the properties of the materials, thoughtfully integrating the unique characteristics of reused elements into both the design and the construction process.</p>
-        <a href="#project-details">View project details</a>
+        <span style="font-size:0.85rem;color:#111;cursor:default;user-select:none;">Scroll to explore</span>
       </div>
 
       <!-- Scroll dots -->
@@ -2449,8 +2448,8 @@
 
     /* ── Sidebar copy ── */
     var SIDEBAR_COPY = {
-      3: { text: "Circular pavilions arranged around shared courtyards, preserving six existing trees and creating shaded gathering spaces for 160 students.", link: "View project details" },
-      4: { text: "Compressed earth blocks, bamboo structure, and colorful translucent panels — built by local workers, designed for passive cooling.", link: "View project details" },
+      3: { text: "Circular pavilions arranged around shared courtyards, preserving six existing trees and creating shaded gathering spaces for 160 students.", link: "Scroll to explore" },
+      4: { text: "Compressed earth blocks, bamboo structure, and colorful translucent panels — built by local workers, designed for passive cooling.", link: "Scroll to explore" },
     };
 
     /* ── Measurements ── */
