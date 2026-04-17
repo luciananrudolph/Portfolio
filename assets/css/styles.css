@@ -1047,9 +1047,14 @@ body.home .site-footer { height: 0; }
     row-gap: 10px;
   }
   body.home .gallery__item { border-radius: 6px; }
+  body.home .gallery__item:nth-child(n+5) { display: none; }
   body.home .gallery__link {
     -webkit-tap-highlight-color: rgba(0,0,0,0.05);
   }
+  /* Always show title overlays on touch screens */
+  body.home .gallery__overlay { opacity: 1; }
+  /* Hide the "Scroll ↓" indicator — it overlaps the subtitle */
+  body.home .block--intro__scroll { display: none; }
 }
 
 @media (max-width: 380px) {

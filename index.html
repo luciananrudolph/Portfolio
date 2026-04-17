@@ -534,7 +534,7 @@
     var scrollFill = document.getElementById("scroll-fill");
     var scrollBtn  = document.getElementById("scroll-btn");
 
-    if (scrollFill && scrollBtn) {
+    if (scrollFill && scrollBtn && window.innerWidth > 768) {
       var navTimer = null;
       var hasNavigated = false;
 
