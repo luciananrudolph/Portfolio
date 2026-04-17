@@ -9,7 +9,7 @@
   <style>
     /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: auto; }
+    html { scroll-behavior: auto; overflow-x: hidden; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         Helvetica, Arial, sans-serif;
@@ -283,19 +283,56 @@
     }
 
     @media (max-width: 768px) {
+      /* Split: sticky one-at-a-time, image on top + text below */
+      .split-wrap { padding: 0; }
       .split {
-        height: auto;
+        height: 700vh;
+        padding: 0;
+        max-width: none;
       }
       .split__stage {
-        position: relative;
-        height: auto;
-        grid-template-columns: 1fr;
-        gap: 32px;
-        padding: 60px 0;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: unset;
+        gap: 0;
+        align-items: stretch;
+        padding: 0;
       }
       .split__images {
-        aspect-ratio: 4 / 3;
+        width: 100%;
+        height: 55vh;
+        flex-shrink: 0;
+        aspect-ratio: unset;
+        position: relative;
       }
+      .split__img { border-radius: 0; }
+      .split__nav {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 24px 28px;
+        overflow: hidden;
+      }
+      .split__item {
+        display: none;
+        border-left: none;
+        padding-left: 0;
+        opacity: 1;
+        cursor: default !important;
+      }
+      .split__item.--active { display: block; border-left: none; }
+      .split__item.--active .split__desc,
+      .split__item.--active .split__subtitle {
+        max-height: none;
+        opacity: 1;
+        margin-top: 8px;
+      }
+      .split__number { color: rgba(255,255,255,0.6); }
+      .split__title  { font-size: 1.15rem; }
     }
 
     /* ── Showcase: full-screen image + sidebar text (like the scroll narrative) ── */
@@ -385,30 +422,49 @@
     }
 
     @media (max-width: 768px) {
-      .showcase {
-        height: auto;
-      }
+      /* Showcase: sticky one-at-a-time, image top + text below */
+      .showcase { height: 200vh; }
       .showcase__stage {
-        position: relative;
-        height: auto;
-        min-height: 100vh;
-        padding: 80px 20px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+        padding: 0;
       }
       .showcase__img {
-        position: relative;
-        opacity: 1;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 4/3;
-        margin-bottom: 24px;
+        position: absolute;
+        left: 50% !important;
+        top: 12vh;
+        width: 80% !important;
+        height: 48vh;
+        transform: translateX(-50%);
+        border-radius: 12px;
+        aspect-ratio: unset;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+      .showcase__img.--visible { opacity: 1; }
+      .showcase__img img {
+        width: 100%; height: 100%;
+        object-fit: cover; display: block; border-radius: 12px;
       }
       .showcase__text {
-        position: relative;
-        right: auto;
-        top: auto;
+        position: absolute;
+        top: 63vh;
+        left: 0; right: 0;
+        max-width: none;
+        padding: 20px 24px 0;
         transform: none;
-        max-width: 100%;
-        opacity: 1;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+      .showcase__text.--visible { opacity: 1; }
+      .showcase__text p { font-size: 0.9rem; color: #444; }
+      .showcase__dots {
+        top: auto; right: auto;
+        bottom: 20px; left: 50%;
+        transform: translateX(-50%);
+        flex-direction: row;
       }
     }
 
@@ -543,6 +599,26 @@
       .xh__stage { position: relative; }
       .xh__img { opacity: 1 !important; transform: none !important; }
       .xh__sidebar, .xh__bigtext { opacity: 1 !important; }
+    }
+
+    /* ── Read-more ── */
+    .desc-readmore { display: none; }
+    @media (max-width: 768px) {
+      .desc-more { display: none; }
+      .desc-more.is-open { display: block; }
+      .desc-readmore {
+        display: inline-block;
+        background: none;
+        border: 1.5px solid #111;
+        border-radius: 20px;
+        padding: 8px 22px;
+        font-size: 0.85rem;
+        font-family: inherit;
+        cursor: pointer;
+        margin-top: 4px;
+        letter-spacing: 0.04em;
+      }
+      .desc-readmore.is-hidden { display: none; }
     }
   </style>
 </head>
@@ -757,6 +833,7 @@
           <p data-i18n="p1_concept_1">
             The design is structured around six existing trees, which define the centre of the site. A first courtyard is formed around them, using their shade as a climatic anchor and a central space for learning and gathering. Classrooms are arranged radially around this courtyard, establishing a clear organisation and direct connections between spaces.
           </p>
+          <div class="desc-more" id="descMore">
           <p data-i18n="p1_concept_2">
             A second courtyard complements this system. In contrast to the enclosed character of the first, it remains more open and supports play, gathering, and outdoor learning. A shared community space connects both courtyards and acts as a central interface between education and social activity.
           </p>
@@ -769,6 +846,8 @@
           <p data-i18n="p1_concept_5">
             Rather than relying on complex systems, the project proposes a building method that can be constructed, adapted, and maintained locally, ensuring long-term usability and resilience.
           </p>
+          </div>
+          <button class="desc-readmore" id="descReadMore">Read more</button>
         </div>
       </div>
     </section>
@@ -1164,6 +1243,18 @@
   })();
   </script>
 
+  <script>
+    (function () {
+      var btn  = document.getElementById("descReadMore");
+      var more = document.getElementById("descMore");
+      if (btn && more) {
+        btn.addEventListener("click", function () {
+          more.classList.add("is-open");
+          btn.classList.add("is-hidden");
+        });
+      }
+    })();
+  </script>
   <script src="../assets/js/main.js"></script>
 </body>
 </html>

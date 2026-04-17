@@ -8,7 +8,7 @@
   <style>
     /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: auto; }
+    html { scroll-behavior: auto; overflow-x: hidden; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         Helvetica, Arial, sans-serif;
@@ -322,8 +322,61 @@
     }
     .p4-split__img.--visible { opacity: 1; }
     @media (max-width: 768px) {
-      .p4-split { height: auto; }
-      .p4-split__stage { position: relative; height: auto; grid-template-columns: 1fr; gap: 32px; padding: 60px 0; }
+      /* p4-split: sticky one-at-a-time, image on top + text below */
+      .p4-split-wrap { padding: 0; }
+      .p4-split {
+        height: 400vh;
+        padding: 0;
+        max-width: none;
+      }
+      .p4-split__stage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: unset;
+        gap: 0;
+        align-items: stretch;
+        padding: 0;
+      }
+      .p4-split__images {
+        width: 100%;
+        height: 55vh;
+        flex-shrink: 0;
+        aspect-ratio: unset;
+        position: relative;
+      }
+      .p4-split__img { border-radius: 0; }
+      .p4-split__img img { object-fit: contain; padding: 16px; }
+      .p4-split__nav {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 24px 28px;
+        overflow: hidden;
+      }
+      .p4-split__item {
+        display: none;
+        border-left: none;
+        padding-left: 0;
+        opacity: 1;
+        cursor: default !important;
+      }
+      .p4-split__item.--active { display: block; border-left: none; }
+      .p4-split__item.--active .p4-split__desc,
+      .p4-split__item.--active .p4-split__subtitle {
+        max-height: none;
+        opacity: 1;
+        margin-top: 8px;
+      }
+      .p4-split__number { color: rgba(255,255,255,0.6); }
+      .p4-split__title  { font-size: 1.15rem; }
+
+      /* Slideshow: always-visible arrows + contained padding */
+      .p4-slideshow { padding: 0 16px 60px; }
+      .p4-slideshow__arrow { opacity: 1; }
     }
 
     /* ── Model slideshow ── */
@@ -461,6 +514,26 @@
       .xh__img { opacity: 1 !important; transform: none !important; }
       .xh__sidebar, .xh__bigtext { opacity: 1 !important; }
     }
+
+    /* ── Read-more ── */
+    .desc-readmore { display: none; }
+    @media (max-width: 768px) {
+      .desc-more { display: none; }
+      .desc-more.is-open { display: block; }
+      .desc-readmore {
+        display: inline-block;
+        background: none;
+        border: 1.5px solid #111;
+        border-radius: 20px;
+        padding: 8px 22px;
+        font-size: 0.85rem;
+        font-family: inherit;
+        cursor: pointer;
+        margin-top: 4px;
+        letter-spacing: 0.04em;
+      }
+      .desc-readmore.is-hidden { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -587,6 +660,7 @@
           <p>
             The project investigates how existing residential buildings can be adapted to contemporary living conditions through minimal architectural intervention. Focusing on a typical post-war housing structure in Munich, it addresses the widespread challenge of aging building stock that is often considered for demolition rather than transformation.
           </p>
+          <div class="desc-more" id="descMore">
           <p>
             Instead of replacing the existing structure, the design proposes a strategy of selective modification. By working within the given structural framework, the project explores how spatial quality can be improved while preserving the material and structural logic of the building.
           </p>
@@ -602,6 +676,8 @@
           <p>
             Rather than imposing a new architectural identity, the project demonstrates how minimal interventions can unlock the latent potential of existing buildings — offering an alternative to demolition through transformation.
           </p>
+          </div>
+          <button class="desc-readmore" id="descReadMore">Read more</button>
         </div>
       </div>
     </section>
@@ -1028,6 +1104,18 @@
   })();
   </script>
 
+  <script>
+    (function () {
+      var btn  = document.getElementById("descReadMore");
+      var more = document.getElementById("descMore");
+      if (btn && more) {
+        btn.addEventListener("click", function () {
+          more.classList.add("is-open");
+          btn.classList.add("is-hidden");
+        });
+      }
+    })();
+  </script>
   <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/main.js"></script>
 </body>

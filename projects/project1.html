@@ -690,7 +690,6 @@
     /* ── A. Scroll canvas ── */
     .timeline {
       position: relative;
-      min-height: 100vh;
       background: #f4f1e6;
     }
 
@@ -907,6 +906,77 @@
       .timeline__event { opacity: 1 !important; transition: none !important; }
       .timeline__img img { transition: none !important; }
     }
+  </style>
+
+  <style>
+  /* ═══════════════════════════════════════════════════════
+     MOBILE FIXES — layout, overflow, matcol, timeline
+     All in one block to avoid cascade conflicts.
+  ═══════════════════════════════════════════════════════ */
+
+  /* ── Global: no horizontal scroll ── */
+  html { overflow-x: hidden; }
+
+  @media (max-width: 768px) {
+
+    /* ── Axo section: contain within viewport ── */
+    .diagrams-row {
+      width: 100%;
+      padding: 0 16px 3rem;
+      box-sizing: border-box;
+    }
+    .axo-section { overflow: hidden; }
+    .axo-outer   { width: 100%; overflow: hidden; }
+    .axo-wrap    { width: 100%; }
+    .axo-img     { width: 100%; height: auto; max-height: none; }
+
+    /* ── Material collage: image on top, all 5 categories in a row ── */
+    .matcol-section { padding: 3rem 16px 2rem; }
+    .matcol-outer {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .matcol-left { flex: none; width: 100%; display: block; }
+    .matcol-img  {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 55vh;
+      object-fit: contain;
+      object-position: center top;
+    }
+    .matcol-right { flex: none; width: 100%; }
+    .matcol-legend {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 4px;
+      justify-content: space-between;
+    }
+    .matcol-cat {
+      flex: 1 0 0;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 8px 2px;
+    }
+    .matcol-cat__num {
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .matcol-cat__body { align-items: center; }
+    .matcol-cat__title {
+      font-size: 0.55rem;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+    /* Hide expandable lists — too small to read in row layout */
+    .matcol-cat__list { display: none !important; }
+
+    /* ── Timeline: remove vertical centering gap ── */
+    .timeline__track-clip { align-items: flex-start; padding-top: 20px; }
+    /* Cards still have their absolute top positions (12px HIGH, ~304px LOW)
+       which work fine relative to the track top. */
+  }
   </style>
 </head>
 <body>
@@ -2942,7 +3012,10 @@
     function measure() {
       containerW    = sticky.clientWidth;
       trackOverflow = Math.max(0, track.offsetWidth - containerW);
-      section.style.height = (Math.round(trackOverflow * 0.7) + window.innerHeight) + "px";
+      /* On mobile the track is narrower relative to the screen, so use a
+         smaller scroll multiplier to avoid an excessively tall section. */
+      var factor = window.innerWidth <= 768 ? 0.45 : 0.7;
+      section.style.height = (Math.round(trackOverflow * factor) + window.innerHeight) + "px";
     }
 
     measure();

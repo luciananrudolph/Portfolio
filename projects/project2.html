@@ -8,7 +8,7 @@
   <style>
     /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: auto; }
+    html { scroll-behavior: auto; overflow-x: hidden; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         Helvetica, Arial, sans-serif;
@@ -433,6 +433,29 @@
       .xh__img { opacity: 1 !important; transform: none !important; }
       .xh__sidebar, .xh__bigtext { opacity: 1 !important; }
     }
+
+    /* ── Read-more (desktop hidden, mobile shown) ── */
+    .desc-readmore { display: none; }
+    @media (max-width: 768px) {
+      .desc-more { display: none; }
+      .desc-more.is-open { display: block; }
+      .desc-readmore {
+        display: inline-block;
+        background: none;
+        border: 1.5px solid #111;
+        border-radius: 20px;
+        padding: 8px 22px;
+        font-size: 0.85rem;
+        font-family: inherit;
+        cursor: pointer;
+        margin-top: 4px;
+        letter-spacing: 0.04em;
+      }
+      .desc-readmore.is-hidden { display: none; }
+
+      /* Slideshow: always-visible arrows on mobile */
+      .slideshow__container .slideshow__arrow { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -594,12 +617,15 @@
           <p data-i18n="p2_concept_1">
             The Innovation Park Artificial Intelligence (IPAI) campus in Heilbronn is a 30-hectare hub for over 5,000 researchers, designed by MVRDV around a distinctive circular masterplan. The striking geometry — visible even in satellite imagery — positions the campus as a global landmark for responsible AI development, with laboratories, housing, offices, and a central cultural building for public engagement.
           </p>
+          <div class="desc-more" id="descMore">
           <p data-i18n="p2_concept_2">
             At the heart of the campus stands the Communication Center, a cylindrical tower with a reflective facade that serves as the public interface between the AI research community and visitors. The building houses exhibitions, conferences, seminars, and a visitor centre, conceived in collaboration with Berlin-based placemaking experts REALACE to invite the public into dialogue with emerging technologies.
           </p>
           <p data-i18n="p2_concept_3">
             The design emphasises human wellbeing as a counterpoint to screen-intensive AI work. A car-free campus, bioclimatic facades, hybrid timber construction, and a parametric landscape by LOLA create an environment where tactile organic materials and generous green spaces encourage outdoor collaboration. Energy consumption is projected at 80% below a typical campus, with carbon neutrality achieved over the building's lifespan through renewable energy, reforestation, and bio-based construction systems.
           </p>
+          </div>
+          <button class="desc-readmore" id="descReadMore">Read more</button>
         </div>
       </div>
     </section>
@@ -977,6 +1003,18 @@
     });
   </script>
 
+  <script>
+    (function () {
+      var btn  = document.getElementById("descReadMore");
+      var more = document.getElementById("descMore");
+      if (btn && more) {
+        btn.addEventListener("click", function () {
+          more.classList.add("is-open");
+          btn.classList.add("is-hidden");
+        });
+      }
+    })();
+  </script>
   <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/main.js"></script>
 </body>
