@@ -111,6 +111,7 @@
        ImageMagick: `magick p1.jpg -resize 1600 -quality 70 p1-1600.jpg`.
        Until those files exist the browser falls back to `src`.
        ══════════════════════════════════════════ -->
+  <div class="m-sticky-section">
   <section class="block block--intro">
     <img class="block--intro__image block--intro__slide --active"
          src="assets/img/home+about/p2.jpg"
@@ -146,10 +147,12 @@
     </div>
     <span class="block--intro__scroll" data-i18n="hero_scroll">Scroll ↓</span>
   </section>
+  </div>
 
   <!-- ══════════════════════════════════════════
        STICKY GRID SCROLL — Main Block
        ══════════════════════════════════════════ -->
+  <div class="m-sticky-section">
   <section class="block block--main">
     <div class="block__wrapper">
 
@@ -246,6 +249,7 @@
 
     </div>
   </section>
+  </div>
 
   <footer class="site-footer"></footer>
 
@@ -338,6 +342,7 @@
        3. StickyGridScroll Class
        ═══════════════════════════════════════ */
     function StickyGridScroll() {
+      if (window.innerWidth <= 768) return;
       this.getElements();
       if (!this.block) return;
 
