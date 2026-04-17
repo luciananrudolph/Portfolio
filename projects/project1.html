@@ -617,41 +617,39 @@
 
     /* ── Mobile ── */
     @media (max-width: 768px) {
-      .xh { height: auto; }
+      /* Sticky title → image slides up */
+      .xh { height: 250vh; }
       .xh__stage {
-        position: relative;
-        height: auto;
-        min-height: 100vh;
-        padding: 60px 20px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding: 0;
+        overflow: hidden;
       }
+      .xh__bg { background: #c4754b !important; }
       .xh__headline {
-        position: relative;
-        top: auto; left: auto;
-        transform: none;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         white-space: normal;
-        margin-bottom: 32px;
+        text-align: center;
         font-size: 2rem;
+        color: #f4f1e6;
+        z-index: 10;
       }
       .xh__img {
-        position: relative !important;
+        position: absolute !important;
+        left: 0 !important;
         width: 100% !important;
-        height: auto !important;
-        aspect-ratio: 4/5;
-        top: auto !important; left: auto !important;
+        height: 68vh !important;
+        top: 100vh !important; /* JS overrides this to animate */
         transform: none !important;
         opacity: 1 !important;
-        margin-bottom: 20px;
+        border-radius: 20px 20px 0 0 !important;
+        margin: 0;
       }
-      .xh__sidebar, .xh__bigtext {
-        position: relative;
-        opacity: 1 !important;
-        right: auto; bottom: auto; left: auto; top: auto;
-        transform: none !important;
-        max-width: 100%;
-        margin-top: 20px;
-      }
-      .xh__label { display: none; }
-      .xh__bg { background: #f4f1e6 !important; }
+      .xh__sidebar, .xh__bigtext, .xh__label { display: none !important; }
       .project-info { padding: 60px 20px 40px; }
       .project-info__grid {
         grid-template-columns: 1fr;
@@ -3207,5 +3205,38 @@
 
   <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/main.js"></script>
+
+  <!-- ── Mobile: xh title → image reveal ── -->
+  <script>
+  (function () {
+    if (window.innerWidth > 768) return;
+
+    var section = document.getElementById("xh");
+    var imgA    = document.getElementById("img-a");
+    if (!section || !imgA) return;
+
+    function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+    function tick() {
+      var rect       = section.getBoundingClientRect();
+      var scrollable = section.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      var p = Math.max(0, Math.min(1, -rect.top / scrollable));
+
+      /* Image slides up from below:
+         p < 0.25 → fully off-screen below
+         p = 0.85 → fully in (covers bottom 68 vh) */
+      var imgP   = Math.max(0, Math.min(1, (p - 0.25) / 0.6));
+      var imgH   = window.innerHeight * 0.68;
+      var startY = window.innerHeight + 20;        /* just below viewport */
+      var endY   = window.innerHeight - imgH;      /* sitting at bottom */
+      imgA.style.top = (startY + (endY - startY) * ease(imgP)) + "px";
+    }
+
+    window.addEventListener("scroll", tick, { passive: true });
+    window.addEventListener("resize", tick);
+    tick();
+  })();
+  </script>
 </body>
 </html>
