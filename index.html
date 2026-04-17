@@ -293,6 +293,7 @@
        1. Smooth scrolling with Lenis
        ═══════════════════════════════════════ */
     function initSmoothScrolling() {
+      if (window.innerWidth <= 768) return; /* scroll snap handles mobile */
       var lenis = new Lenis({
         lerp: 0.08,
         wheelMultiplier: 1.4
